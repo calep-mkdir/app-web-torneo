@@ -85,3 +85,8 @@ docker run --rm -p 3000:3000 \
 4. desplegar build o imagen
 5. validar `/api/health`
 6. hacer smoke test de `/tournaments` y `/admin`
+
+Nota:
+
+- Si reutilizas el proyecto de Supabase ya preparado para esta puesta en marcha, las migraciones y el seed inicial ya estan aplicados.
+- Si creas otro entorno distinto, repite el paso 3 antes del primer despliegue.

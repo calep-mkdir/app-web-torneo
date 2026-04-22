@@ -42,3 +42,4 @@
 - [ ] logs sin errores de entorno.
 - [ ] monitorizacion y alertas configuradas en la plataforma.
 - [ ] copia segura de secretos y acceso restringido al panel admin.
+- [ ] rotacion hecha de credenciales sensibles si se compartieron durante la puesta a punto.

@@ -62,6 +62,15 @@ Duplica `.env.example` como `.env.local` en desarrollo o configura estas variabl
 - `ADMIN_BASIC_AUTH_PASSWORD`
   password del panel `/admin`.
 
+Variables opcionales para mantenimiento local con Supabase CLI:
+
+- `SUPABASE_PROJECT_REF`
+  identificador del proyecto remoto para tareas de administracion.
+- `SUPABASE_DB_PASSWORD`
+  password de Postgres para flujos CLI basados en `db push` o conexion directa.
+- `SUPABASE_ACCESS_TOKEN`
+  token personal de Supabase si quieres usar `supabase link` sin pasar `--db-url`.
+
 ## Puesta en marcha local
 
 1. Instala dependencias:
@@ -111,7 +120,8 @@ Las migraciones SQL viven en [supabase/migrations](./supabase/migrations). Inclu
 - broadcast de realtime por categoria;
 - seed inicial de deportes.
 
-Aplica las migraciones con el flujo habitual de Supabase CLI o desde tu pipeline de base de datos.
+El repositorio ya incluye configuracion de Supabase CLI en [supabase/config.toml](./supabase/config.toml).
+Si apuntas a un proyecto o entorno nuevo, aplica las migraciones con el flujo habitual de Supabase CLI o desde tu pipeline de base de datos.
 
 ## Seguridad y produccion
 

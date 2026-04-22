@@ -1,33 +1,16 @@
 # Pasos que faltan fuera de Codex
 
-Estos son los pasos que no se pueden completar automaticamente desde este entorno porque dependen de tus credenciales o de decisiones de cuenta.
+Estado actual de esta puesta en marcha:
 
-## 1. Crear o elegir el proyecto de Supabase
+- el repositorio privado ya existe en GitHub;
+- el proyecto ya compila y pasa `lint`, `typecheck`, `test` y `build`;
+- la base de datos de Supabase ya tiene esquema, realtime y seed inicial aplicados.
 
-Necesitas un proyecto real de Supabase donde desplegar la base de datos del torneo.
+Lo que queda ahora ya es principalmente despliegue y endurecimiento final.
 
-Cuando lo tengas, guarda estos tres valores:
+## 1. Elegir hosting para la primera salida
 
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-
-## 2. Aplicar migraciones en Supabase
-
-Las migraciones estan en [supabase/migrations](../supabase/migrations).
-
-Tienes dos caminos:
-
-- con Supabase CLI:
-  - conecta tu proyecto
-  - ejecuta `supabase db push`
-- con el panel de Supabase:
-  - abre SQL Editor
-  - ejecuta los archivos en orden
-
-## 3. Elegir plataforma de despliegue
-
-La opcion mas facil suele ser `Vercel`.
+La opcion mas simple suele ser `Vercel`.
 
 Alternativas compatibles:
 
@@ -37,15 +20,15 @@ Alternativas compatibles:
 - cualquier runtime Node con `npm run build` y `npm run start`
 - Docker usando el [Dockerfile](../Dockerfile)
 
-## 4. Conectar el repo privado a tu hosting
+## 2. Conectar el repo privado al hosting
 
 Importa [calep-mkdir/app-web-torneo](https://github.com/calep-mkdir/app-web-torneo) desde la plataforma elegida.
 
-Si el proveedor te pide permisos para leer repos privados, concédeselos a GitHub.
+Si el proveedor te pide permisos para leer repos privados, concedelos.
 
-## 5. Configurar variables de entorno en produccion
+## 3. Cargar variables de entorno de produccion
 
-Copia los nombres desde [.env.example](../.env.example):
+Usa los nombres de [.env.example](../.env.example):
 
 - `NEXT_PUBLIC_SITE_URL`
 - `NEXT_PUBLIC_SUPABASE_URL`
@@ -54,41 +37,65 @@ Copia los nombres desde [.env.example](../.env.example):
 - `ADMIN_BASIC_AUTH_USER`
 - `ADMIN_BASIC_AUTH_PASSWORD`
 
-## 6. Lanzar el primer deploy
+## 4. Lanzar el primer deploy
 
 Una vez cargados los secretos:
 
-- ejecuta el deploy inicial en la plataforma
-- confirma que el build termina correctamente
+- ejecuta el deploy inicial;
+- confirma que el build termina correctamente;
+- valida que el dominio final responde por HTTPS.
 
-## 7. Ejecutar smoke test post-deploy
+## 5. Hacer smoke test funcional
 
 Comprueba al menos:
 
-- `GET /api/health` devuelve `200`
-- `/tournaments` carga
-- `/admin` pide credenciales
-- puedes crear un torneo
-- puedes crear participantes y partidos
-- el realtime se refleja en la parte publica
+- `GET /api/health` devuelve `200`;
+- `/tournaments` carga;
+- `/admin` pide credenciales;
+- puedes crear un torneo;
+- puedes crear categorias, participantes y partidos;
+- al guardar resultados, la parte publica refleja los cambios.
 
-## 8. Opcional pero recomendado: activar GitHub Pro o un plan con branch protection para privados
+## 6. Crear contenido inicial real
 
-El repo ya esta privado y con ajustes razonables, pero la proteccion de rama de `main` no se puede activar desde la API con el plan actual.
+La tabla `sports` ya esta sembrada, pero aun necesitas cargar tus datos operativos:
 
-Si mas adelante activas un plan compatible, entonces haz esto:
+- torneos reales;
+- categorias;
+- participantes o equipos;
+- primeros partidos.
 
-- proteger `main`
-- bloquear force-push
-- bloquear borrado de rama
-- requerir PR para merge
-- exigir que pase la CI
+## 7. Activar observabilidad minima
 
-## 9. Opcional: añadir observabilidad
+Lo minimo recomendable:
 
-Lo minimo:
+- logs centralizados;
+- alerta si falla `/api/health`;
+- captura de errores de servidor;
+- monitorizacion de tiempos de respuesta.
 
-- logs centralizados
-- alerta si falla `/api/health`
-- captura de errores de servidor
-- monitorizacion de tiempo de respuesta
+## 8. Opcional: activar branch protection cuando tu plan de GitHub lo permita
+
+El repo ya esta privado y con ajustes razonables, pero la proteccion de `main` no se puede activar en el plan actual del repositorio privado.
+
+Cuando tengas un plan compatible:
+
+- protege `main`;
+- bloquea force-push;
+- bloquea borrado de rama;
+- requiere PR para merge;
+- exige CI en verde.
+
+## 9. Opcional: crear un `SUPABASE_ACCESS_TOKEN`
+
+No hace falta para que la app funcione ni para el estado actual de la base.
+
+Si quieres usar despues `supabase link` y otros flujos CLI enlazados sin depender de `--db-url`, crea un token personal en Supabase y guardalo solo en tu entorno local.
+
+## 10. Recomendado: rotar claves sensibles compartidas durante la puesta a punto
+
+Como durante el onboarding se han usado credenciales administrativas para dejar todo listo:
+
+- rota la `SUPABASE_SERVICE_ROLE_KEY` si quieres cerrar completamente este ciclo con higiene de secretos;
+- cambia la password de Postgres si consideras esa credencial ya expuesta;
+- actualiza esos valores en tu hosting despues de rotarlos.
