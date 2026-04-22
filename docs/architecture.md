@@ -23,7 +23,10 @@ Ubicacion principal:
 
 Responsabilidades:
 
+- portada publica con resumen de actividad;
 - listado de torneos publicados;
+- exploracion por deportes;
+- pagina de organizacion;
 - detalle por torneo;
 - cambio de categoria;
 - vista de partidos en vivo y siguientes cruces;
@@ -80,8 +83,10 @@ Separacion:
   valida entorno de servidor.
 - [src/lib/env/client.ts](../src/lib/env/client.ts)
   valida entorno publico del navegador.
-- [src/proxy.ts](../src/proxy.ts)
-  protege `/admin` con HTTP Basic Auth.
+- [src/app/robots.ts](../src/app/robots.ts)
+  deja `/admin` fuera de indexacion.
+
+La version actual no añade autenticacion a `/admin`; esa capa queda como decision de plataforma o de una iteracion futura.
 
 ## Modelo de datos
 

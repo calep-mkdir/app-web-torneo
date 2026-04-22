@@ -7,6 +7,8 @@ import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { buildEntryHistory, buildKnockoutPath, getEntryLabel } from "./mappers";
 import type {
   PublicParticipantPageData,
+  PublicSiteStats,
+  PublicSportSummary,
   PublicTournamentListItem,
   PublicTournamentPageData,
 } from "./types";
@@ -85,6 +87,102 @@ export async function getPublicTournamentIndexData(): Promise<{
   });
 
   return { tournaments };
+}
+
+export async function getPublicHomePageData(): Promise<{
+  tournaments: PublicTournamentListItem[];
+  featuredTournaments: PublicTournamentListItem[];
+  liveTournaments: PublicTournamentListItem[];
+  sports: PublicSportSummary[];
+  stats: PublicSiteStats;
+}> {
+  const { tournaments } = await getPublicTournamentIndexData();
+
+  const sportsMap = new Map<string, PublicSportSummary>();
+  for (const tournament of tournaments) {
+    const current = sportsMap.get(tournament.sportName) ?? {
+      name: tournament.sportName,
+      tournamentsCount: 0,
+      participantsCount: 0,
+      liveMatchesCount: 0,
+      featuredTournamentSlug: null,
+      featuredTournamentName: null,
+    };
+
+    current.tournamentsCount += 1;
+    current.participantsCount += tournament.participantsCount;
+    current.liveMatchesCount += tournament.liveMatchesCount;
+
+    if (!current.featuredTournamentSlug) {
+      current.featuredTournamentSlug = tournament.slug;
+      current.featuredTournamentName = tournament.name;
+    }
+
+    sportsMap.set(tournament.sportName, current);
+  }
+
+  const featuredTournaments = tournaments
+    .slice()
+    .sort((left, right) => {
+      if (right.liveMatchesCount !== left.liveMatchesCount) {
+        return right.liveMatchesCount - left.liveMatchesCount;
+      }
+
+      if (right.participantsCount !== left.participantsCount) {
+        return right.participantsCount - left.participantsCount;
+      }
+
+      return left.name.localeCompare(right.name, "es");
+    })
+    .slice(0, 6);
+
+  const liveTournaments = tournaments.filter((tournament) => tournament.liveMatchesCount > 0).slice(0, 3);
+  const sports = Array.from(sportsMap.values()).sort((left, right) => {
+    if (right.liveMatchesCount !== left.liveMatchesCount) {
+      return right.liveMatchesCount - left.liveMatchesCount;
+    }
+
+    if (right.tournamentsCount !== left.tournamentsCount) {
+      return right.tournamentsCount - left.tournamentsCount;
+    }
+
+    return left.name.localeCompare(right.name, "es");
+  });
+
+  const stats: PublicSiteStats = {
+    tournamentsCount: tournaments.length,
+    participantsCount: tournaments.reduce(
+      (total, tournament) => total + tournament.participantsCount,
+      0,
+    ),
+    liveMatchesCount: tournaments.reduce(
+      (total, tournament) => total + tournament.liveMatchesCount,
+      0,
+    ),
+    sportsCount: sports.length,
+  };
+
+  return {
+    tournaments,
+    featuredTournaments,
+    liveTournaments,
+    sports,
+    stats,
+  };
+}
+
+export async function getPublicSportsPageData(): Promise<{
+  sports: PublicSportSummary[];
+  stats: PublicSiteStats;
+  tournaments: PublicTournamentListItem[];
+}> {
+  const data = await getPublicHomePageData();
+
+  return {
+    sports: data.sports,
+    stats: data.stats,
+    tournaments: data.tournaments,
+  };
 }
 
 export async function getPublicTournamentPageData(

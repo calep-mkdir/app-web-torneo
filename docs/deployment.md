@@ -55,8 +55,6 @@ docker run --rm -p 3000:3000 \
   -e NEXT_PUBLIC_SUPABASE_URL=... \
   -e NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=... \
   -e SUPABASE_SERVICE_ROLE_KEY=... \
-  -e ADMIN_BASIC_AUTH_USER=admin \
-  -e ADMIN_BASIC_AUTH_PASSWORD='cambia-esto' \
   app-web-torneo
 ```
 
@@ -66,8 +64,6 @@ docker run --rm -p 3000:3000 \
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `ADMIN_BASIC_AUTH_USER`
-- `ADMIN_BASIC_AUTH_PASSWORD`
 
 ## Recomendaciones de plataforma
 
@@ -75,7 +71,8 @@ docker run --rm -p 3000:3000 \
 - Gestiona secretos desde el vault nativo de la plataforma.
 - Usa checks contra `/api/health`.
 - Mantén el panel `/admin` fuera de indexacion publica.
-- Si tienes reverse proxy, conserva `X-Forwarded-*` y no elimines `Authorization`.
+- Si vas a operar el panel desde internet abierta, añade autenticacion o restricciones de red por capa de plataforma.
+- Si tienes reverse proxy, conserva `X-Forwarded-*`.
 
 ## Pipeline minimo recomendado
 
@@ -84,7 +81,7 @@ docker run --rm -p 3000:3000 \
 3. aplicar migraciones de Supabase
 4. desplegar build o imagen
 5. validar `/api/health`
-6. hacer smoke test de `/tournaments` y `/admin`
+6. hacer smoke test de `/`, `/tournaments`, `/deportes`, `/organiza` y `/admin`
 
 Nota:
 

@@ -2,11 +2,11 @@
 
 Estado actual de esta puesta en marcha:
 
-- el repositorio privado ya existe en GitHub;
-- el proyecto ya compila y pasa `lint`, `typecheck`, `test` y `build`;
+- el repositorio ya existe en GitHub;
+- el proyecto ya compila y pasa `lint`, `typegen`, `typecheck`, `test` y `build`;
 - la base de datos de Supabase ya tiene esquema, realtime y seed inicial aplicados.
 
-Lo que queda ahora ya es principalmente despliegue y endurecimiento final.
+Lo que queda ahora ya es principalmente operacion real, contenido y endurecimiento final.
 
 ## 1. Elegir hosting para la primera salida
 
@@ -20,11 +20,9 @@ Alternativas compatibles:
 - cualquier runtime Node con `npm run build` y `npm run start`
 - Docker usando el [Dockerfile](../Dockerfile)
 
-## 2. Conectar el repo privado al hosting
+## 2. Conectar el repo al hosting
 
 Importa [calep-mkdir/app-web-torneo](https://github.com/calep-mkdir/app-web-torneo) desde la plataforma elegida.
-
-Si el proveedor te pide permisos para leer repos privados, concedelos.
 
 ## 3. Cargar variables de entorno de produccion
 
@@ -34,8 +32,6 @@ Usa los nombres de [.env.example](../.env.example):
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `ADMIN_BASIC_AUTH_USER`
-- `ADMIN_BASIC_AUTH_PASSWORD`
 
 ## 4. Lanzar el primer deploy
 
@@ -50,8 +46,11 @@ Una vez cargados los secretos:
 Comprueba al menos:
 
 - `GET /api/health` devuelve `200`;
+- `/` carga;
 - `/tournaments` carga;
-- `/admin` pide credenciales;
+- `/deportes` carga;
+- `/organiza` carga;
+- `/admin` abre directamente;
 - puedes crear un torneo;
 - puedes crear categorias, participantes y partidos;
 - al guardar resultados, la parte publica refleja los cambios.
@@ -74,17 +73,16 @@ Lo minimo recomendable:
 - captura de errores de servidor;
 - monitorizacion de tiempos de respuesta.
 
-## 8. Opcional: activar branch protection cuando tu plan de GitHub lo permita
+## 8. Decidir como quieres proteger `/admin` en internet abierta
 
-El repo ya esta privado y con ajustes razonables, pero la proteccion de `main` no se puede activar en el plan actual del repositorio privado.
+La app funciona sin login porque asi se ha decidido para esta version.
 
-Cuando tengas un plan compatible:
+Antes de delegar gestion a terceros o exponer edicion real, elige una de estas vias:
 
-- protege `main`;
-- bloquea force-push;
-- bloquea borrado de rama;
-- requiere PR para merge;
-- exige CI en verde.
+- autenticacion dentro de la app;
+- proteccion por plataforma;
+- restriccion de red o IP;
+- acceso solo para uso interno.
 
 ## 9. Opcional: crear un `SUPABASE_ACCESS_TOKEN`
 

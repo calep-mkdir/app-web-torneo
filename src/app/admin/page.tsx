@@ -8,9 +8,9 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Panel de administracion"
-        title="Dashboard de torneos"
-        description="Gestiona torneos, inscripciones, cuadros y resultados desde una sola vista."
+        eyebrow="Panel de gestion"
+        title="Dashboard abierto de torneos"
+        description="Crea torneos, publica competiciones y actualiza participantes, cuadros y resultados desde una sola vista, sin pasos de acceso intermedios."
         badge={`${data.tournaments.length} torneos`}
       />
 
@@ -26,7 +26,7 @@ export default async function AdminDashboardPage() {
       <div className="grid gap-6 xl:grid-cols-[440px_minmax(0,1fr)]">
         <TournamentCreateForm sports={data.sports} />
 
-        <Card>
+        <Card className="bg-white/86">
           <CardHeader>
             <CardTitle>Torneos creados</CardTitle>
             <CardDescription>

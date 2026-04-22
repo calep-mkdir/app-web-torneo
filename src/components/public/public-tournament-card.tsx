@@ -11,16 +11,21 @@ export function PublicTournamentCard({
 }: {
   tournament: PublicTournamentListItem;
 }) {
+  const accent = getTournamentAccent(tournament.sportName);
+
   return (
-    <Card className="h-full overflow-hidden border-slate-200/80">
-      <CardHeader className="gap-4 bg-white">
+    <Card className="group h-full overflow-hidden border-white/70 bg-white/85 shadow-[0_22px_70px_-38px_rgba(15,23,42,0.35)] backdrop-blur transition hover:-translate-y-1 hover:shadow-[0_30px_90px_-42px_rgba(14,165,233,0.4)]">
+      <div className={accent.ribbonClass} />
+      <CardHeader className={`gap-4 ${accent.headerClass}`}>
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1">
-            <CardDescription>{tournament.sportName}</CardDescription>
-            <CardTitle className="text-xl">{tournament.name}</CardTitle>
+            <CardDescription className="font-medium text-slate-600">{tournament.sportName}</CardDescription>
+            <CardTitle className="text-2xl text-slate-950">{tournament.name}</CardTitle>
           </div>
           <Badge variant={tournament.liveMatchesCount > 0 ? "warning" : "secondary"}>
-            {tournament.liveMatchesCount > 0 ? `${tournament.liveMatchesCount} en directo` : tournament.status}
+            {tournament.liveMatchesCount > 0
+              ? `${tournament.liveMatchesCount} en directo`
+              : tournament.status.replaceAll("_", " ")}
           </Badge>
         </div>
       </CardHeader>
@@ -39,7 +44,7 @@ export function PublicTournamentCard({
 
         <Link
           href={`/tournaments/${tournament.slug}` as Route}
-          className="inline-flex items-center rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white no-underline transition hover:bg-slate-800"
+          className="inline-flex items-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white no-underline transition hover:bg-slate-800"
         >
           Ver torneo
         </Link>
@@ -50,9 +55,31 @@ export function PublicTournamentCard({
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border bg-slate-50 px-3 py-3">
-      <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-500">{label}</dt>
+    <div className="rounded-[1.3rem] border border-white/70 bg-slate-50/90 px-3 py-3">
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">{label}</dt>
       <dd className="mt-1 text-lg font-semibold text-slate-950">{value}</dd>
     </div>
   );
+}
+
+function getTournamentAccent(sportName: string) {
+  const palette = [
+    {
+      ribbonClass: "h-2 bg-[linear-gradient(90deg,#f97316_0%,#fb7185_55%,#fdba74_100%)]",
+      headerClass: "bg-[linear-gradient(180deg,rgba(255,247,237,0.95)_0%,rgba(255,255,255,0.96)_100%)]",
+    },
+    {
+      ribbonClass: "h-2 bg-[linear-gradient(90deg,#06b6d4_0%,#38bdf8_50%,#0ea5e9_100%)]",
+      headerClass: "bg-[linear-gradient(180deg,rgba(236,254,255,0.95)_0%,rgba(255,255,255,0.96)_100%)]",
+    },
+    {
+      ribbonClass: "h-2 bg-[linear-gradient(90deg,#10b981_0%,#84cc16_45%,#facc15_100%)]",
+      headerClass: "bg-[linear-gradient(180deg,rgba(240,253,244,0.95)_0%,rgba(255,255,255,0.96)_100%)]",
+    },
+  ];
+  const seed = sportName
+    .split("")
+    .reduce((total, letter) => total + letter.charCodeAt(0), 0);
+
+  return palette[seed % palette.length];
 }

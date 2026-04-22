@@ -1,6 +1,6 @@
 # App Web Torneo
 
-Aplicacion web para gestionar torneos deportivos y publicarlos en tiempo real con una zona publica y un panel de administracion.
+Aplicacion web para gestionar torneos deportivos y publicarlos en tiempo real con una experiencia multipagina, alegre, deportiva y totalmente responsive.
 
 ## Estado del proyecto
 
@@ -9,9 +9,10 @@ Esta base queda preparada para una primera salida seria a produccion:
 - `Next.js 16` con `App Router`, `React 19` y `TypeScript`.
 - `Supabase` como backend operativo y canal realtime.
 - build reproducible con `package-lock.json` y dependencias fijadas.
-- proteccion del panel `/admin` mediante HTTP Basic Auth.
+- experiencia publica multipagina con portada, torneos, deportes y flujo de organizacion.
+- panel `/admin` abierto para operar sin login.
 - validacion de entorno en cliente y servidor.
-- control de calidad con `lint`, `typecheck`, `test` y `build`.
+- control de calidad con `lint`, `typegen`, `typecheck`, `test` y `build`.
 - `Dockerfile`, workflow de CI y documentacion de despliegue.
 
 ## Funcionalidades principales
@@ -21,7 +22,10 @@ Esta base queda preparada para una primera salida seria a produccion:
 - Registro de resultados.
 - Avance automatico del bracket knockout.
 - Vista publica con:
+  - home principal con resumen de actividad,
   - listado de torneos publicados,
+  - exploracion por deportes,
+  - pagina de organizacion,
   - detalle por torneo,
   - partidos en vivo y proximos,
   - bracket en tiempo real,
@@ -41,7 +45,7 @@ Esta base queda preparada para una primera salida seria a produccion:
 
 ## Requisitos
 
-- Node.js 20 o superior
+- Node.js 22 o superior
 - npm 11 o superior
 - un proyecto de Supabase con las migraciones aplicadas
 
@@ -57,10 +61,6 @@ Duplica `.env.example` como `.env.local` en desarrollo o configura estas variabl
   clave publica para cliente web y realtime.
 - `SUPABASE_SERVICE_ROLE_KEY`
   clave privada solo para servidor. Nunca la expongas en cliente.
-- `ADMIN_BASIC_AUTH_USER`
-  usuario del panel `/admin`.
-- `ADMIN_BASIC_AUTH_PASSWORD`
-  password del panel `/admin`.
 
 Variables opcionales para mantenimiento local con Supabase CLI:
 
@@ -93,17 +93,22 @@ npm run dev
 
 4. Abre:
 
+- home: [http://localhost:3000](http://localhost:3000)
 - zona publica: [http://localhost:3000/tournaments](http://localhost:3000/tournaments)
+- deportes: [http://localhost:3000/deportes](http://localhost:3000/deportes)
+- organiza: [http://localhost:3000/organiza](http://localhost:3000/organiza)
 - admin: [http://localhost:3000/admin](http://localhost:3000/admin)
 
 ## Scripts disponibles
 
 - `npm run dev`
   desarrollo local
+- `npm run typegen`
+  regenera tipos de rutas de Next.js
 - `npm run lint`
   analiza el codigo con ESLint
 - `npm run typecheck`
-  ejecuta TypeScript sin emitir artefactos
+  regenera tipos de Next y ejecuta TypeScript sin emitir artefactos
 - `npm run test`
   ejecuta las pruebas unitarias
 - `npm run build`
@@ -125,11 +130,11 @@ Si apuntas a un proyecto o entorno nuevo, aplica las migraciones con el flujo ha
 
 ## Seguridad y produccion
 
-- El panel `/admin` queda bloqueado con HTTP Basic Auth.
-- Si en `production` faltan `ADMIN_BASIC_AUTH_USER` o `ADMIN_BASIC_AUTH_PASSWORD`, el panel responde `503` para evitar exponerlo accidentalmente.
 - Las queries de lectura en App Router se marcan como dinamicas para no congelar datos durante el build.
 - Se añaden cabeceras HTTP defensivas y `output: "standalone"` para despliegues mas simples.
 - Se incluye `GET /api/health` para checks de plataforma o balanceador.
+- `robots.txt` mantiene `/admin` fuera de indexacion publica.
+- La configuracion actual deja `/admin` abierto por decision de producto. Si vas a exponer la app a internet con edicion real, añade autenticacion o restricciones de red antes de operar con terceros.
 
 ## Despliegue
 
@@ -150,5 +155,5 @@ La guia detallada esta en [docs/deployment.md](./docs/deployment.md).
 ## Limitaciones conocidas de esta primera version
 
 - El flujo admin visible esta centrado en competidores individuales; el esquema soporta equipos, pero la interfaz aun no explota toda esa parte.
-- No se ha introducido autenticacion completa por usuario/rol; para esta primera salida se endurece el acceso admin con HTTP Basic Auth.
+- No se ha introducido autenticacion por usuario/rol; el panel queda abierto a proposito en esta iteracion visual y de producto.
 - La consistencia multi-tabla de algunas operaciones complejas depende de varias escrituras consecutivas en Supabase, aunque se han reducido los casos de estado parcial mas obvios.

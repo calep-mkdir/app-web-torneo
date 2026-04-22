@@ -26,14 +26,19 @@ export default async function TournamentAdminPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <PageHeader
           eyebrow="Torneo"
           title={data.tournament.name}
           description={`Slug ${data.tournament.slug} - Zona ${data.tournament.timezone}`}
           badge={data.tournament.status}
         />
-        <Link href="/admin">Volver al dashboard</Link>
+        <Link
+          href="/admin"
+          className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 no-underline transition hover:border-slate-300 hover:text-slate-950"
+        >
+          Volver al dashboard
+        </Link>
       </div>
 
       <StatCards

@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
+import { Bricolage_Grotesque, Manrope } from "next/font/google";
 
 import { getOptionalSiteUrl } from "@/lib/env/server";
 
 import "./globals.css";
 
 const siteUrl = getOptionalSiteUrl();
+const bodyFont = Manrope({
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+});
+const displayFont = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -13,7 +24,8 @@ export const metadata: Metadata = {
     default: "App Web Torneo",
     template: "%s | App Web Torneo",
   },
-  description: "Gestiona torneos y publica cuadros, participantes y partidos en tiempo real.",
+  description:
+    "Plataforma multipagina para organizar torneos, publicar cuadros y seguir competiciones con una experiencia alegre, deportiva y responsive.",
 };
 
 export default function RootLayout({
@@ -23,7 +35,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className="min-h-screen bg-background text-foreground">{children}</body>
+      <body
+        className={`${bodyFont.variable} ${displayFont.variable} min-h-screen bg-background text-foreground`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

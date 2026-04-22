@@ -1,5 +1,6 @@
 export * from "./bracket-view";
 export * from "./category-switcher";
+export * from "./cta-banner";
 export * from "./date-utils";
 export * from "./live-match-list";
 export * from "./participant-directory";
@@ -10,3 +11,4 @@ export * from "./public-stat-strip";
 export * from "./public-tournament-card";
 export * from "./public-tournament-client";
 export * from "./realtime-pill";
+export * from "./section-heading";

@@ -16,6 +16,22 @@ export interface PublicTournamentListItem {
   liveMatchesCount: number;
 }
 
+export interface PublicSiteStats {
+  tournamentsCount: number;
+  participantsCount: number;
+  liveMatchesCount: number;
+  sportsCount: number;
+}
+
+export interface PublicSportSummary {
+  name: string;
+  tournamentsCount: number;
+  participantsCount: number;
+  liveMatchesCount: number;
+  featuredTournamentSlug: string | null;
+  featuredTournamentName: string | null;
+}
+
 export interface PublicTournamentCategory {
   id: string;
   name: string;
