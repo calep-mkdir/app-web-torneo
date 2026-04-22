@@ -1,0 +1,62 @@
+import type { Route } from "next";
+import Link from "next/link";
+
+import {
+  Badge,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui";
+import type { TournamentListItem } from "@/features/admin/types";
+
+export function TournamentList({
+  tournaments,
+}: {
+  tournaments: TournamentListItem[];
+}) {
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
+      {tournaments.map((tournament) => (
+        <Card key={tournament.id}>
+          <CardHeader className="gap-3">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <CardTitle>{tournament.name}</CardTitle>
+                <CardDescription>
+                  {tournament.sportName} - {tournament.slug}
+                </CardDescription>
+              </div>
+              <Badge variant={tournament.isPublic ? "success" : "secondary"}>
+                {tournament.isPublic ? "Publico" : "Privado"}
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <dl className="grid grid-cols-2 gap-3 text-sm">
+              <Metric label="Categorias" value={String(tournament.categoriesCount)} />
+              <Metric label="Participantes" value={String(tournament.entrantsCount)} />
+              <Metric label="Partidos" value={String(tournament.matchesCount)} />
+              <Metric label="Finalizados" value={String(tournament.finishedMatchesCount)} />
+            </dl>
+
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <span>Estado: {tournament.status}</span>
+              <Link href={`/admin/tournaments/${tournament.id}` as Route}>Abrir torneo</Link>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border bg-slate-50 p-3">
+      <dt className="text-xs uppercase tracking-wide text-muted-foreground">{label}</dt>
+      <dd className="mt-1 text-lg font-semibold">{value}</dd>
+    </div>
+  );
+}
