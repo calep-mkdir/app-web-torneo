@@ -1,6 +1,6 @@
 # App Web Torneo
 
-Aplicacion web para gestionar torneos deportivos y publicarlos en tiempo real con una experiencia multipagina, alegre, deportiva y totalmente responsive.
+Aplicacion web para gestionar torneos de padel y publicarlos en tiempo real con una experiencia multipagina, oscura, minimalista, visual y totalmente responsive.
 
 ## Estado del proyecto
 
@@ -9,22 +9,22 @@ Esta base queda preparada para una primera salida seria a produccion:
 - `Next.js 16` con `App Router`, `React 19` y `TypeScript`.
 - `Supabase` como backend operativo y canal realtime.
 - build reproducible con `package-lock.json` y dependencias fijadas.
-- experiencia publica multipagina con portada, torneos, deportes y flujo de organizacion.
-- panel `/admin` abierto para operar sin login.
+- experiencia publica multipagina centrada en padel, con portada animada, calendario, circuito y flujo de organizacion.
+- panel `/admin` abierto para operar sin login y con alta simplificada de torneos.
 - validacion de entorno en cliente y servidor.
 - control de calidad con `lint`, `typegen`, `typecheck`, `test` y `build`.
 - `Dockerfile`, workflow de CI y documentacion de despliegue.
 
 ## Funcionalidades principales
 
-- Alta y edicion de torneos.
+- Alta y edicion de torneos de padel.
 - Gestion de categorias, fases, rondas, participantes y partidos.
 - Registro de resultados.
 - Avance automatico del bracket knockout.
 - Vista publica con:
-  - home principal con resumen de actividad,
+  - home principal con escena 3D de raqueta orientada a scroll,
   - listado de torneos publicados,
-  - exploracion por deportes,
+  - vista de circuito de padel,
   - pagina de organizacion,
   - detalle por torneo,
   - partidos en vivo y proximos,

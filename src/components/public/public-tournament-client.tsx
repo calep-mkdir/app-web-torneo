@@ -91,12 +91,12 @@ export function PublicTournamentClient({
   if (!snapshot) {
     return (
       <div className="space-y-6">
-        <Card className="border-slate-200/80">
+        <Card className="border-white/8 bg-white/[0.03]">
           <CardContent className="space-y-4 px-5 py-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-500">Categoria activa</p>
-                <h2 className="mt-1 text-xl font-semibold text-slate-950">
+                <h2 className="mt-1 text-xl font-semibold text-white">
                   {selectedCategory?.name ?? "Sin categoria"}
                 </h2>
               </div>
@@ -116,7 +116,7 @@ export function PublicTournamentClient({
                 {realtime.error}
               </p>
             ) : (
-              <p className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-500">
+              <p className="rounded-2xl border border-white/12 bg-white/[0.03] px-4 py-6 text-sm text-slate-400">
                 Sincronizando datos de la categoria seleccionada...
               </p>
             )}
@@ -128,12 +128,12 @@ export function PublicTournamentClient({
 
   return (
     <div className="space-y-6">
-      <Card className="border-slate-200/80">
+      <Card className="border-white/8 bg-white/[0.03]">
         <CardContent className="space-y-4 px-5 py-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm font-medium text-slate-500">Categoria activa</p>
-              <h2 className="mt-1 text-xl font-semibold text-slate-950">
+              <h2 className="mt-1 text-xl font-semibold text-white">
                 {selectedCategory?.name ?? "Sin categoria"}
               </h2>
             </div>

@@ -3,6 +3,7 @@ export * from "./category-switcher";
 export * from "./cta-banner";
 export * from "./date-utils";
 export * from "./live-match-list";
+export * from "./padel-racket-hero";
 export * from "./participant-directory";
 export * from "./participant-path-timeline";
 export * from "./public-page-hero";

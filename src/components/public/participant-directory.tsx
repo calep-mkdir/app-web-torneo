@@ -27,11 +27,11 @@ export function ParticipantDirectory({
   }, [deferredQuery, entries]);
 
   return (
-    <Card className="border-slate-200/80">
+    <Card className="border-white/8 bg-white/[0.03]">
       <CardHeader>
         <CardTitle>Participantes</CardTitle>
         <CardDescription>
-          Busca un jugador o equipo y entra en su trayectoria completa.
+          Busca una pareja o jugador y entra en su trayectoria completa.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -43,7 +43,7 @@ export function ParticipantDirectory({
 
         <div className="space-y-3">
           {filteredEntries.length === 0 ? (
-            <p className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-sm text-slate-500">
+            <p className="rounded-2xl border border-dashed border-white/12 bg-white/[0.03] px-4 py-6 text-sm text-slate-400">
               No hay participantes que coincidan con la busqueda.
             </p>
           ) : (
@@ -51,21 +51,21 @@ export function ParticipantDirectory({
               <Link
                 key={entry.id}
                 href={`/tournaments/${slug}/participants/${entry.id}` as Route}
-                className="block rounded-2xl border border-slate-200 bg-white px-4 py-4 no-underline transition hover:border-slate-300 hover:bg-slate-50"
+                className="block rounded-2xl border border-white/8 bg-[#0b1220] px-4 py-4 no-underline transition hover:bg-white/[0.04]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="truncate font-medium text-slate-950">{entry.name}</p>
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="truncate font-medium text-white">{entry.name}</p>
+                    <p className="mt-1 text-xs text-slate-400">
                       Seed {entry.seed ?? "-"} · Estado {entry.status}
                     </p>
                   </div>
-                  <div className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+                  <div className="rounded-full bg-white/[0.05] px-3 py-1 text-xs font-medium text-slate-300">
                     {entry.matchesPlayed} partidos
                   </div>
                 </div>
 
-                <div className="mt-3 flex items-center gap-3 text-xs text-slate-500">
+                <div className="mt-3 flex items-center gap-3 text-xs text-slate-400">
                   <span>{entry.wins} victorias</span>
                   <span>{entry.losses} derrotas</span>
                 </div>

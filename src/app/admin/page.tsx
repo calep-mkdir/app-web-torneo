@@ -8,9 +8,9 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Panel de gestion"
-        title="Dashboard abierto de torneos"
-        description="Crea torneos, publica competiciones y actualiza participantes, cuadros y resultados desde una sola vista, sin pasos de acceso intermedios."
+        eyebrow="Panel de padel"
+        title="Gestion simple para torneos que salen rapido"
+        description="Empieza creando el torneo y después entra a completar categorías, parejas, cruces y resultados desde un flujo más corto y claro."
         badge={`${data.tournaments.length} torneos`}
       />
 
@@ -24,13 +24,13 @@ export default async function AdminDashboardPage() {
       />
 
       <div className="grid gap-6 xl:grid-cols-[440px_minmax(0,1fr)]">
-        <TournamentCreateForm sports={data.sports} />
+        <TournamentCreateForm sport={data.sport} />
 
-        <Card className="bg-white/86">
+        <Card>
           <CardHeader>
             <CardTitle>Torneos creados</CardTitle>
             <CardDescription>
-              Entra en cada torneo para editar su configuracion, categorias, participantes y partidos.
+              Entra en cada torneo para seguir con la configuración, cuadros, partidos y resultados.
             </CardDescription>
           </CardHeader>
           <CardContent>

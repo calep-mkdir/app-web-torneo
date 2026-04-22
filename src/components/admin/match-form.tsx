@@ -97,7 +97,7 @@ export function MatchForm({
       <CardHeader>
         <CardTitle>Crear partido</CardTitle>
         <CardDescription>
-          Alta manual de partido con participantes y metadatos operativos.
+          Programa el cruce, la pista y las parejas que van a jugar.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -203,6 +203,7 @@ export function MatchForm({
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="slot1EntryId">Participante 1</Label>
+              
               <Select
                 id="slot1EntryId"
                 name="slot1EntryId"
@@ -210,7 +211,7 @@ export function MatchForm({
                 onChange={(event) => setSlot1EntryId(event.target.value)}
                 disabled={filteredEntries.length === 0}
               >
-                <option value="">Selecciona participante</option>
+                <option value="">Selecciona pareja o jugador</option>
                 {filteredEntries
                   .filter((entry) => entry.id !== currentSlot2EntryId)
                   .map((entry) => (
@@ -229,7 +230,7 @@ export function MatchForm({
                 onChange={(event) => setSlot2EntryId(event.target.value)}
                 disabled={filteredEntries.length === 0}
               >
-                <option value="">Selecciona participante</option>
+                <option value="">Selecciona pareja o jugador</option>
                 {filteredEntries
                   .filter((entry) => entry.id !== currentSlot1EntryId)
                   .map((entry) => (

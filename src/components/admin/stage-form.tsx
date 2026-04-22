@@ -23,7 +23,9 @@ export function StageForm({
     <Card>
       <CardHeader>
         <CardTitle>Nueva fase</CardTitle>
-        <CardDescription>Define fases de grupos o knockout dentro de cada categoria.</CardDescription>
+        <CardDescription>
+          Define si esta categoria empieza en grupos o va directa al cuadro final.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form action={formAction} className="space-y-4">
@@ -52,8 +54,8 @@ export function StageForm({
             <div className="space-y-2">
               <Label htmlFor="stage-type">Tipo</Label>
               <Select id="stage-type" name="stageType" defaultValue="knockout">
-                <option value="group">group</option>
-                <option value="knockout">knockout</option>
+                <option value="group">Grupos</option>
+                <option value="knockout">Knockout</option>
               </Select>
               <FieldErrorText errors={state.fieldErrors} name="stageType" />
             </div>
@@ -66,7 +68,7 @@ export function StageForm({
 
           <div className="space-y-2">
             <Label htmlFor="stage-name">Nombre</Label>
-            <Input id="stage-name" name="name" placeholder="Cuadro final" />
+            <Input id="stage-name" name="name" placeholder="Cuadro principal" />
             <FieldErrorText errors={state.fieldErrors} name="name" />
           </div>
 
@@ -94,7 +96,9 @@ export function StageRoundForm({
     <Card>
       <CardHeader>
         <CardTitle>Nueva ronda</CardTitle>
-        <CardDescription>Necesaria para organizar cruces y mostrar el avance del torneo.</CardDescription>
+        <CardDescription>
+          Úsala para ordenar mejor el cuadro: octavos, cuartos, semifinales o final.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form action={formAction} className="space-y-4">

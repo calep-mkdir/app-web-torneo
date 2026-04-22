@@ -22,7 +22,7 @@ export function ParticipantPathTimeline({
 }) {
   return (
     <div className="space-y-6">
-      <Card className="border-slate-200/80">
+      <Card className="border-white/8 bg-white/[0.03]">
         <CardHeader>
           <CardTitle>Trayectoria de {entryName}</CardTitle>
           <CardDescription>
@@ -45,7 +45,7 @@ export function ParticipantPathTimeline({
       </Card>
 
       {knockoutPath ? (
-        <Card className="border-slate-200/80">
+        <Card className="border-white/8 bg-white/[0.03]">
           <CardHeader>
             <CardTitle>Camino en el bracket</CardTitle>
             <CardDescription>
@@ -57,19 +57,19 @@ export function ParticipantPathTimeline({
               {knockoutPath.matches.map((step) => (
                 <div
                   key={step.matchId}
-                  className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4"
+                  className="rounded-2xl border border-white/8 bg-[#0b1220] px-4 py-4"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-slate-950">{step.roundName}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-sm font-semibold text-white">{step.roundName}</p>
+                      <p className="text-xs text-slate-400">
                         Rival {step.opponentName ?? "Pendiente"}
                       </p>
                     </div>
                     <Badge variant={badgeForOutcome(step.outcome)}>{step.outcome}</Badge>
                   </div>
 
-                  <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-600">
+                  <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-400">
                     <span>
                       Marcador {step.scoreFor ?? "-"} - {step.scoreAgainst ?? "-"}
                     </span>
@@ -82,7 +82,7 @@ export function ParticipantPathTimeline({
         </Card>
       ) : null}
 
-      <Card className="border-slate-200/80">
+      <Card className="border-white/8 bg-white/[0.03]">
         <CardHeader>
           <CardTitle>Historial completo</CardTitle>
           <CardDescription>
@@ -91,7 +91,7 @@ export function ParticipantPathTimeline({
         </CardHeader>
         <CardContent>
           {history.length === 0 ? (
-            <p className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-sm text-slate-500">
+            <p className="rounded-2xl border border-dashed border-white/12 bg-white/[0.03] px-4 py-6 text-sm text-slate-400">
               Este participante todavia no tiene partidos registrados.
             </p>
           ) : (
@@ -99,15 +99,15 @@ export function ParticipantPathTimeline({
               {history.map((match) => (
                 <article
                   key={match.id}
-                  className="rounded-2xl border border-slate-200 bg-white px-4 py-4"
+                  className="rounded-2xl border border-white/8 bg-[#0b1220] px-4 py-4"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium text-slate-950">
+                      <p className="font-medium text-white">
                         {match.stageName}
                         {match.roundName ? ` - ${match.roundName}` : ""}
                       </p>
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="mt-1 text-xs text-slate-400">
                         {formatDateTime(match.scheduledAt, "es-ES", timezone)}
                         {match.venue ? ` - ${match.venue}` : ""}
                       </p>
@@ -123,7 +123,7 @@ export function ParticipantPathTimeline({
                       entryId={match.slot1EntryId}
                       label={match.slot1Label}
                     />
-                    <div className="rounded-full bg-slate-100 px-3 py-1 text-center text-sm font-semibold text-slate-700">
+                    <div className="rounded-full bg-white/[0.05] px-3 py-1 text-center text-sm font-semibold text-slate-200">
                       {match.slot1Score ?? "-"} - {match.slot2Score ?? "-"}
                     </div>
                     <EntryLink
@@ -144,9 +144,9 @@ export function ParticipantPathTimeline({
 
 function SummaryTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border bg-slate-50 px-4 py-4">
+    <div className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-4">
       <div className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</div>
-      <div className="mt-2 text-2xl font-semibold text-slate-950">{value}</div>
+      <div className="mt-2 text-2xl font-semibold text-white">{value}</div>
     </div>
   );
 }
@@ -161,13 +161,13 @@ function EntryLink({
   label: string;
 }) {
   if (!entryId) {
-    return <div className="truncate text-sm font-medium text-slate-700">{label}</div>;
+    return <div className="truncate text-sm font-medium text-slate-300">{label}</div>;
   }
 
   return (
     <Link
       href={`/tournaments/${slug}/participants/${entryId}` as Route}
-      className="truncate text-sm font-medium text-slate-900 no-underline hover:text-sky-700"
+      className="truncate text-sm font-medium text-white no-underline hover:text-cyan-200"
     >
       {label}
     </Link>

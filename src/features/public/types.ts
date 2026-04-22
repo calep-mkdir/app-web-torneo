@@ -18,6 +18,7 @@ export interface PublicTournamentListItem {
 
 export interface PublicSiteStats {
   tournamentsCount: number;
+  categoriesCount: number;
   participantsCount: number;
   liveMatchesCount: number;
   sportsCount: number;

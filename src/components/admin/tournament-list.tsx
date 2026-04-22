@@ -21,7 +21,7 @@ export function TournamentList({
       {tournaments.map((tournament) => (
         <Card
           key={tournament.id}
-          className="overflow-hidden bg-white/85 shadow-[0_24px_80px_-46px_rgba(15,23,42,0.3)]"
+          className="overflow-hidden bg-[linear-gradient(180deg,rgba(17,24,39,0.92)_0%,rgba(15,23,42,0.96)_100%)]"
         >
           <div
             className={
@@ -33,10 +33,10 @@ export function TournamentList({
           <CardHeader className="gap-3">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <CardDescription className="font-medium text-slate-600">
+                <CardDescription className="font-medium text-cyan-200">
                   {tournament.sportName} · {tournament.slug}
                 </CardDescription>
-                <CardTitle className="mt-1 text-2xl text-slate-950">{tournament.name}</CardTitle>
+                <CardTitle className="mt-1 text-2xl text-white">{tournament.name}</CardTitle>
               </div>
               <Badge variant={tournament.isPublic ? "success" : "secondary"}>
                 {tournament.isPublic ? "Publico" : "Privado"}
@@ -52,12 +52,12 @@ export function TournamentList({
             </dl>
 
             <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
+              <span className="rounded-full bg-white/[0.05] px-3 py-1 text-slate-300">
                 Estado: {tournament.status.replaceAll("_", " ")}
               </span>
               <Link
                 href={`/admin/tournaments/${tournament.id}` as Route}
-                className="font-semibold no-underline"
+                className="font-semibold text-cyan-200 no-underline"
               >
                 Abrir torneo
               </Link>
@@ -71,9 +71,9 @@ export function TournamentList({
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[1.25rem] border border-white/70 bg-slate-50/90 p-3">
+    <div className="rounded-[1.25rem] border border-white/8 bg-white/[0.04] p-3">
       <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{label}</dt>
-      <dd className="mt-1 text-lg font-semibold text-slate-950">{value}</dd>
+      <dd className="mt-1 text-lg font-semibold text-white">{value}</dd>
     </div>
   );
 }

@@ -22,9 +22,9 @@ export function ParticipantRegistrationForm({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Anadir participante</CardTitle>
+        <CardTitle>Anadir pareja o jugador</CardTitle>
         <CardDescription>
-          Crea el participante y lo registra directamente en una categoria.
+          Registra una pareja o jugador directamente dentro de la categoria elegida.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -52,7 +52,7 @@ export function ParticipantRegistrationForm({
 
           <div className="space-y-2">
             <Label htmlFor="displayName">Nombre visible</Label>
-            <Input id="displayName" name="displayName" placeholder="Carlos Perez" />
+            <Input id="displayName" name="displayName" placeholder="Alejandro / Marcos" />
             <FieldErrorText errors={state.fieldErrors} name="displayName" />
           </div>
 
@@ -70,7 +70,7 @@ export function ParticipantRegistrationForm({
           </div>
 
           <Button type="submit" disabled={pending || !hasCategories}>
-            {pending ? "Guardando..." : "Registrar participante"}
+            {pending ? "Guardando..." : "Registrar entrada"}
           </Button>
         </form>
       </CardContent>

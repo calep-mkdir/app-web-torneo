@@ -35,7 +35,7 @@ export default async function TournamentAdminPage({
         />
         <Link
           href="/admin"
-          className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 no-underline transition hover:border-slate-300 hover:text-slate-950"
+          className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white no-underline transition hover:bg-white/[0.08]"
         >
           Volver al dashboard
         </Link>
@@ -55,7 +55,7 @@ export default async function TournamentAdminPage({
       />
 
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <TournamentEditForm tournament={data.tournament} sports={data.sports} />
+        <TournamentEditForm tournament={data.tournament} />
 
         <Card>
           <CardHeader>

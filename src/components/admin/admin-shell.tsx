@@ -21,21 +21,21 @@ export function AdminShell({
   ] satisfies ReadonlyArray<{ href: Route; label: string }>;
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#fff7ed_0%,#fffef7_34%,#f7fbff_100%)]">
+    <div className="min-h-screen">
       <div className="mx-auto grid min-h-screen max-w-[1600px] grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)]">
-        <aside className="relative overflow-hidden border-b border-white/70 bg-white/78 px-5 py-6 backdrop-blur lg:border-b-0 lg:border-r">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(circle_at_top_left,rgba(249,115,22,0.18),transparent_48%),radial-gradient(circle_at_top_right,rgba(14,165,233,0.14),transparent_44%)]" />
+        <aside className="relative overflow-hidden border-b border-white/8 bg-[#090f1d]/82 px-5 py-6 backdrop-blur lg:border-b-0 lg:border-r">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_48%),radial-gradient(circle_at_top_right,rgba(217,249,157,0.14),transparent_44%)]" />
 
           <div className="relative mb-8">
             <div className="flex items-center gap-3">
-              <div className="rounded-2xl bg-[linear-gradient(135deg,#f97316_0%,#ec4899_50%,#06b6d4_100%)] p-3 text-white shadow-lg shadow-orange-200/40">
+              <div className="rounded-2xl bg-[linear-gradient(135deg,#22d3ee_0%,#7dd3fc_48%,#d9f99d_100%)] p-3 text-slate-950 shadow-[0_18px_40px_-24px_rgba(125,211,252,0.9)]">
                 <Trophy className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-fuchsia-600">
-                  Gestion abierta
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+                  Gestion de padel
                 </p>
-                <h1 className="text-lg font-semibold text-slate-950">App Web Torneo</h1>
+                <h1 className="text-lg font-semibold text-white">App Web Torneo</h1>
               </div>
             </div>
           </div>
@@ -66,13 +66,13 @@ export function AdminShell({
             })}
           </nav>
 
-          <div className="relative mt-8 rounded-[1.5rem] border border-white/75 bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_45%,#eff6ff_100%)] p-4 text-sm text-slate-600 shadow-[0_24px_60px_-44px_rgba(15,23,42,0.35)]">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+          <div className="relative mt-8 rounded-[1.5rem] border border-white/8 bg-white/[0.03] p-4 text-sm text-slate-400 shadow-[0_24px_60px_-44px_rgba(0,0,0,0.5)]">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-lime-300/14 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-lime-200">
               <Sparkles className="h-3.5 w-3.5" />
-              Sin login
+              Flujo corto
             </div>
-            Panel operativo para crear torneos, mover partidos, guardar resultados y saltar a la
-            vista publica cuando lo necesites.
+            Crea el torneo, completa el cuadro y salta a la vista pública cuando necesites revisar
+            cómo se está viendo fuera del panel.
           </div>
         </aside>
 
@@ -99,8 +99,8 @@ function SidebarLink({
       className={cn(
         "flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-semibold no-underline transition",
         active
-          ? "bg-slate-950 text-white shadow-lg shadow-slate-900/20"
-          : "bg-white/80 text-slate-700 hover:bg-white hover:text-slate-950",
+          ? "bg-lime-300 text-slate-950 shadow-[0_18px_35px_-24px_rgba(217,249,157,0.75)]"
+          : "bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white",
       )}
     >
       {icon}

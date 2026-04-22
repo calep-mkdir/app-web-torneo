@@ -1,6 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
+import { getPadelSport } from "@/lib/padel";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 
 import type {
@@ -15,7 +16,7 @@ import type {
 } from "./types";
 
 export async function getAdminOverviewData(): Promise<{
-  sports: SportOption[];
+  sport: SportOption | null;
   tournaments: TournamentListItem[];
   stats: {
     tournamentsCount: number;
@@ -65,6 +66,10 @@ export async function getAdminOverviewData(): Promise<{
   const entries = entriesResult.data ?? [];
   const matches = matchesResult.data ?? [];
 
+  const padelSport = getPadelSport(sports);
+  const visibleSportIds = new Set(
+    padelSport ? [padelSport.id] : sports.map((sport) => sport.id),
+  );
   const sportMap = new Map(sports.map((sport) => [sport.id, sport.name]));
   const categoriesByTournament = new Map<string, string[]>();
   for (const category of categories) {
@@ -73,7 +78,9 @@ export async function getAdminOverviewData(): Promise<{
     categoriesByTournament.set(category.tournament_id, list);
   }
 
-  const tournamentItems: TournamentListItem[] = tournaments.map((tournament) => {
+  const tournamentItems: TournamentListItem[] = tournaments
+    .filter((tournament) => visibleSportIds.has(tournament.sport_id))
+    .map((tournament) => {
     const categoryIds = categoriesByTournament.get(tournament.id) ?? [];
     const categoryIdSet = new Set(categoryIds);
     const tournamentEntries = entries.filter((entry) => categoryIdSet.has(entry.category_id));
@@ -95,10 +102,10 @@ export async function getAdminOverviewData(): Promise<{
       matchesCount: tournamentMatches.length,
       finishedMatchesCount: tournamentMatches.filter((match) => match.status === "finished").length,
     };
-  });
+    });
 
   return {
-    sports,
+    sport: padelSport,
     tournaments: tournamentItems,
     stats: {
       tournamentsCount: tournamentItems.length,
@@ -142,6 +149,8 @@ export async function getTournamentAdminDetail(
   }
 
   const tournament = tournamentResult.data;
+  const sports = (sportsResult.data ?? []) as SportOption[];
+  const sportMap = new Map(sports.map((sport) => [sport.id, sport.name]));
   const categories = (categoriesResult.data ?? []).map<TournamentCategoryRecord>((category) => ({
     id: category.id,
     tournamentId: category.tournament_id,
@@ -342,8 +351,8 @@ export async function getTournamentAdminDetail(
       startAt: tournament.start_at,
       endAt: tournament.end_at,
       sportId: tournament.sport_id,
+      sportName: sportMap.get(tournament.sport_id) ?? "Padel",
     },
-    sports: (sportsResult.data ?? []) as SportOption[],
     categories,
     stages,
     stageRounds,

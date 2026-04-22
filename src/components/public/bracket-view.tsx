@@ -14,7 +14,7 @@ export function BracketView({
 }) {
   if (!bracket) {
     return (
-      <Card className="border-slate-200/80">
+      <Card className="border-white/8 bg-white/[0.03]">
         <CardHeader>
           <CardTitle>Bracket</CardTitle>
           <CardDescription>
@@ -34,7 +34,7 @@ export function BracketView({
   }));
 
   return (
-    <Card className="border-slate-200/80">
+    <Card className="border-white/8 bg-white/[0.03]">
       <CardHeader>
         <CardTitle>Bracket en tiempo real</CardTitle>
         <CardDescription>
@@ -52,11 +52,11 @@ export function BracketView({
                   paddingTop: `${round.roundIndex === 0 ? 0 : round.roundIndex * 22}px`,
                 }}
               >
-                <div className="mb-3 rounded-2xl border bg-slate-50 px-4 py-3">
+                <div className="mb-3 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3">
                   <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                     Ronda {round.roundNumber}
                   </p>
-                  <p className="mt-1 font-semibold text-slate-950">{round.name}</p>
+                  <p className="mt-1 font-semibold text-white">{round.name}</p>
                 </div>
 
                 <div
@@ -68,14 +68,14 @@ export function BracketView({
                   {round.matches.map((match) => (
                     <article
                       key={match.id}
-                      className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                      className="rounded-2xl border border-white/8 bg-[#0b1220] p-4 shadow-[0_18px_40px_-28px_rgba(0,0,0,0.6)]"
                     >
                       <div className="flex items-center justify-between gap-3">
                         <div>
                           <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                             Partido {match.position}
                           </p>
-                          <p className="mt-1 text-sm font-medium text-slate-950">{match.roundName}</p>
+                          <p className="mt-1 text-sm font-medium text-white">{match.roundName}</p>
                         </div>
                         <Badge variant={statusVariant(match.status)}>{match.status}</Badge>
                       </div>
@@ -98,8 +98,8 @@ export function BracketView({
                               className={cn(
                                 "flex items-center justify-between rounded-xl px-3 py-3",
                                 isWinner
-                                  ? "bg-emerald-50 text-emerald-900"
-                                  : "bg-slate-50 text-slate-700",
+                                  ? "bg-lime-300/18 text-lime-100"
+                                  : "bg-white/[0.04] text-slate-200",
                               )}
                             >
                               <div className="min-w-0">

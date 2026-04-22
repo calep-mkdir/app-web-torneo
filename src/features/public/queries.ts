@@ -2,6 +2,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import { notFound } from "next/navigation";
 
 import { fetchTournamentLiveSnapshot } from "@/features/live";
+import { getPadelSport } from "@/lib/padel";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 
 import { buildEntryHistory, buildKnockoutPath, getEntryLabel } from "./mappers";
@@ -21,7 +22,7 @@ export async function getPublicTournamentIndexData(): Promise<{
 
   const [sportsResult, tournamentsResult, categoriesResult, entriesResult, matchesResult] =
     await Promise.all([
-      supabase.from("sports").select("id, name"),
+      supabase.from("sports").select("id, code, name"),
       supabase
         .from("tournaments")
         .select("id, sport_id, slug, name, venue, timezone, status, start_at, end_at")
@@ -52,7 +53,12 @@ export async function getPublicTournamentIndexData(): Promise<{
     throw new Error(`No se pudieron cargar los partidos: ${matchesResult.error.message}`);
   }
 
-  const sportsMap = new Map((sportsResult.data ?? []).map((sport) => [sport.id, sport.name]));
+  const sports = sportsResult.data ?? [];
+  const padelSport = getPadelSport(sports);
+  const visibleTournamentRows = (tournamentsResult.data ?? []).filter((tournament) =>
+    padelSport ? tournament.sport_id === padelSport.id : true,
+  );
+  const sportsMap = new Map(sports.map((sport) => [sport.id, sport.name]));
   const categoriesByTournament = new Map<string, string[]>();
   for (const category of categoriesResult.data ?? []) {
     const list = categoriesByTournament.get(category.tournament_id) ?? [];
@@ -60,7 +66,7 @@ export async function getPublicTournamentIndexData(): Promise<{
     categoriesByTournament.set(category.tournament_id, list);
   }
 
-  const tournaments = (tournamentsResult.data ?? []).map<PublicTournamentListItem>((tournament) => {
+  const tournaments = visibleTournamentRows.map<PublicTournamentListItem>((tournament) => {
     const categoryIds = categoriesByTournament.get(tournament.id) ?? [];
     const categoryIdSet = new Set(categoryIds);
     const participantsCount = (entriesResult.data ?? []).filter((entry) =>
@@ -74,7 +80,7 @@ export async function getPublicTournamentIndexData(): Promise<{
       id: tournament.id,
       slug: tournament.slug,
       name: tournament.name,
-      sportName: sportsMap.get(tournament.sport_id) ?? "Deporte",
+      sportName: sportsMap.get(tournament.sport_id) ?? padelSport?.name ?? "Padel",
       venue: tournament.venue,
       timezone: tournament.timezone,
       status: tournament.status,
@@ -151,6 +157,10 @@ export async function getPublicHomePageData(): Promise<{
 
   const stats: PublicSiteStats = {
     tournamentsCount: tournaments.length,
+    categoriesCount: tournaments.reduce(
+      (total, tournament) => total + tournament.categoriesCount,
+      0,
+    ),
     participantsCount: tournaments.reduce(
       (total, tournament) => total + tournament.participantsCount,
       0,

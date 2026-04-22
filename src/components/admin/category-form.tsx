@@ -18,7 +18,9 @@ export function CategoryForm({ tournamentId }: { tournamentId: string }) {
     <Card>
       <CardHeader>
         <CardTitle>Nueva categoria</CardTitle>
-        <CardDescription>Crea categorias para separar cuadros, grupos o divisiones.</CardDescription>
+        <CardDescription>
+          Crea niveles, divisiones o cuadros para organizar mejor el torneo de pádel.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form action={formAction} className="space-y-4">
@@ -27,13 +29,13 @@ export function CategoryForm({ tournamentId }: { tournamentId: string }) {
 
           <div className="space-y-2">
             <Label htmlFor="category-name">Nombre</Label>
-            <Input id="category-name" name="name" placeholder="Senior Masculino" />
+            <Input id="category-name" name="name" placeholder="Mixto nivel 3" />
             <FieldErrorText errors={state.fieldErrors} name="name" />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="category-slug">Slug</Label>
-            <Input id="category-slug" name="slug" placeholder="senior-masculino" />
+            <Input id="category-slug" name="slug" placeholder="mixto-nivel-3" />
             <FieldErrorText errors={state.fieldErrors} name="slug" />
           </div>
 

@@ -111,8 +111,8 @@ export interface TournamentAdminDetail {
     startAt: string | null;
     endAt: string | null;
     sportId: string;
+    sportName: string;
   };
-  sports: SportOption[];
   categories: TournamentCategoryRecord[];
   stages: TournamentStageRecord[];
   stageRounds: TournamentStageRoundRecord[];

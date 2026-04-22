@@ -2,25 +2,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: 42 100% 98%;
-  --foreground: 222 47% 11%;
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-  --primary: 197 92% 45%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 36 100% 95%;
-  --secondary-foreground: 222 47% 11%;
-  --muted: 36 100% 97%;
-  --muted-foreground: 215 16% 47%;
-  --accent: 187 92% 95%;
-  --accent-foreground: 222 47% 11%;
+  --background: 224 27% 8%;
+  --foreground: 210 40% 96%;
+  --card: 222 24% 12%;
+  --card-foreground: 210 40% 96%;
+  --popover: 222 24% 10%;
+  --popover-foreground: 210 40% 96%;
+  --primary: 78 96% 64%;
+  --primary-foreground: 224 27% 8%;
+  --secondary: 221 18% 18%;
+  --secondary-foreground: 210 40% 96%;
+  --muted: 222 18% 15%;
+  --muted-foreground: 215 20% 69%;
+  --accent: 193 95% 56%;
+  --accent-foreground: 224 27% 8%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
-  --border: 34 45% 90%;
-  --input: 34 45% 90%;
-  --ring: 197 92% 45%;
+  --border: 220 16% 21%;
+  --input: 220 16% 21%;
+  --ring: 193 95% 56%;
   --radius: 1rem;
 }
 
@@ -30,15 +30,16 @@
 }
 
 html {
-  color-scheme: light;
+  color-scheme: dark;
   scroll-behavior: smooth;
 }
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(251, 146, 60, 0.1), transparent 26%),
-    radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 24%),
-    linear-gradient(180deg, #fff7ed 0%, #fffef7 32%, #f7fbff 100%);
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 24%),
+    radial-gradient(circle at top right, rgba(217, 249, 157, 0.08), transparent 20%),
+    radial-gradient(circle at bottom center, rgba(244, 114, 182, 0.08), transparent 24%),
+    linear-gradient(180deg, #0d1324 0%, #0a1020 34%, #070b15 100%);
   color: hsl(var(--foreground));
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -76,5 +77,5 @@ input[type="number"] {
 }
 
 ::selection {
-  background: rgba(14, 165, 233, 0.2);
+  background: rgba(56, 189, 248, 0.28);
 }

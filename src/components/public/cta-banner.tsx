@@ -19,29 +19,30 @@ export function CtaBanner({
   secondaryLabel?: string;
 }) {
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-[linear-gradient(135deg,#f97316_0%,#fb7185_45%,#38bdf8_100%)] px-6 py-8 text-white shadow-[0_30px_90px_-35px_rgba(14,165,233,0.55)] sm:px-8 sm:py-10">
-      <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.24),transparent_62%)] lg:block" />
+    <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(135deg,#0f172a_0%,#111827_40%,#0b1120_100%)] px-6 py-8 text-white shadow-[0_30px_90px_-35px_rgba(0,0,0,0.55)] sm:px-8 sm:py-10">
+      <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.18),transparent_62%)] lg:block" />
+      <div className="absolute left-8 top-8 h-24 w-24 rounded-full bg-lime-300/12 blur-3xl" />
 
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-white/80">
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
             {eyebrow}
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-white/85">{description}</p>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">{description}</p>
         </div>
 
         <div className="flex flex-wrap gap-3">
           <Link
             href={primaryHref}
-            className="inline-flex items-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 no-underline transition hover:-translate-y-0.5 hover:bg-slate-100"
+            className="inline-flex items-center rounded-full bg-lime-300 px-5 py-3 text-sm font-semibold text-slate-950 no-underline transition hover:-translate-y-0.5 hover:bg-lime-200"
           >
             {primaryLabel}
           </Link>
           {secondaryHref && secondaryLabel ? (
             <Link
               href={secondaryHref}
-              className="inline-flex items-center rounded-full border border-white/55 bg-white/10 px-5 py-3 text-sm font-semibold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/20"
+              className="inline-flex items-center rounded-full border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/[0.08]"
             >
               {secondaryLabel}
             </Link>

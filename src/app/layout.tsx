@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | App Web Torneo",
   },
   description:
-    "Plataforma multipagina para organizar torneos, publicar cuadros y seguir competiciones con una experiencia alegre, deportiva y responsive.",
+    "Plataforma de padel para crear torneos, seguir cuadros y publicar resultados con una experiencia más simple, oscura y visual.",
 };
 
 export default function RootLayout({

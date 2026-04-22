@@ -37,7 +37,7 @@ export function ResultForm({ matches }: { matches: TournamentMatchRecord[] }) {
       <CardHeader>
         <CardTitle>Introducir resultado</CardTitle>
         <CardDescription>
-          Guarda el marcador y, en knockout, avanza automaticamente el ganador.
+          Guarda el marcador y deja listo el siguiente cruce cuando haya knockout.
         </CardDescription>
       </CardHeader>
       <CardContent>

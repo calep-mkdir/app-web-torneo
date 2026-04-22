@@ -32,11 +32,11 @@ export default async function PublicTournamentPage({
           initialSnapshot={data.initialSnapshot}
         />
       ) : (
-        <Card className="border-slate-200/80">
+        <Card className="border-white/8 bg-white/[0.03]">
           <CardHeader>
             <CardTitle>Sin categorias publicas</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-slate-500">
+          <CardContent className="text-sm text-slate-400">
             Este torneo todavia no tiene categorias configuradas para mostrar bracket o partidos.
           </CardContent>
         </Card>

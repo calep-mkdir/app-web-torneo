@@ -24,7 +24,7 @@ export function LiveMatchList({
   timezone?: string;
 }) {
   return (
-    <Card className="border-slate-200/80">
+    <Card className="border-white/8 bg-white/[0.03]">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
@@ -37,15 +37,15 @@ export function LiveMatchList({
             {matches.map((match) => (
               <article
                 key={match.id}
-                className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4"
+                className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-4"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-slate-950">
+                    <p className="text-sm font-semibold text-white">
                       {match.stageName}
                       {match.roundName ? ` - ${match.roundName}` : ""}
                     </p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-400">
                       {formatDateTime(match.scheduledAt, "es-ES", timezone)}
                       {match.venue ? ` - ${match.venue}` : ""}
                     </p>
@@ -101,7 +101,7 @@ function ScoreRow({
     <div
       className={[
         "flex items-center justify-between rounded-xl px-3 py-2 transition",
-        winner ? "bg-emerald-50 text-emerald-900" : "bg-white text-slate-700",
+        winner ? "bg-lime-300/18 text-lime-100" : "bg-[#0b1220] text-slate-200",
       ].join(" ")}
     >
       <span className="truncate font-medium">{label}</span>
@@ -122,9 +122,9 @@ function ScoreRow({
 
 function EmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center">
-      <p className="font-medium text-slate-900">{title}</p>
-      <p className="mt-2 text-sm text-slate-500">{description}</p>
+    <div className="rounded-2xl border border-dashed border-white/12 bg-white/[0.03] px-4 py-8 text-center">
+      <p className="font-medium text-white">{title}</p>
+      <p className="mt-2 text-sm text-slate-400">{description}</p>
     </div>
   );
 }

@@ -31,7 +31,7 @@ export function FieldErrorText({
     return null;
   }
 
-  return <p className="mt-1 text-xs text-rose-600">{fieldErrors[0]}</p>;
+  return <p className="mt-1 text-xs text-rose-300">{fieldErrors[0]}</p>;
 }
 
 export function SubmitButton({

@@ -31,8 +31,13 @@ export default async function PublicParticipantPage({
       </div>
 
       <div className="flex items-center justify-between">
-        <Link href={`/tournaments/${slug}` as Route}>Volver al torneo</Link>
-        <div className="text-sm text-slate-500">Seed {data.entry.seed ?? "-"}</div>
+        <Link
+          href={`/tournaments/${slug}` as Route}
+          className="text-sm font-semibold text-cyan-200 no-underline"
+        >
+          Volver al torneo
+        </Link>
+        <div className="text-sm text-slate-400">Seed {data.entry.seed ?? "-"}</div>
       </div>
 
       <ParticipantPathTimeline
