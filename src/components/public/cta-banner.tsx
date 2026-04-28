@@ -12,7 +12,7 @@ export function CtaBanner({
 }: {
   eyebrow: string;
   title: string;
-  description: string;
+  description?: string;
   primaryHref: Route;
   primaryLabel: string;
   secondaryHref?: Route;
@@ -29,13 +29,15 @@ export function CtaBanner({
             {eyebrow}
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">{description}</p>
+          {description ? (
+            <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">{description}</p>
+          ) : null}
         </div>
 
         <div className="flex flex-wrap gap-3">
           <Link
             href={primaryHref}
-            className="inline-flex items-center rounded-full bg-lime-300 px-5 py-3 text-sm font-semibold text-slate-950 no-underline transition hover:-translate-y-0.5 hover:bg-lime-200"
+            className="inline-flex items-center rounded-full bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] px-5 py-3 text-sm font-semibold text-slate-950 no-underline shadow-[0_18px_45px_-18px_rgba(103,232,249,0.5)] transition hover:-translate-y-0.5 hover:brightness-105"
           >
             {primaryLabel}
           </Link>

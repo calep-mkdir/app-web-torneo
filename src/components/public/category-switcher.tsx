@@ -36,7 +36,7 @@ export function CategorySwitcher({
               className={[
                 "rounded-full border px-4 py-2 text-sm font-medium transition",
                 isActive
-                  ? "border-lime-300 bg-lime-300 text-slate-950 shadow-[0_18px_35px_-24px_rgba(217,249,157,0.75)]"
+                  ? "border-transparent bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] text-slate-950 shadow-[0_18px_45px_-22px_rgba(103,232,249,0.45)]"
                   : "border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white",
               ].join(" ")}
             >

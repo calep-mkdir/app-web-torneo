@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { CalendarDays, MapPin, Sparkles, Waves } from "lucide-react";
+import { Waves } from "lucide-react";
 
 import { createTournamentAction } from "@/features/admin/actions";
 import { initialAdminActionState, type SportOption } from "@/features/admin/types";
@@ -41,18 +41,11 @@ export function TournamentCreateForm({
     <Card className="overflow-hidden">
       <div className="h-1 bg-[linear-gradient(90deg,#7dd3fc_0%,#d9f99d_52%,#fb7185_100%)]" />
       <CardHeader>
-        <div className="flex flex-wrap items-center gap-3">
-          <Badge variant="secondary" className="bg-white/8 text-white">
-            {sport?.name ?? "Padel"}
-          </Badge>
-          <Badge variant="outline" className="border-white/10 bg-white/4 text-slate-300">
-            Alta rapida
-          </Badge>
-        </div>
-        <CardTitle>Crea un torneo en menos de un minuto</CardTitle>
-        <CardDescription>
-          Solo pedimos lo necesario para empezar. El resto del setup queda dentro del torneo.
-        </CardDescription>
+        <Badge variant="secondary" className="w-fit bg-white/8 text-white">
+          {sport?.name ?? "Padel"}
+        </Badge>
+        <CardTitle>Nuevo torneo</CardTitle>
+        <CardDescription>Nombre, club y fechas.</CardDescription>
       </CardHeader>
       <CardContent>
         <form action={formAction} className="space-y-5">
@@ -67,24 +60,6 @@ export function TournamentCreateForm({
               torneos.
             </p>
           ) : null}
-
-          <div className="grid gap-3 sm:grid-cols-3">
-            <QuickHint
-              icon={Sparkles}
-              title="Padel fijo"
-              text="La app ya trabaja solo para torneos de pádel."
-            />
-            <QuickHint
-              icon={MapPin}
-              title="Listo para club"
-              text="Crea el torneo con sede, fechas y publicación en una sola pasada."
-            />
-            <QuickHint
-              icon={CalendarDays}
-              title="Sin ruido"
-              text="Slug, zona horaria y notas quedan recogidos en ajustes avanzados."
-            />
-          </div>
 
           <div className="space-y-2">
             <Label htmlFor="name">Nombre del torneo</Label>
@@ -132,16 +107,16 @@ export function TournamentCreateForm({
               className="mt-0.5"
             />
             <span className="space-y-1">
-              <span className="block text-sm font-semibold text-white">Publicar en la web</span>
+              <span className="block text-sm font-semibold text-white">Publicar ahora</span>
               <span className="block text-sm text-slate-400">
-                Si lo activas, el torneo sale publicado al crearlo. Si no, se guarda como borrador.
+                Si no, se guarda como borrador.
               </span>
             </span>
           </label>
 
           <details className="rounded-3xl border border-white/10 bg-white/[0.03] px-4 py-4">
             <summary className="cursor-pointer list-none text-sm font-semibold text-white">
-              Ajustes avanzados
+              Ajustes
             </summary>
 
             <div className="mt-4 grid gap-4">
@@ -165,7 +140,7 @@ export function TournamentCreateForm({
                 <Textarea
                   id="description"
                   name="description"
-                  placeholder="Torneo de fin de semana con cuadro principal y seguimiento en directo."
+                  placeholder="Cuadro principal, fase de grupos o nota breve."
                 />
                 <FieldErrorText errors={state.fieldErrors} name="description" />
               </div>
@@ -178,28 +153,10 @@ export function TournamentCreateForm({
           </details>
 
           <Button type="submit" disabled={pending || !hasSport} size="lg" className="w-full">
-            {pending ? "Creando torneo..." : "Crear torneo de padel"}
+            {pending ? "Creando torneo..." : "Crear torneo"}
           </Button>
         </form>
       </CardContent>
     </Card>
-  );
-}
-
-function QuickHint({
-  icon: Icon,
-  title,
-  text,
-}: {
-  icon: typeof Sparkles;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="rounded-3xl border border-white/8 bg-white/[0.03] px-4 py-4">
-      <Icon className="h-4 w-4 text-cyan-300" />
-      <p className="mt-3 text-sm font-semibold text-white">{title}</p>
-      <p className="mt-1 text-sm leading-6 text-slate-400">{text}</p>
-    </div>
   );
 }

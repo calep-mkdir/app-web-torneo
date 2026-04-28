@@ -3,7 +3,7 @@
 import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, LayoutDashboard, Sparkles, Trophy } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, Trophy } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -14,9 +14,9 @@ export function AdminShell({
 }) {
   const pathname = usePathname();
   const navItems = [
-    { href: "/admin", label: "Dashboard" },
-    { href: "/tournaments", label: "Vista publica" },
-    { href: "/deportes", label: "Deportes" },
+    { href: "/admin", label: "Panel" },
+    { href: "/tournaments", label: "Web" },
+    { href: "/deportes", label: "Circuito" },
     { href: "/organiza", label: "Organiza" },
   ] satisfies ReadonlyArray<{ href: Route; label: string }>;
 
@@ -32,9 +32,7 @@ export function AdminShell({
                 <Trophy className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
-                  Gestion de padel
-                </p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">Padel</p>
                 <h1 className="text-lg font-semibold text-white">App Web Torneo</h1>
               </div>
             </div>
@@ -67,12 +65,10 @@ export function AdminShell({
           </nav>
 
           <div className="relative mt-8 rounded-[1.5rem] border border-white/8 bg-white/[0.03] p-4 text-sm text-slate-400 shadow-[0_24px_60px_-44px_rgba(0,0,0,0.5)]">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-lime-300/14 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-lime-200">
-              <Sparkles className="h-3.5 w-3.5" />
-              Flujo corto
+            <div className="mb-3 inline-flex rounded-full bg-cyan-400/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
+              Atajos
             </div>
-            Crea el torneo, completa el cuadro y salta a la vista pública cuando necesites revisar
-            cómo se está viendo fuera del panel.
+            Crea. Edita. Publica.
           </div>
         </aside>
 
@@ -99,7 +95,7 @@ function SidebarLink({
       className={cn(
         "flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-semibold no-underline transition",
         active
-          ? "bg-lime-300 text-slate-950 shadow-[0_18px_35px_-24px_rgba(217,249,157,0.75)]"
+          ? "bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] text-slate-950 shadow-[0_18px_45px_-22px_rgba(103,232,249,0.45)]"
           : "bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white",
       )}
     >

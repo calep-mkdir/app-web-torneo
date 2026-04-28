@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui";
+import { cn } from "@/lib/utils";
 
 import { formatDateRange } from "./date-utils";
 
@@ -12,6 +13,7 @@ export function PublicPageHero({
   startAt,
   endAt,
   timezone,
+  details,
 }: {
   eyebrow: string;
   title: string;
@@ -22,7 +24,16 @@ export function PublicPageHero({
   startAt?: string | null;
   endAt?: string | null;
   timezone?: string;
+  details?: Array<{ label: string; value: string }>;
 }) {
+  const detailItems =
+    details ??
+    [
+      { label: "Fechas", value: formatDateRange(startAt, endAt, "es-ES", timezone) },
+      ...(timezone ? [{ label: "Zona", value: timezone }] : []),
+      ...(venue ? [{ label: "Club", value: venue }] : []),
+    ];
+
   return (
     <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(180deg,rgba(17,24,39,0.92)_0%,rgba(15,23,42,0.92)_100%)] shadow-[0_28px_90px_-42px_rgba(0,0,0,0.55)] backdrop-blur">
       <div className="absolute inset-x-0 top-0 h-full bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.12),transparent_32%),radial-gradient(circle_at_top_right,rgba(217,249,157,0.1),transparent_34%),radial-gradient(circle_at_center,rgba(251,113,133,0.08),transparent_42%)]" />
@@ -53,11 +64,22 @@ export function PublicPageHero({
           </div>
         </div>
 
-        <div className="mt-8 grid gap-3 text-sm text-slate-400 sm:grid-cols-3">
-          <InfoTile label="Calendario" value={formatDateRange(startAt, endAt, "es-ES", timezone)} />
-          <InfoTile label="Zona horaria" value={timezone ?? "UTC"} />
-          <InfoTile label="Sede" value={venue ?? "Pendiente"} />
-        </div>
+        {detailItems.length > 0 ? (
+          <div
+            className={cn(
+              "mt-8 grid gap-3 text-sm text-slate-400",
+              detailItems.length === 1
+                ? "sm:grid-cols-1"
+                : detailItems.length === 2
+                  ? "sm:grid-cols-2"
+                  : "sm:grid-cols-3",
+            )}
+          >
+            {detailItems.map((item) => (
+              <InfoTile key={`${item.label}-${item.value}`} label={item.label} value={item.value} />
+            ))}
+          </div>
+        ) : null}
       </div>
     </section>
   );

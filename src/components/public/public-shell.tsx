@@ -3,7 +3,7 @@
 import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sparkles, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -18,7 +18,7 @@ export function PublicShell({
     { href: "/tournaments", label: "Torneos" },
     { href: "/deportes", label: "Circuito" },
     { href: "/organiza", label: "Organiza" },
-    { href: "/admin", label: "Gestion" },
+    { href: "/admin", label: "Panel" },
   ] satisfies ReadonlyArray<{ href: Route; label: string }>;
 
   return (
@@ -33,17 +33,13 @@ export function PublicShell({
             </div>
             <div className="min-w-0">
               <Link href="/" className="no-underline">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-300">
-                  Padel en directo
-                </span>
-                <span className="mt-1 block truncate text-xl font-semibold text-white">
-                  App Web Torneo
-                </span>
+                <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-300">Padel</span>
+                <span className="mt-1 block truncate text-xl font-semibold text-white">App Web Torneo</span>
               </Link>
             </div>
           </div>
 
-          <nav className="flex flex-wrap items-center gap-2">
+          <nav className="flex flex-1 flex-wrap items-center gap-2 lg:justify-center">
             {navItems.map((item) => {
               const isActive =
                 item.href === "/"
@@ -57,7 +53,7 @@ export function PublicShell({
                   className={cn(
                     "rounded-full px-4 py-2 text-sm font-semibold no-underline transition",
                     isActive
-                      ? "bg-lime-300 text-slate-950 shadow-[0_18px_35px_-24px_rgba(217,249,157,0.75)]"
+                      ? "bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] text-slate-950 shadow-[0_18px_45px_-22px_rgba(103,232,249,0.45)]"
                       : "bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white",
                   )}
                 >
@@ -68,10 +64,12 @@ export function PublicShell({
           </nav>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/15 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-100">
-              <Sparkles className="h-4 w-4" />
-              Claro, rapido y visual
-            </div>
+            <Link
+              href={"/admin" as Route}
+              className="inline-flex items-center rounded-full bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] px-5 py-3 text-sm font-semibold text-slate-950 no-underline shadow-[0_18px_45px_-18px_rgba(103,232,249,0.5)] transition hover:-translate-y-0.5 hover:brightness-105"
+            >
+              Crear torneo
+            </Link>
           </div>
         </div>
       </header>
@@ -79,30 +77,33 @@ export function PublicShell({
       <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">{children}</main>
 
       <footer className="relative mt-10 border-t border-white/8 bg-black/20 backdrop-blur">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
-              Hecho para torneos de padel
-            </p>
-            <h2 className="mt-3 text-2xl font-semibold text-white">
-              Menos ruido, mejor seguimiento y un panel que no te frena.
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
-              Sigue partidos, revisa cuadros y entra en gestión desde una interfaz oscura, simple y
-              con personalidad propia.
-            </p>
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#22d3ee_0%,#7dd3fc_38%,#d9f99d_100%)] text-slate-950">
+              <Trophy className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">Padel</p>
+              <p className="text-lg font-semibold text-white">App Web Torneo</p>
+            </div>
           </div>
 
-          <div className="grid gap-3 text-sm text-slate-400 sm:grid-cols-2">
+          <div className="flex flex-wrap items-center gap-2 text-sm text-slate-300">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 no-underline transition hover:-translate-y-0.5 hover:bg-white/[0.06] hover:text-white"
+                className="rounded-full border border-white/8 bg-white/[0.03] px-4 py-2 no-underline transition hover:bg-white/[0.08] hover:text-white"
               >
                 {item.label}
               </Link>
             ))}
+            <Link
+              href={"/admin" as Route}
+              className="rounded-full bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] px-4 py-2 font-semibold text-slate-950 no-underline shadow-[0_18px_40px_-22px_rgba(103,232,249,0.45)] transition hover:brightness-105"
+            >
+              Crear torneo
+            </Link>
           </div>
         </div>
       </footer>

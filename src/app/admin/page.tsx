@@ -8,9 +8,9 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Panel de padel"
-        title="Gestion simple para torneos que salen rapido"
-        description="Empieza creando el torneo y después entra a completar categorías, parejas, cruces y resultados desde un flujo más corto y claro."
+        eyebrow="Panel"
+        title="Nuevo torneo"
+        description="Crea uno y entra."
         badge={`${data.tournaments.length} torneos`}
       />
 
@@ -28,16 +28,12 @@ export default async function AdminDashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Torneos creados</CardTitle>
-            <CardDescription>
-              Entra en cada torneo para seguir con la configuración, cuadros, partidos y resultados.
-            </CardDescription>
+            <CardTitle>Torneos</CardTitle>
+            <CardDescription>Abre cualquiera.</CardDescription>
           </CardHeader>
           <CardContent>
             {data.tournaments.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aun no hay torneos. Crea el primero desde el formulario de la izquierda.
-              </p>
+              <p className="text-sm text-muted-foreground">Todavia no hay torneos.</p>
             ) : (
               <TournamentList tournaments={data.tournaments} />
             )}

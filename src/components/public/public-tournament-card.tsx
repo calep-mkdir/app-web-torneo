@@ -44,7 +44,7 @@ export function PublicTournamentCard({
 
         <Link
           href={`/tournaments/${tournament.slug}` as Route}
-          className="inline-flex items-center rounded-full bg-lime-300 px-4 py-2 text-sm font-semibold text-slate-950 no-underline transition hover:bg-lime-200"
+          className="inline-flex items-center rounded-full bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] px-4 py-2 text-sm font-semibold text-slate-950 no-underline shadow-[0_18px_40px_-22px_rgba(103,232,249,0.45)] transition hover:brightness-105"
         >
           Ver torneo
         </Link>
