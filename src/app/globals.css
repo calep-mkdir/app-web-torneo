@@ -82,6 +82,18 @@ body {
   text-decoration: none;
 }
 
+.app-cta-primary,
+a.app-cta-primary,
+button.app-cta-primary {
+  color: #10161f;
+}
+
+.app-cta-secondary,
+a.app-cta-secondary,
+button.app-cta-secondary {
+  color: #f8fafc;
+}
+
 .app-cta-primary:hover {
   transform: translateY(-2px);
   background: #d4ff63;
@@ -91,6 +103,7 @@ body {
 .app-cta-secondary:hover {
   transform: translateY(-2px);
   background: #1b232d;
+  color: #f8fafc;
 }
 
 h1,

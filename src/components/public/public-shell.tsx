@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Route } from "next";
+import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -46,6 +47,17 @@ export function PublicShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [currentHash, setCurrentHash] = useState("");
+
+  useEffect(() => {
+    const syncHash = () => {
+      setCurrentHash(window.location.hash);
+    };
+
+    syncHash();
+    window.addEventListener("hashchange", syncHash);
+    return () => window.removeEventListener("hashchange", syncHash);
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-x-clip">
@@ -59,7 +71,7 @@ export function PublicShell({
 
           <nav className="hidden flex-1 items-center justify-center gap-8 xl:flex">
             {navItems.map((item) => (
-              <NavLink key={item.href} href={item.href} pathname={pathname} />
+              <NavLink key={item.href} href={item.href} pathname={pathname} currentHash={currentHash} />
             ))}
           </nav>
 
@@ -69,7 +81,7 @@ export function PublicShell({
         <div className="border-t border-white/6 xl:hidden">
           <nav className="mx-auto flex max-w-[1560px] gap-2 overflow-x-auto px-4 py-3 sm:px-6 lg:px-8">
             {navItems.map((item) => (
-              <NavLink key={item.href} href={item.href} pathname={pathname} mobile />
+              <NavLink key={item.href} href={item.href} pathname={pathname} currentHash={currentHash} mobile />
             ))}
           </nav>
         </div>
@@ -123,16 +135,19 @@ export function PublicShell({
 function NavLink({
   href,
   pathname,
+  currentHash,
   mobile = false,
 }: {
   href: Route;
   pathname: string;
+  currentHash: string;
   mobile?: boolean;
 }) {
   const isAnchor = href.includes("#");
   const itemPath = isAnchor ? href.split("#")[0] || "/" : href;
+  const itemHash = isAnchor ? `#${href.split("#")[1] ?? ""}` : "";
   const isActive = isAnchor
-    ? pathname === itemPath
+    ? pathname === itemPath && currentHash === itemHash
     : pathname === itemPath || (itemPath !== "/" && pathname.startsWith(itemPath));
 
   return (
