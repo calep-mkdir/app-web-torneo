@@ -85,8 +85,10 @@ export function formatCategoryFormatLabel(format: string): string {
     case "group_only":
       return "Grupos";
     case "knockout":
+    case "knockout_only":
       return "Cuadro";
     case "group_knockout":
+    case "group_to_knockout":
       return "Grupos + cuadro";
     default:
       return format.replaceAll("_", " ");

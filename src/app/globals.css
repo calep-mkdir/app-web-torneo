@@ -2,24 +2,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: 218 31% 8%;
+  --background: 216 18% 16%;
   --foreground: 210 40% 96%;
-  --card: 219 27% 12%;
+  --card: 216 16% 20%;
   --card-foreground: 210 40% 96%;
-  --popover: 219 28% 10%;
+  --popover: 216 18% 17%;
   --popover-foreground: 210 40% 96%;
   --primary: 78 100% 57%;
-  --primary-foreground: 219 34% 8%;
-  --secondary: 220 24% 15%;
+  --primary-foreground: 217 24% 12%;
+  --secondary: 216 16% 21%;
   --secondary-foreground: 210 40% 96%;
-  --muted: 220 20% 18%;
+  --muted: 217 14% 23%;
   --muted-foreground: 215 20% 69%;
   --accent: 193 98% 61%;
-  --accent-foreground: 219 34% 8%;
+  --accent-foreground: 217 24% 12%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
-  --border: 220 22% 18%;
-  --input: 220 22% 18%;
+  --border: 216 14% 24%;
+  --input: 216 14% 24%;
   --ring: 78 100% 57%;
   --radius: 1rem;
 }
@@ -36,10 +36,10 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(190, 242, 100, 0.08), transparent 20%),
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 20%),
-    radial-gradient(circle at center, rgba(56, 189, 248, 0.05), transparent 28%),
-    linear-gradient(180deg, #090d14 0%, #0b1018 38%, #0e1520 100%);
+    radial-gradient(circle at top left, rgba(190, 242, 100, 0.07), transparent 20%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.07), transparent 20%),
+    radial-gradient(circle at center, rgba(56, 189, 248, 0.04), transparent 28%),
+    linear-gradient(180deg, #1a1f27 0%, #161b22 34%, #10151c 100%);
   color: hsl(var(--foreground));
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -49,19 +49,19 @@ body {
 
 @layer utilities {
   .app-panel {
-    @apply border border-white/8 bg-[#121a25]/94 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.55)] backdrop-blur;
+    @apply border border-white/8 bg-[#1a212b]/94 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.55)] backdrop-blur;
   }
 
   .app-panel-strong {
-    background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(10, 15, 24, 0.99) 100%);
+    background: linear-gradient(180deg, rgba(26, 33, 43, 0.98) 0%, rgba(15, 20, 29, 0.99) 100%);
   }
 
   .app-cta-primary {
-    @apply inline-flex items-center justify-center rounded-xl border border-[#d3ff69]/60 bg-[#c7ff2f] px-5 py-3 text-sm font-semibold text-[#0a0f14] no-underline shadow-[0_20px_55px_-18px_rgba(199,255,47,0.6)] transition;
+    @apply inline-flex items-center justify-center rounded-xl border border-[#d3ff69]/60 bg-[#c7ff2f] px-5 py-3 text-sm font-semibold text-[#10161f] no-underline shadow-[0_20px_55px_-18px_rgba(199,255,47,0.6)] transition;
   }
 
   .app-cta-secondary {
-    @apply inline-flex items-center justify-center rounded-xl border border-white/14 bg-[#111823] px-5 py-3 text-sm font-semibold text-white no-underline transition;
+    @apply inline-flex items-center justify-center rounded-xl border border-white/14 bg-[#151b23] px-5 py-3 text-sm font-semibold text-white no-underline transition;
   }
 
   .app-nav-active {
@@ -85,11 +85,12 @@ body {
 .app-cta-primary:hover {
   transform: translateY(-2px);
   background: #d4ff63;
+  color: #10161f;
 }
 
 .app-cta-secondary:hover {
   transform: translateY(-2px);
-  background: #182230;
+  background: #1b232d;
 }
 
 h1,

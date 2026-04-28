@@ -4,7 +4,7 @@ Estado actual de esta puesta en marcha:
 
 - el repositorio ya existe en GitHub;
 - el proyecto ya compila y pasa `lint`, `typegen`, `typecheck`, `test` y `build`;
-- la base de datos de Supabase ya tiene esquema, realtime y seed inicial aplicados.
+- la base de datos de Supabase ya tiene esquema y seed inicial aplicados.
 
 Lo que queda ahora ya es principalmente operacion real, contenido y endurecimiento final.
 
@@ -57,7 +57,7 @@ Comprueba al menos:
 
 ## 6. Crear contenido inicial real
 
-La tabla `sports` ya esta sembrada, pero aun necesitas cargar tus datos operativos:
+La tabla `sports` ya esta sembrada y puedes regenerar el demo con `npm run seed:demo`, pero aun necesitas cargar tus datos operativos:
 
 - torneos reales;
 - categorias;

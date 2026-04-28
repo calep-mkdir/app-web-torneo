@@ -29,7 +29,7 @@ Responsabilidades:
 - pagina de organizacion;
 - detalle por torneo;
 - cambio de categoria;
-- vista de partidos en vivo y siguientes cruces;
+- vista de partidos pendientes y resultados cerrados;
 - visualizacion del bracket;
 - historial por participante.
 
@@ -109,4 +109,4 @@ Las migraciones de [supabase/migrations](../supabase/migrations) crean:
 5. Admin carga resultado.
 6. El servidor genera el parche del bracket y actualiza siguientes cruces.
 7. Supabase emite broadcast por la categoria.
-8. La web publica actualiza la vista en tiempo real.
+8. La web publica actualiza la vista y refleja los nuevos estados y resultados.

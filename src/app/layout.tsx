@@ -19,13 +19,12 @@ const displayFont = Bricolage_Grotesque({
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
-  applicationName: "App Web Torneo",
+  applicationName: "Padel Tournaments",
   title: {
-    default: "App Web Torneo",
-    template: "%s | App Web Torneo",
+    default: "Padel Tournaments",
+    template: "%s | Padel Tournaments",
   },
-  description:
-    "Torneos de padel, cuadros, resultados y panel.",
+  description: "Torneos de padel, cuadros, resultados y panel.",
 };
 
 export default function RootLayout({

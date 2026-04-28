@@ -1,35 +1,36 @@
-# App Web Torneo
+# Padel Tournaments
 
-Aplicacion web para gestionar torneos de padel y publicarlos en tiempo real con una experiencia multipagina, oscura, minimalista, visual y totalmente responsive.
+Aplicacion web para gestionar torneos de padel con una experiencia multipagina, oscura, visual y centrada en cuadros, partidos, parejas y resultados.
 
 ## Estado del proyecto
 
 Esta base queda preparada para una primera salida seria a produccion:
 
 - `Next.js 16` con `App Router`, `React 19` y `TypeScript`.
-- `Supabase` como backend operativo y canal realtime.
+- `Supabase` como backend operativo.
 - build reproducible con `package-lock.json` y dependencias fijadas.
-- experiencia publica multipagina centrada en padel, con portada animada, calendario, circuito y flujo de organizacion.
+- experiencia publica multipagina centrada en padel, con portada tipo portal de torneo, listado, detalle y flujo de organizacion.
 - panel `/admin` abierto para operar sin login y con alta simplificada de torneos.
 - validacion de entorno en cliente y servidor.
 - control de calidad con `lint`, `typegen`, `typecheck`, `test` y `build`.
 - `Dockerfile`, workflow de CI y documentacion de despliegue.
+- script reutilizable para resetear y sembrar un torneo demo completo.
 
 ## Funcionalidades principales
 
 - Alta y edicion de torneos de padel.
-- Gestion de categorias, fases, rondas, participantes y partidos.
+- Gestion de categorias, fases, rondas, parejas, participantes y partidos.
 - Registro de resultados.
 - Avance automatico del bracket knockout.
 - Vista publica con:
-  - home principal con escena 3D de raqueta orientada a scroll,
+  - home principal estilo portal de torneo,
   - listado de torneos publicados,
   - vista de circuito de padel,
   - pagina de organizacion,
   - detalle por torneo,
-  - partidos en vivo y proximos,
-  - bracket en tiempo real,
-  - ficha de trayectoria por participante.
+  - resultados y partidos pendientes,
+  - bracket completo,
+  - ficha de trayectoria por pareja o entrada.
 
 ## Stack
 
@@ -115,6 +116,8 @@ npm run dev
   compila la app para produccion
 - `npm run check`
   ejecuta la cadena completa de calidad
+- `npm run seed:demo`
+  borra torneos, participantes, equipos y datos competitivos actuales, y crea un torneo demo completo en Supabase
 
 ## Base de datos
 
@@ -154,6 +157,6 @@ La guia detallada esta en [docs/deployment.md](./docs/deployment.md).
 
 ## Limitaciones conocidas de esta primera version
 
-- El flujo admin visible esta centrado en competidores individuales; el esquema soporta equipos, pero la interfaz aun no explota toda esa parte.
+- El modelo de datos ya soporta equipos y el seed demo crea parejas reales, pero el panel todavia puede simplificarse mas para una operativa 100% orientada a padel.
 - No se ha introducido autenticacion por usuario/rol; el panel queda abierto a proposito en esta iteracion visual y de producto.
 - La consistencia multi-tabla de algunas operaciones complejas depende de varias escrituras consecutivas en Supabase, aunque se han reducido los casos de estado parcial mas obvios.

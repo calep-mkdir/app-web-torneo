@@ -11,8 +11,8 @@
 
 - [ ] migraciones aplicadas en el entorno objetivo.
 - [ ] seed de deportes aplicado.
-- [ ] existe al menos un torneo de prueba.
-- [ ] el canal realtime por categoria funciona.
+- [ ] existe al menos un torneo de prueba o se ha ejecutado `npm run seed:demo`.
+- [ ] el flujo de estados y resultados funciona correctamente.
 
 ## Calidad
 

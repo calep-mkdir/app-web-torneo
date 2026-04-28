@@ -3,13 +3,14 @@ import type { Route } from "next";
 import Link from "next/link";
 import { CalendarDays, ChevronRight, Clock3, MapPin, Trophy } from "lucide-react";
 
-import { Badge } from "@/components/ui";
-import { BracketView, PadelRacketHero } from "@/components/public";
+import { BracketView, PadelTournamentsLogo } from "@/components/public";
 import { formatDateRange, formatDateTime } from "@/components/public/date-utils";
+import { Badge } from "@/components/ui";
 import { buildEntryDirectory, buildMatchViewModels, buildPublicBracket } from "@/features/public/mappers";
 import { getPublicHomePageData, getPublicTournamentPageData } from "@/features/public/queries";
 import type { PublicMatchViewModel, PublicTournamentListItem } from "@/features/public/types";
 import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Padel Tournaments",
@@ -31,10 +32,9 @@ export default async function PublicHomePage() {
 
   const bracket = featuredSnapshot ? buildPublicBracket(featuredSnapshot) : null;
   const allMatches = featuredSnapshot ? buildMatchViewModels(featuredSnapshot) : [];
-  const upcomingMatches = allMatches
-    .filter((match) => match.status !== "finished" && match.status !== "cancelled")
-    .slice(0, 4);
+  const pendingMatches = allMatches.filter((match) => match.status !== "finished" && match.status !== "cancelled");
   const finishedMatches = allMatches.filter((match) => match.status === "finished");
+  const featuredMatches = pendingMatches.length > 0 ? pendingMatches.slice(0, 4) : finishedMatches.slice(0, 4);
   const highlightedEntries = featuredSnapshot
     ? buildEntryDirectory(featuredSnapshot)
         .slice()
@@ -53,7 +53,12 @@ export default async function PublicHomePage() {
     : [];
   const championMatch = getChampionMatch(finishedMatches);
   const championLabel = championMatch ? getWinnerLabel(championMatch) : null;
-  const countdown = featuredTournament?.startAt ? buildCountdown(featuredTournament.startAt) : null;
+  const countdown =
+    featuredTournament?.startAt &&
+    shouldShowCountdown(featuredTournament.startAt, featuredTournament.status)
+      ? buildCountdown(featuredTournament.startAt)
+      : null;
+  const featuredTitle = featuredTournament ? splitFeaturedTitle(featuredTournament.name) : null;
 
   return (
     <div className="grid gap-4 xl:grid-cols-[320px_minmax(0,1fr)]">
@@ -84,25 +89,31 @@ export default async function PublicHomePage() {
         </section>
 
         <section className="app-panel app-panel-strong relative overflow-hidden rounded-[1.7rem] p-5">
-          <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top,rgba(199,255,47,0.14),transparent_60%)]" />
+          <div className="absolute inset-x-0 top-0 h-36 bg-[radial-gradient(circle_at_top,rgba(199,255,47,0.14),transparent_60%)]" />
+          <div className="absolute inset-y-6 right-[-2rem] w-32 rounded-full bg-[#c7ff2f]/8 blur-3xl" />
           <div className="relative">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">Vive el mejor</p>
-            <h2 className="mt-2 text-5xl font-semibold uppercase leading-none text-[#c7ff2f]">Padel</h2>
-            <p className="mt-3 max-w-[14rem] text-sm leading-6 text-slate-300">
-              Compite. Disfruta. Superate.
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">Circuito</p>
+            <PadelTournamentsLogo
+              size="md"
+              className="mt-4"
+              titleClassName="text-[2.7rem]"
+              subtitleClassName="tracking-[0.3em] text-white/62"
+            />
+            <p className="mt-4 max-w-[15rem] text-sm leading-6 text-slate-300">
+              Compite. Disfruta. Repite.
             </p>
           </div>
 
-          <div className="relative mt-4 h-[250px] overflow-hidden rounded-[1.4rem] border border-white/8 bg-[linear-gradient(180deg,rgba(15,23,42,0.2)_0%,rgba(9,14,24,0.75)_80%)]">
-            <div className="absolute inset-0 scale-[0.88]">
-              <PadelRacketHero />
-            </div>
-            <div className="absolute inset-x-0 bottom-0 h-20 bg-[linear-gradient(180deg,transparent_0%,rgba(9,14,24,0.92)_100%)]" />
-          </div>
+          <BrandShowcase className="mt-5" compact />
 
-          <Link href={"/organiza" as Route} className="app-cta-secondary mt-4 w-full">
-            Sobre el circuito
-          </Link>
+          <div className="mt-5 grid gap-3">
+            <Link href={"/admin" as Route} className="app-cta-primary w-full">
+              Abrir panel
+            </Link>
+            <Link href={"/organiza" as Route} className="app-cta-secondary w-full">
+              Organizar torneo
+            </Link>
+          </div>
         </section>
       </aside>
 
@@ -110,6 +121,9 @@ export default async function PublicHomePage() {
         {featuredTournament ? (
           <section className="app-panel app-panel-strong relative overflow-hidden rounded-[1.8rem]">
             <CourtBackdrop />
+            <div className="absolute right-8 top-8 hidden opacity-10 lg:block">
+              <PadelTournamentsLogo size="md" titleClassName="text-white" subtitleClassName="text-white/60" />
+            </div>
             <div className="relative grid gap-6 px-6 py-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-10">
               <div className="space-y-6">
                 <div>
@@ -117,7 +131,15 @@ export default async function PublicHomePage() {
                     Torneo destacado
                   </p>
                   <h1 className="mt-4 max-w-xl text-5xl font-semibold uppercase tracking-tight text-white sm:text-6xl">
-                    {featuredTournament.name}
+                    {featuredTitle ? (
+                      <>
+                        {featuredTitle.lead}
+                        <br />
+                        <span className="text-[#c7ff2f]">{featuredTitle.accent}</span>
+                      </>
+                    ) : (
+                      featuredTournament.name
+                    )}
                   </h1>
                 </div>
 
@@ -197,7 +219,7 @@ export default async function PublicHomePage() {
               slug={featuredTournament.slug}
               bracket={bracket}
               title={featuredCategoryName ? `Cuadro ${featuredCategoryName}` : "Cuadro principal"}
-              description="Octavos, cuartos, semifinales y final."
+              description="Cruces, resultados y avance del torneo."
             />
           ) : (
             <section className="app-panel rounded-[1.8rem] px-6 py-8 text-center text-slate-300">
@@ -208,24 +230,35 @@ export default async function PublicHomePage() {
 
         <section className="grid gap-4 xl:grid-cols-[1.15fr_1fr_1fr]">
           <div id="partidos" className="app-panel rounded-[1.8rem] p-5">
-            <SectionHeader title="Proximos partidos" href={featuredTournament ? (`/tournaments/${featuredTournament.slug}` as Route) : undefined} />
+            <SectionHeader
+              title={pendingMatches.length > 0 ? "Partidos pendientes" : "Resultados recientes"}
+              href={featuredTournament ? (`/tournaments/${featuredTournament.slug}` as Route) : undefined}
+            />
+            <p className="mt-3 text-sm text-slate-400">
+              {pendingMatches.length > 0
+                ? "Cruces programados y por cerrar."
+                : "Ultimos cruces cerrados del torneo."}
+            </p>
             <div className="mt-4 space-y-3">
-              {upcomingMatches.length > 0 ? (
-                upcomingMatches.map((match) => (
-                  <UpcomingMatchRow
+              {featuredMatches.length > 0 ? (
+                featuredMatches.map((match) => (
+                  <FeaturedMatchRow
                     key={match.id}
                     match={match}
                     timezone={featuredTournament?.timezone}
                   />
                 ))
               ) : (
-                <EmptyCopy text="No hay partidos pendientes para mostrar." />
+                <EmptyCopy text="Todavia no hay partidos para mostrar." />
               )}
             </div>
           </div>
 
           <div id="jugadores" className="app-panel rounded-[1.8rem] p-5">
-            <SectionHeader title="Parejas destacadas" href={featuredTournament ? (`/tournaments/${featuredTournament.slug}` as Route) : undefined} />
+            <SectionHeader
+              title="Parejas destacadas"
+              href={featuredTournament ? (`/tournaments/${featuredTournament.slug}` as Route) : undefined}
+            />
             <div className="mt-4 space-y-3">
               {highlightedEntries.length > 0 ? (
                 highlightedEntries.map((entry, index) => (
@@ -244,9 +277,7 @@ export default async function PublicHomePage() {
                         </p>
                       </div>
                     </div>
-                    <div className="text-sm font-semibold text-white/80">
-                      {entry.matchesPlayed} pj
-                    </div>
+                    <div className="text-sm font-semibold text-white/80">{entry.matchesPlayed} pj</div>
                   </div>
                 ))
               ) : (
@@ -265,14 +296,14 @@ export default async function PublicHomePage() {
           <div id="ranking" className="app-panel rounded-[1.8rem] p-5">
             <SectionHeader title="Ultimos ganadores" />
             {championMatch && championLabel ? (
-              <div className="mt-4 overflow-hidden rounded-[1.4rem] border border-white/8 bg-[linear-gradient(180deg,rgba(59,130,246,0.16)_0%,rgba(17,24,39,0.92)_100%)]">
-                <div className="relative h-[220px] overflow-hidden border-b border-white/8">
-                  <CourtBackdrop compact />
+              <div className="mt-4 overflow-hidden rounded-[1.4rem] border border-white/8 bg-[linear-gradient(180deg,rgba(26,34,46,0.96)_0%,rgba(15,20,29,0.98)_100%)]">
+                <div className="relative border-b border-white/8 px-4 py-4">
                   <div className="absolute left-4 top-4">
-                    <span className="inline-flex rounded-full bg-[#c7ff2f] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#0a0f14]">
+                    <span className="inline-flex rounded-full bg-[#c7ff2f] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#10161f]">
                       Campeones
                     </span>
                   </div>
+                  <BrandShowcase compact className="min-h-[220px]" />
                 </div>
                 <div className="space-y-2 px-5 py-5">
                   <h2 className="text-3xl font-semibold text-white">{championLabel}</h2>
@@ -345,7 +376,7 @@ function CourtThumbnail({ tone }: { tone: number }) {
 function CourtBackdrop({ compact = false }: { compact?: boolean }) {
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.18),transparent_54%),linear-gradient(180deg,rgba(9,13,20,0.26)_0%,rgba(6,10,16,0.78)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.18),transparent_54%),linear-gradient(180deg,rgba(17,22,31,0.26)_0%,rgba(12,18,27,0.82)_100%)]" />
       <div className="absolute inset-x-[6%] bottom-[10%] top-[12%] rounded-[1.5rem] border border-white/8" />
       <div className="absolute inset-x-[27%] bottom-[10%] top-[12%] border-x border-white/8" />
       <div className="absolute bottom-[35%] left-[6%] right-[6%] border-t border-white/8" />
@@ -354,8 +385,38 @@ function CourtBackdrop({ compact = false }: { compact?: boolean }) {
       <div className="absolute left-[10%] top-[14%] h-16 w-16 rounded-full bg-white/60 blur-[38px]" />
       <div className="absolute right-[16%] top-[12%] h-16 w-16 rounded-full bg-white/55 blur-[38px]" />
       {!compact ? (
-        <div className="absolute inset-y-0 right-0 w-[45%] bg-[linear-gradient(90deg,transparent_0%,rgba(6,10,16,0.22)_20%,rgba(6,10,16,0.72)_100%)]" />
+        <div className="absolute inset-y-0 right-0 w-[45%] bg-[linear-gradient(90deg,transparent_0%,rgba(12,18,27,0.22)_20%,rgba(12,18,27,0.74)_100%)]" />
       ) : null}
+    </div>
+  );
+}
+
+function BrandShowcase({
+  compact = false,
+  className,
+}: {
+  compact?: boolean;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-[1.5rem] border border-white/8 bg-[linear-gradient(180deg,rgba(18,24,34,0.98)_0%,rgba(11,16,24,1)_100%)]",
+        compact ? "px-4 py-6" : "px-5 py-7",
+        className,
+      )}
+    >
+      <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(199,255,47,0.16),transparent_70%)]" />
+      <div className="absolute right-[-2rem] top-[-2rem] h-28 w-28 rounded-full bg-[#c7ff2f]/10 blur-3xl" />
+      <div className="absolute left-[-2rem] bottom-[-2rem] h-24 w-24 rounded-full bg-cyan-300/10 blur-3xl" />
+      <div className="relative flex min-h-full items-center justify-center">
+        <PadelTournamentsLogo
+          size={compact ? "md" : "lg"}
+          className="justify-center"
+          titleClassName={compact ? "text-[2.5rem]" : "text-center"}
+          subtitleClassName="text-white/58"
+        />
+      </div>
     </div>
   );
 }
@@ -382,7 +443,7 @@ function SectionHeader({
   );
 }
 
-function UpcomingMatchRow({
+function FeaturedMatchRow({
   match,
   timezone,
 }: {
@@ -434,19 +495,21 @@ function EmptyCopy({ text }: { text: string }) {
 }
 
 function getChampionMatch(matches: PublicMatchViewModel[]) {
-  return matches
-    .slice()
-    .sort((left, right) => {
-      const leftRound = left.roundNo ?? 0;
-      const rightRound = right.roundNo ?? 0;
-      if (rightRound !== leftRound) {
-        return rightRound - leftRound;
-      }
+  return (
+    matches
+      .slice()
+      .sort((left, right) => {
+        const leftRound = left.roundNo ?? 0;
+        const rightRound = right.roundNo ?? 0;
+        if (rightRound !== leftRound) {
+          return rightRound - leftRound;
+        }
 
-      const leftDate = left.scheduledAt ? Date.parse(left.scheduledAt) : 0;
-      const rightDate = right.scheduledAt ? Date.parse(right.scheduledAt) : 0;
-      return rightDate - leftDate;
-    })[0] ?? null;
+        const leftDate = left.scheduledAt ? Date.parse(left.scheduledAt) : 0;
+        const rightDate = right.scheduledAt ? Date.parse(right.scheduledAt) : 0;
+        return rightDate - leftDate;
+      })[0] ?? null
+  );
 }
 
 function getWinnerLabel(match: PublicMatchViewModel) {
@@ -480,4 +543,29 @@ function buildCountdown(startAt: string) {
     { label: "Min", value: String(minutes).padStart(2, "0") },
     { label: "Seg", value: String(seconds).padStart(2, "0") },
   ];
+}
+
+function shouldShowCountdown(startAt: string, status: string) {
+  const statusValue = status.trim().toLowerCase();
+  if (statusValue === "completed" || statusValue === "finished" || statusValue === "archived") {
+    return false;
+  }
+
+  const target = Date.parse(startAt);
+  return Number.isFinite(target) && target > Date.now();
+}
+
+function splitFeaturedTitle(name: string) {
+  const tokens = name.trim().split(/\s+/).filter(Boolean);
+  if (tokens.length < 2) {
+    return null;
+  }
+
+  const lead = tokens[0];
+  const accent = tokens.slice(1).join(" ");
+
+  return {
+    lead,
+    accent,
+  };
 }
