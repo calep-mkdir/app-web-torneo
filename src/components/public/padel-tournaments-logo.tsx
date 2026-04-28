@@ -39,9 +39,9 @@ export function PadelTournamentsLogo({
   const scale = logoScale[size];
 
   return (
-    <div className={cn("flex items-center", scale.gap, className)}>
+    <div className={cn("inline-flex items-center", scale.gap, className)}>
       <PadelTournamentsMark className={scale.icon} />
-      <div className="leading-none">
+      <div className="flex min-w-0 flex-col justify-center leading-none">
         <div
           className={cn(
             "font-semibold uppercase tracking-tight text-white",
@@ -75,10 +75,9 @@ export function PadelTournamentsMark({
       src="/logo-padel-p.svg"
       alt=""
       aria-hidden="true"
-      width={1024}
-      height={1024}
-      className={className}
-      priority
+      width={435}
+      height={788}
+      className={cn("block shrink-0 object-contain", className)}
     />
   );
 }

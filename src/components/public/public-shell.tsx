@@ -64,9 +64,9 @@ export function PublicShell({
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[26rem] bg-[radial-gradient(circle_at_top_left,rgba(199,255,47,0.08),transparent_28%),radial-gradient(circle_at_top_right,rgba(255,255,255,0.03),transparent_22%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_80%)]" />
 
       <header className="relative z-50 border-b border-white/6 bg-[#10151b]/92 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1560px] items-center gap-6 px-4 py-5 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[1560px] items-center gap-6 px-4 py-4 sm:px-6 lg:px-8">
           <Link href="/" className="no-underline">
-            <PadelTournamentsLogo size="sm" />
+            <PadelTournamentsLogo size="sm" className="transition hover:opacity-95" />
           </Link>
 
           <nav className="hidden flex-1 items-center justify-center gap-8 xl:flex">
@@ -110,18 +110,16 @@ export function PublicShell({
           ))}
 
           <div className="space-y-4">
-            <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-white">Siguenos</h2>
-            <p className="text-sm text-slate-400">Instagram, Facebook y Twitter.</p>
+            <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-white">Acceso directo</h2>
+            <p className="text-sm text-slate-400">Todo listo para entrar, ver torneos o organizar el siguiente.</p>
             <BrandSocials />
-            <div className="flex overflow-hidden rounded-xl border border-white/10 bg-[#0e131a]">
-              <input
-                type="email"
-                placeholder="Tu email"
-                className="min-w-0 flex-1 border-0 bg-transparent px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-              />
-              <button type="button" className="app-cta-primary rounded-none border-0 px-4 py-3">
-                OK
-              </button>
+            <div className="grid gap-3 sm:max-w-[16rem]">
+              <Link href={"/tournaments" as Route} className="app-cta-primary">
+                Ver torneos
+              </Link>
+              <Link href={"/organiza" as Route} className="app-cta-secondary">
+                Organiza
+              </Link>
             </div>
           </div>
         </div>

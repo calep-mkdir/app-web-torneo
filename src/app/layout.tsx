@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Manrope } from "next/font/google";
 
 import { getOptionalSiteUrl } from "@/lib/env/server";
@@ -25,6 +25,16 @@ export const metadata: Metadata = {
     template: "%s | Padel Tournaments",
   },
   description: "Torneos de padel, cuadros, resultados y panel.",
+  icons: {
+    icon: "/logo-padel-p.svg",
+    shortcut: "/logo-padel-p.svg",
+    apple: "/logo-padel-p.svg",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#10141a",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
