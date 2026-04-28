@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 import { cn } from "@/lib/utils";
 
 type LogoSize = "sm" | "md" | "lg";
@@ -68,72 +70,62 @@ export function PadelTournamentsMark({
 }: {
   className?: string;
 }) {
+  const maskId = useId();
+
   return (
     <svg
-      viewBox="0 0 108 164"
+      viewBox="0 0 220 270"
       aria-hidden="true"
       className={cn("text-[#c7ff2f]", className)}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path
-        d="M24 14H66C87.17 14 98 27.66 98 46.59C98 66.86 84.55 81.82 66.87 86.36C48.55 91.08 39.38 103.19 38.89 122H24V14Z"
-        fill="currentColor"
-      />
-      <path d="M24 122H42V140H24V122Z" fill="currentColor" />
-      <path
-        d="M24 142H42V154C42 159.52 37.52 164 32 164H34C28.48 164 24 159.52 24 154V142Z"
-        fill="currentColor"
-      />
-      <path
-        d="M33 132C42.39 132 50 139.61 50 149C50 158.39 42.39 166 33 166C23.61 166 16 158.39 16 149C16 139.61 23.61 132 33 132Z"
-        fill="currentColor"
-      />
-      <path
-        d="M33 132C26.06 136.41 21.9 142.05 21.9 149C21.9 155.95 26.06 161.59 33 166"
-        fill="none"
-        stroke="#10161f"
-        strokeWidth="4.6"
-        strokeLinecap="round"
-      />
-      <path
-        d="M33 132C39.94 136.41 44.1 142.05 44.1 149C44.1 155.95 39.94 161.59 33 166"
-        fill="none"
-        stroke="#10161f"
-        strokeWidth="4.6"
-        strokeLinecap="round"
-      />
-      <path d="M24 122H42" stroke="#10161f" strokeWidth="4" />
-      <path d="M24 134H42" stroke="#10161f" strokeWidth="4" />
-      <path d="M24 146H42" stroke="#10161f" strokeWidth="4" />
-      <path d="M35 73L55 86L35 100V73Z" fill="#10161f" />
-      {[
-        [53, 28],
-        [65, 28],
-        [77, 28],
-        [89, 28],
-        [45, 40],
-        [57, 40],
-        [69, 40],
-        [81, 40],
-        [93, 40],
-        [41, 52],
-        [53, 52],
-        [65, 52],
-        [77, 52],
-        [89, 52],
-        [41, 64],
-        [53, 64],
-        [65, 64],
-        [77, 64],
-        [89, 64],
-        [49, 76],
-        [61, 76],
-        [73, 76],
-        [85, 76],
-      ].map(([cx, cy]) => (
-        <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3.5" fill="#10161f" />
-      ))}
+      <mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width="220" height="270">
+        <rect width="220" height="270" fill="black" />
+        <g fill="white">
+          <path d="M54 30C54 21.163 61.163 14 70 14H124C170.485 14 196 46.148 196 95C196 137.076 167.846 167.468 129.769 176.433C97.075 184.13 78.63 203.583 74.093 230H54V30Z" />
+          <rect x="54" y="199" width="32" height="48" />
+          <circle cx="70" cy="254" r="24" />
+        </g>
+
+        <g fill="black">
+          <path d="M76 164.5C76 157.25 83.348 152.276 90.12 154.9L116.93 165.292C124.672 168.294 125.731 178.726 118.749 183.193L91.939 200.347C84.396 205.172 74.5 199.756 74.5 190.823V164.5H76Z" />
+          <rect x="54" y="200" width="32" height="4.5" />
+          <rect x="54" y="215.5" width="32" height="4.5" />
+          <rect x="54" y="231" width="32" height="4.5" />
+          <circle cx="48" cy="254" r="14.5" />
+          <circle cx="92" cy="254" r="14.5" />
+          {[
+            [112, 60],
+            [132, 60],
+            [152, 60],
+            [172, 60],
+            [102, 84],
+            [122, 84],
+            [142, 84],
+            [162, 84],
+            [182, 84],
+            [102, 108],
+            [122, 108],
+            [142, 108],
+            [162, 108],
+            [182, 108],
+            [102, 132],
+            [122, 132],
+            [142, 132],
+            [162, 132],
+            [182, 132],
+            [112, 156],
+            [132, 156],
+            [152, 156],
+            [172, 156],
+          ].map(([cx, cy]) => (
+            <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="8" />
+          ))}
+        </g>
+      </mask>
+
+      <rect width="220" height="270" fill="currentColor" mask={`url(#${maskId})`} />
     </svg>
   );
 }
