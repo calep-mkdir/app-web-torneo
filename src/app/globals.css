@@ -2,25 +2,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: 220 10% 20%;
+  --background: 218 31% 8%;
   --foreground: 210 40% 96%;
-  --card: 222 11% 24%;
+  --card: 219 27% 12%;
   --card-foreground: 210 40% 96%;
-  --popover: 222 11% 22%;
+  --popover: 219 28% 10%;
   --popover-foreground: 210 40% 96%;
-  --primary: 193 100% 80%;
-  --primary-foreground: 220 18% 10%;
-  --secondary: 222 10% 24%;
+  --primary: 78 100% 57%;
+  --primary-foreground: 219 34% 8%;
+  --secondary: 220 24% 15%;
   --secondary-foreground: 210 40% 96%;
-  --muted: 222 9% 27%;
+  --muted: 220 20% 18%;
   --muted-foreground: 215 20% 69%;
-  --accent: 193 96% 64%;
-  --accent-foreground: 220 18% 10%;
+  --accent: 193 98% 61%;
+  --accent-foreground: 219 34% 8%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
-  --border: 220 9% 32%;
-  --input: 220 9% 32%;
-  --ring: 193 96% 64%;
+  --border: 220 22% 18%;
+  --input: 220 22% 18%;
+  --ring: 78 100% 57%;
   --radius: 1rem;
 }
 
@@ -36,10 +36,10 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(103, 232, 249, 0.14), transparent 24%),
-    radial-gradient(circle at top right, rgba(190, 242, 100, 0.08), transparent 18%),
-    radial-gradient(circle at bottom center, rgba(251, 113, 133, 0.08), transparent 24%),
-    linear-gradient(180deg, #353b44 0%, #292e36 36%, #1d2128 100%);
+    radial-gradient(circle at top left, rgba(190, 242, 100, 0.08), transparent 20%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 20%),
+    radial-gradient(circle at center, rgba(56, 189, 248, 0.05), transparent 28%),
+    linear-gradient(180deg, #090d14 0%, #0b1018 38%, #0e1520 100%);
   color: hsl(var(--foreground));
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -49,27 +49,31 @@ body {
 
 @layer utilities {
   .app-panel {
-    @apply border border-white/10 bg-white/[0.05] shadow-[0_24px_70px_-42px_rgba(0,0,0,0.55)] backdrop-blur;
+    @apply border border-white/8 bg-[#121a25]/94 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.55)] backdrop-blur;
   }
 
   .app-panel-strong {
-    background: linear-gradient(180deg, rgba(58, 64, 75, 0.97) 0%, rgba(34, 38, 46, 0.98) 100%);
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(10, 15, 24, 0.99) 100%);
   }
 
   .app-cta-primary {
-    @apply inline-flex items-center justify-center rounded-full border border-white/35 bg-[#9ae8ff] px-5 py-3 text-sm font-semibold text-[#11161d] no-underline shadow-[0_18px_45px_-18px_rgba(154,232,255,0.55)] transition;
+    @apply inline-flex items-center justify-center rounded-xl border border-[#d3ff69]/60 bg-[#c7ff2f] px-5 py-3 text-sm font-semibold text-[#0a0f14] no-underline shadow-[0_20px_55px_-18px_rgba(199,255,47,0.6)] transition;
   }
 
   .app-cta-secondary {
-    @apply inline-flex items-center justify-center rounded-full border border-white/14 bg-[#232830] px-5 py-3 text-sm font-semibold text-white no-underline transition;
+    @apply inline-flex items-center justify-center rounded-xl border border-white/14 bg-[#111823] px-5 py-3 text-sm font-semibold text-white no-underline transition;
   }
 
   .app-nav-active {
-    @apply border border-white/35 bg-[#9ae8ff] text-[#11161d] shadow-[0_18px_45px_-18px_rgba(154,232,255,0.55)];
+    @apply text-[#c7ff2f];
   }
 
   .app-nav-idle {
-    @apply border border-white/10 bg-white/[0.04] text-slate-200;
+    @apply text-slate-200;
+  }
+
+  .app-surface-soft {
+    @apply rounded-[1.5rem] border border-white/8 bg-white/[0.03];
   }
 }
 
@@ -80,12 +84,12 @@ body {
 
 .app-cta-primary:hover {
   transform: translateY(-2px);
-  background: #b9f0ff;
+  background: #d4ff63;
 }
 
 .app-cta-secondary:hover {
   transform: translateY(-2px);
-  background: #2c333d;
+  background: #182230;
 }
 
 h1,

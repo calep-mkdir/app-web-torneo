@@ -9,15 +9,19 @@ import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 export function BracketView({
   slug,
   bracket,
+  title = "Cuadro",
+  description = "Cruces y estados de cada partido.",
 }: {
   slug: string;
   bracket: Bracket | null;
+  title?: string;
+  description?: string;
 }) {
   if (!bracket) {
     return (
       <Card className="app-panel bg-white/[0.04]">
         <CardHeader>
-          <CardTitle>Cuadro</CardTitle>
+          <CardTitle>{title}</CardTitle>
           <CardDescription>Esta categoria todavia no tiene un cuadro disponible.</CardDescription>
         </CardHeader>
       </Card>
@@ -35,8 +39,8 @@ export function BracketView({
   return (
     <Card className="app-panel bg-white/[0.04]">
       <CardHeader>
-        <CardTitle>Cuadro</CardTitle>
-        <CardDescription>Cruces y estados de cada partido.</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="-mx-2 overflow-x-auto px-2 pb-2">
