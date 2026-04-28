@@ -5,6 +5,7 @@ import { CalendarDays, ChevronRight, Clock3, MapPin, Trophy } from "lucide-react
 
 import { BracketView, PadelTournamentsLogo, PadelTournamentsMark } from "@/components/public";
 import { formatDateRange, formatDateTime } from "@/components/public/date-utils";
+import { SidebarLinkButton } from "@/components/public/sidebar-link-button";
 import { Badge } from "@/components/ui";
 import { buildEntryDirectory, buildMatchViewModels, buildPublicBracket } from "@/features/public/mappers";
 import { getPublicHomePageData, getPublicTournamentPageData } from "@/features/public/queries";
@@ -83,9 +84,9 @@ export default async function PublicHomePage() {
             ))}
           </div>
 
-          <Link href={"/tournaments" as Route} className="app-cta-secondary mt-4 w-full">
+          <SidebarLinkButton href={"/tournaments" as Route} className="mt-4 w-full">
             Ver todos los torneos
-          </Link>
+          </SidebarLinkButton>
         </section>
 
         <section className="app-panel app-panel-strong relative overflow-hidden rounded-[1.7rem] p-5">
@@ -103,20 +104,19 @@ export default async function PublicHomePage() {
           </div>
 
           <div className="relative z-10 mt-5 grid gap-3">
-            <Link
+            <SidebarLinkButton
               href={"/admin" as Route}
-              className="app-cta-primary w-full justify-start px-6 text-base !text-[#10161f]"
-              style={{ color: "#10161f" }}
+              variant="primary"
+              className="w-full justify-start px-6 text-base !text-[#10161f]"
             >
-              <span style={{ color: "#10161f" }}>Abrir panel</span>
-            </Link>
-            <Link
+              Abrir panel
+            </SidebarLinkButton>
+            <SidebarLinkButton
               href={"/organiza" as Route}
-              className="app-cta-secondary w-full justify-start px-6 text-base !text-white"
-              style={{ color: "#f8fafc" }}
+              className="w-full justify-start px-6 text-base !text-white"
             >
-              <span style={{ color: "#f8fafc" }}>Organizar torneo</span>
-            </Link>
+              Organizar torneo
+            </SidebarLinkButton>
           </div>
         </section>
       </aside>
