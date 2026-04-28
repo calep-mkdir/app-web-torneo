@@ -3,6 +3,7 @@
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
+import { Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
 export function SidebarLinkButton({
@@ -19,15 +20,15 @@ export function SidebarLinkButton({
   const router = useRouter();
 
   return (
-    <button
+    <Button
       type="button"
+      variant={variant === "primary" ? "default" : "secondary"}
       onClick={() => router.push(href)}
       className={cn(
-        variant === "primary" ? "app-cta-primary" : "app-cta-secondary",
         className,
       )}
     >
       {children}
-    </button>
+    </Button>
   );
 }
