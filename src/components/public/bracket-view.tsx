@@ -3,8 +3,16 @@ import Link from "next/link";
 
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import type { Bracket } from "@/lib/brackets";
+import type { Bracket, BracketMatch, BracketRound, BracketSlot } from "@/lib/brackets";
 import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
+
+const DESKTOP_HEADER_HEIGHT = 82;
+const DESKTOP_CARD_WIDTH = 304;
+const DESKTOP_CARD_HEIGHT = 168;
+const DESKTOP_COLUMN_GAP = 80;
+const DESKTOP_ROW_GAP = 22;
+const DESKTOP_CHAMPION_CARD_WIDTH = 244;
+const DESKTOP_CHAMPION_CARD_HEIGHT = 128;
 
 export function BracketView({
   slug,
@@ -30,110 +38,474 @@ export function BracketView({
 
   const rounds = bracket.rounds.map((round, roundIndex) => ({
     ...round,
-    matches: round.matchIds
-      .map((matchId) => bracket.matches[matchId])
-      .filter(Boolean),
     roundIndex,
+    matches: round.matchIds.map((matchId) => bracket.matches[matchId]).filter(Boolean),
+  }));
+  const champion =
+    bracket.championParticipantId ? bracket.participants[bracket.championParticipantId] : undefined;
+
+  const firstRoundMatchCount = rounds[0]?.matches.length ?? 0;
+  const boardCoreHeight =
+    firstRoundMatchCount > 0
+      ? firstRoundMatchCount * DESKTOP_CARD_HEIGHT + Math.max(firstRoundMatchCount - 1, 0) * DESKTOP_ROW_GAP
+      : DESKTOP_CARD_HEIGHT;
+  const boardHeight = DESKTOP_HEADER_HEIGHT + boardCoreHeight;
+  const bracketBoardWidth =
+    rounds.length * DESKTOP_CARD_WIDTH + Math.max(rounds.length - 1, 0) * DESKTOP_COLUMN_GAP;
+
+  const roundIndexByMatchId = new Map<string, number>();
+  rounds.forEach((round) => {
+    round.matches.forEach((match) => {
+      roundIndexByMatchId.set(match.id, round.roundIndex);
+    });
+  });
+
+  const desktopRounds = rounds.map((round) => ({
+    ...round,
+    x: round.roundIndex * (DESKTOP_CARD_WIDTH + DESKTOP_COLUMN_GAP),
+    matches: round.matches.map((match) => {
+      const centerY = getMatchCenterY(round.roundIndex, match.position);
+      const top = DESKTOP_HEADER_HEIGHT + centerY - DESKTOP_CARD_HEIGHT / 2;
+      return {
+        ...match,
+        centerY,
+        top,
+      };
+    }),
   }));
 
-  return (
-    <Card className="app-panel bg-white/[0.04]">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="-mx-2 overflow-x-auto px-2 pb-2">
-          <div className="flex min-w-max gap-4">
-            {rounds.map((round) => (
-              <div
-                key={round.id}
-                className="w-[284px] shrink-0"
-                style={{
-                  paddingTop: `${round.roundIndex === 0 ? 0 : round.roundIndex * 22}px`,
-                }}
-              >
-                <div className="mb-3 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3">
-                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                    Ronda {round.roundNumber}
-                  </p>
-                  <p className="mt-1 font-semibold text-white">{round.name}</p>
-                </div>
+  const connectors = desktopRounds.flatMap((round) =>
+    round.matches.flatMap((match) => {
+      if (!match.nextWinner) {
+        return [];
+      }
 
+      const nextRoundIndex = roundIndexByMatchId.get(match.nextWinner.matchId);
+      if (nextRoundIndex == null) {
+        return [];
+      }
+
+      const nextRound = desktopRounds[nextRoundIndex];
+      const nextMatch = nextRound?.matches.find((candidate) => candidate.id === match.nextWinner?.matchId);
+
+      if (!nextRound || !nextMatch) {
+        return [];
+      }
+
+      return [
+        {
+          id: `${match.id}-${nextMatch.id}`,
+          d: buildConnectorPath(
+            round.x + DESKTOP_CARD_WIDTH,
+            DESKTOP_HEADER_HEIGHT + match.centerY,
+            nextRound.x,
+            DESKTOP_HEADER_HEIGHT + nextMatch.centerY,
+          ),
+          active: Boolean(match.winnerParticipantId),
+        },
+      ];
+    }),
+  );
+  const finalRound = desktopRounds.at(-1);
+  const finalMatch = finalRound?.matches.at(0);
+  const championX = bracketBoardWidth + DESKTOP_COLUMN_GAP;
+  const boardWidth = champion ? championX + DESKTOP_CHAMPION_CARD_WIDTH : bracketBoardWidth;
+  const championConnector =
+    champion && finalRound && finalMatch
+      ? {
+          d: buildConnectorPath(
+            finalRound.x + DESKTOP_CARD_WIDTH,
+            DESKTOP_HEADER_HEIGHT + finalMatch.centerY,
+            championX,
+            DESKTOP_HEADER_HEIGHT + finalMatch.centerY,
+          ),
+          y: finalMatch.centerY,
+        }
+      : null;
+
+  return (
+    <Card className="app-panel overflow-hidden bg-white/[0.04]">
+      <CardHeader className="gap-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription>{description}</CardDescription>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <span className="inline-flex items-center rounded-full border border-[#d6ff72]/18 bg-[#c7ff2f]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#eaff9d]">
+              Eliminatoria
+            </span>
+            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">
+              {rounds.length} rondas
+            </span>
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        <BracketOverviewRail
+          roundsCount={rounds.length}
+          championName={champion?.name}
+        />
+
+        <div className="space-y-4 lg:hidden">
+          {rounds.map((round) => (
+            <section key={round.id} className="space-y-3">
+              <RoundHeader round={round} mobile />
+              <div className="space-y-3">
+                {round.matches.map((match) => (
+                  <BracketMatchCard
+                    key={match.id}
+                    match={match}
+                    slug={slug}
+                    participants={bracket.participants}
+                    compact
+                  />
+                ))}
+              </div>
+            </section>
+          ))}
+          {champion ? <BracketChampionBanner championName={champion.name} /> : null}
+        </div>
+
+        <div className="hidden lg:block">
+          <div className="-mx-2 overflow-x-auto px-2 pb-2">
+            <div className="relative min-w-max" style={{ width: boardWidth, height: boardHeight }}>
+              <svg
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0"
+                width={boardWidth}
+                height={boardHeight}
+                viewBox={`0 0 ${boardWidth} ${boardHeight}`}
+              >
+                {connectors.map((connector) => (
+                  <path
+                    key={connector.id}
+                    d={connector.d}
+                    fill="none"
+                    stroke={connector.active ? "rgba(199,255,47,0.45)" : "rgba(148,163,184,0.18)"}
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                ))}
+                {championConnector ? (
+                  <path
+                    d={championConnector.d}
+                    fill="none"
+                    stroke="rgba(199,255,47,0.65)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                ) : null}
+              </svg>
+
+              {desktopRounds.map((round) => (
                 <div
-                  className="flex flex-col"
+                  key={round.id}
+                  className="absolute top-0"
+                  style={{ left: round.x, width: DESKTOP_CARD_WIDTH }}
+                >
+                  <RoundHeader round={round} />
+                </div>
+              ))}
+
+              {desktopRounds.map((round) =>
+                round.matches.map((match) => (
+                  <div
+                    key={match.id}
+                    className="absolute"
+                    style={{
+                      left: round.x,
+                      top: match.top,
+                      width: DESKTOP_CARD_WIDTH,
+                    }}
+                  >
+                    <BracketMatchCard
+                      match={match}
+                      slug={slug}
+                      participants={bracket.participants}
+                      fixedHeight
+                    />
+                  </div>
+                )),
+              )}
+
+              {champion && championConnector ? (
+                <div
+                  className="absolute"
                   style={{
-                    gap: `${20 + round.roundIndex * 28}px`,
+                    left: championX,
+                    top:
+                      DESKTOP_HEADER_HEIGHT +
+                      championConnector.y -
+                      DESKTOP_CHAMPION_CARD_HEIGHT / 2,
+                    width: DESKTOP_CHAMPION_CARD_WIDTH,
                   }}
                 >
-                  {round.matches.map((match) => (
-                    <article
-                      key={match.id}
-                      className="rounded-2xl border border-white/8 bg-[#232830] p-4 shadow-[0_18px_40px_-28px_rgba(0,0,0,0.6)]"
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                            Partido {match.position}
-                          </p>
-                          <p className="mt-1 text-sm font-medium text-white">{match.roundName}</p>
-                        </div>
-                        <Badge variant={getStatusBadgeVariant(match.status)}>
-                          {formatStatusLabel(match.status)}
-                        </Badge>
-                      </div>
-
-                      <div className="mt-4 space-y-2">
-                        {match.slots.map((slot, slotIndex) => {
-                          const participant =
-                            slot.participantId ? bracket.participants[slot.participantId] : null;
-                          const isWinner = match.winnerParticipantId === slot.participantId;
-                          const label =
-                            participant?.name ??
-                            slot.label ??
-                            (slot.source.type === "bye" ? "BYE" : "Pendiente");
-                          const href = slot.participantId
-                            ? (`/tournaments/${slug}/participants/${slot.participantId}` as Route)
-                            : null;
-
-                          const slotContent = (
-                            <div
-                              className={cn(
-                                "flex items-center justify-between rounded-xl border px-3 py-3",
-                                isWinner
-                                  ? "border-[#d3ff69]/18 bg-[#202813] text-white"
-                                  : "border-transparent bg-white/[0.05] text-white",
-                              )}
-                            >
-                              <div className="min-w-0">
-                                <div className="truncate font-medium">{label}</div>
-                                <div className="mt-1 text-xs text-slate-500">
-                                  {slot.source.type === "seed" ? `Seed ${slot.source.seed}` : slot.source.type === "bye" ? "BYE" : `Lado ${slotIndex + 1}`}
-                                </div>
-                              </div>
-                              <div className="ml-4 text-lg font-semibold">
-                                {slot.score ?? "-"}
-                              </div>
-                            </div>
-                          );
-
-                          return href ? (
-                            <Link key={`${match.id}-${slotIndex}`} href={href} className="block no-underline">
-                              {slotContent}
-                            </Link>
-                          ) : (
-                            <div key={`${match.id}-${slotIndex}`}>{slotContent}</div>
-                          );
-                        })}
-                      </div>
-                    </article>
-                  ))}
+                  <BracketChampionBanner championName={champion.name} desktop />
                 </div>
-              </div>
-            ))}
+              ) : null}
+            </div>
           </div>
         </div>
       </CardContent>
     </Card>
   );
+}
+
+function RoundHeader({
+  round,
+  mobile = false,
+}: {
+  round: BracketRound & { roundIndex?: number };
+  mobile?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-[1.35rem] border border-white/8 bg-[linear-gradient(180deg,rgba(34,40,49,0.96)_0%,rgba(24,29,37,0.98)_100%)] px-4 py-3 shadow-[0_22px_55px_-40px_rgba(0,0,0,0.6)]",
+        mobile ? "flex items-center justify-between" : "",
+      )}
+    >
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8fa2c5]">
+          {mobile ? `Ronda ${round.roundNumber}` : `Fase ${round.roundNumber}`}
+        </p>
+        <p className="mt-1 text-lg font-semibold text-white">{round.name}</p>
+      </div>
+      {mobile ? (
+        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">
+          {round.matchIds.length} cruces
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+function BracketMatchCard({
+  match,
+  slug,
+  participants,
+  compact = false,
+  fixedHeight = false,
+}: {
+  match: BracketMatch;
+  slug: string;
+  participants: Bracket["participants"];
+  compact?: boolean;
+  fixedHeight?: boolean;
+}) {
+  return (
+    <article
+      className={cn(
+        "rounded-[1.55rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(31,36,45,0.99)_100%)] p-4 shadow-[0_24px_60px_-40px_rgba(0,0,0,0.65)]",
+        fixedHeight ? "h-[168px]" : "",
+      )}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8191ad]">
+            {compact ? match.roundName : `Partido ${match.position}`}
+          </p>
+          <p className="mt-1 text-sm font-semibold text-white/92">
+            {compact ? `Cruce ${match.position}` : match.roundName}
+          </p>
+        </div>
+        <Badge variant={getStatusBadgeVariant(match.status)}>{formatStatusLabel(match.status)}</Badge>
+      </div>
+
+      <div className="mt-4 space-y-2.5">
+        {match.slots.map((slot, slotIndex) => (
+          <BracketSlotRow
+            key={`${match.id}-${slotIndex}`}
+            slug={slug}
+            slot={slot}
+            slotIndex={slotIndex}
+            isWinner={match.winnerParticipantId === slot.participantId}
+            winnerKnown={Boolean(match.winnerParticipantId)}
+            participants={participants}
+            match={match}
+          />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function BracketSlotRow({
+  slug,
+  slot,
+  slotIndex,
+  isWinner,
+  winnerKnown,
+  participants,
+  match,
+}: {
+  slug: string;
+  slot: BracketSlot;
+  slotIndex: number;
+  isWinner: boolean;
+  winnerKnown: boolean;
+  participants: Bracket["participants"];
+  match: BracketMatch;
+}) {
+  const label = resolveSlotLabel(slot, slotIndex, participants);
+  const href = slot.participantId
+    ? (`/tournaments/${slug}/participants/${slot.participantId}` as Route)
+    : null;
+
+  const content = (
+    <div
+      className={cn(
+        "flex items-center justify-between gap-3 rounded-[1rem] border px-3 py-3 transition",
+        isWinner
+          ? "border-[#c7ff2f]/18 bg-[#263214] text-white shadow-[inset_0_0_0_1px_rgba(199,255,47,0.06)]"
+          : winnerKnown
+            ? "border-white/6 bg-[#313742] text-white/92"
+            : "border-white/8 bg-[#2b313b] text-white",
+      )}
+    >
+      <div className="min-w-0">
+        <p className={cn("truncate text-[15px] font-semibold", !slot.participantId && "text-white/78")}>
+          {label}
+        </p>
+        <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#7f90af]">
+          {formatSlotMeta(slot, slotIndex)}
+        </p>
+      </div>
+      <div className={cn("min-w-[1.75rem] text-right text-2xl font-semibold", isWinner ? "text-[#efffaa]" : "text-white")}>
+        {slot.score ?? "-"}
+      </div>
+    </div>
+  );
+
+  if (!href) {
+    return content;
+  }
+
+  return (
+    <Link href={href} className="block no-underline">
+      {content}
+    </Link>
+  );
+}
+
+function BracketOverviewRail({
+  roundsCount,
+  championName,
+}: {
+  roundsCount: number;
+  championName?: string;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <BracketOverviewPill label="Recorrido" value="Izquierda a derecha" />
+      <BracketOverviewPill label="Cruces" value={`${roundsCount} rondas`} />
+      <BracketOverviewPill label="Marcador" value="Resultado a la derecha" />
+      {championName ? <BracketOverviewPill label="Campeon" value={championName} accent /> : null}
+    </div>
+  );
+}
+
+function BracketOverviewPill({
+  label,
+  value,
+  accent = false,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-full border px-3 py-2",
+        accent
+          ? "border-[#c7ff2f]/20 bg-[#253017] text-white"
+          : "border-white/8 bg-white/[0.03] text-white",
+      )}
+    >
+      <p className={cn("text-[10px] font-semibold uppercase tracking-[0.18em]", accent ? "text-[#dfff94]" : "text-[#8092b1]")}>
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function BracketChampionBanner({
+  championName,
+  desktop = false,
+}: {
+  championName: string;
+  desktop?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-[1.5rem] border border-[#c7ff2f]/20 bg-[linear-gradient(180deg,rgba(48,66,18,0.86)_0%,rgba(31,40,18,0.96)_100%)] px-4 py-4 shadow-[0_28px_65px_-38px_rgba(199,255,47,0.18)]",
+        desktop ? "h-[128px] flex items-center" : "",
+      )}
+    >
+      <div className="space-y-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e7ff9c]">
+          Campeones
+        </p>
+        <p className="text-lg font-semibold leading-tight text-white">{championName}</p>
+        <p className="text-sm text-[#d3ddbb]">Pareja ganadora del cuadro.</p>
+      </div>
+    </div>
+  );
+}
+
+function resolveSlotLabel(
+  slot: BracketSlot,
+  slotIndex: number,
+  participants: Bracket["participants"],
+) {
+  if (slot.label) {
+    return slot.label;
+  }
+
+  if (slot.participantId) {
+    return participants[slot.participantId]?.name ?? slot.participantId;
+  }
+
+  if (slot.source.type === "bye") {
+    return "BYE";
+  }
+
+  return slot.source.type === "winner_of_match" || slot.source.type === "loser_of_match"
+    ? "Por decidir"
+    : `Pendiente ${slotIndex + 1}`;
+}
+
+function formatSlotMeta(slot: BracketSlot, slotIndex: number) {
+  switch (slot.source.type) {
+    case "seed":
+      return `Seed ${slot.source.seed}`;
+    case "bye":
+      return "Libre";
+    case "winner_of_match":
+      return "Ganador previo";
+    case "loser_of_match":
+      return "Perdedor previo";
+    case "group_qualifier":
+      return `${slot.source.groupId} · ${slot.source.groupRank}`;
+    default:
+      return `Lado ${slotIndex + 1}`;
+  }
+}
+
+function getMatchCenterY(roundIndex: number, position: number) {
+  const unit = DESKTOP_CARD_HEIGHT + DESKTOP_ROW_GAP;
+  return DESKTOP_CARD_HEIGHT / 2 + ((((2 * position) - 1) * 2 ** roundIndex) - 1) * (unit / 2);
+}
+
+function buildConnectorPath(x1: number, y1: number, x2: number, y2: number) {
+  const midX = x1 + DESKTOP_COLUMN_GAP / 2;
+  return `M ${x1} ${y1} H ${midX} V ${y2} H ${x2}`;
 }
