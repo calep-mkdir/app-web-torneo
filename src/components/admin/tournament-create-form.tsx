@@ -39,7 +39,7 @@ export function TournamentCreateForm({
 
   return (
     <Card className="overflow-hidden">
-      <div className="h-1 bg-[linear-gradient(90deg,#7dd3fc_0%,#d9f99d_52%,#fb7185_100%)]" />
+      <div className="h-1 bg-[#c7ff2f]" />
       <CardHeader>
         <Badge variant="secondary" className="w-fit bg-white/8 text-white">
           {sport?.name ?? "Padel"}
@@ -55,7 +55,7 @@ export function TournamentCreateForm({
           <FormFeedback state={state} />
 
           {!hasSport ? (
-            <p className="rounded-3xl border border-amber-400/25 bg-amber-400/10 px-4 py-4 text-sm text-amber-100">
+            <p className="rounded-3xl border border-[#d6ff72]/18 bg-[#c7ff2f]/10 px-4 py-4 text-sm text-[#f3ffd2]">
               No encuentro el deporte Pádel en la base. Revisa la semilla `sports` antes de crear
               torneos.
             </p>
@@ -146,7 +146,7 @@ export function TournamentCreateForm({
               </div>
 
               <div className="flex items-center gap-2 text-sm text-slate-400">
-                <Waves className="h-4 w-4 text-cyan-300" />
+                <Waves className="h-4 w-4 text-[#dfff7b]" />
                 Zona horaria fija por defecto: Europe/Madrid
               </div>
             </div>

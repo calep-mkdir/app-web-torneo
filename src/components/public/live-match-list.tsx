@@ -101,8 +101,10 @@ function ScoreRow({
   const content = (
     <div
       className={[
-        "flex items-center justify-between rounded-xl px-3 py-2 transition",
-        winner ? "bg-[#9ae8ff] text-[#11161d]" : "bg-[#232830] text-white",
+        "flex items-center justify-between rounded-xl border px-3 py-2 transition",
+        winner
+          ? "border-[#d3ff69]/18 bg-[#202813] text-white"
+          : "border-white/8 bg-[#232830] text-white",
       ].join(" ")}
     >
       <span className="truncate font-medium">{label}</span>

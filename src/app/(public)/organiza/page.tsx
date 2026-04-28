@@ -46,7 +46,7 @@ export default function OrganizePage() {
         <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-1">
           {workflow.map((item) => (
             <article key={item.title} className="app-panel rounded-[2rem] p-5">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-300/12 text-cyan-100">
+              <div className="app-icon-chip h-11 w-11">
                 <item.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-4 text-2xl font-semibold text-white">{item.title}</h3>
@@ -94,7 +94,7 @@ function ActionTile({
       className="app-panel group rounded-[2rem] p-6 no-underline transition hover:-translate-y-1 hover:bg-white/[0.08]"
     >
       <div className="flex items-start justify-between gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-300/12 text-cyan-100">
+        <div className="app-icon-chip h-12 w-12">
           <Icon className="h-5 w-5" />
         </div>
         <span className={primary ? "app-cta-primary px-4 py-2" : "app-cta-secondary px-4 py-2"}>

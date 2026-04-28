@@ -99,10 +99,10 @@ export function BracketView({
                           const slotContent = (
                             <div
                               className={cn(
-                                "flex items-center justify-between rounded-xl px-3 py-3",
+                                "flex items-center justify-between rounded-xl border px-3 py-3",
                                 isWinner
-                                  ? "bg-[#9ae8ff] text-[#11161d]"
-                                  : "bg-white/[0.05] text-white",
+                                  ? "border-[#d3ff69]/18 bg-[#202813] text-white"
+                                  : "border-transparent bg-white/[0.05] text-white",
                               )}
                             >
                               <div className="min-w-0">

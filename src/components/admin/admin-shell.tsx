@@ -3,8 +3,9 @@
 import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, LayoutDashboard, Trophy } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard } from "lucide-react";
 
+import { PadelTournamentsLogo } from "@/components/public/padel-tournaments-logo";
 import { cn } from "@/lib/utils";
 
 export function AdminShell({
@@ -23,18 +24,13 @@ export function AdminShell({
   return (
     <div className="min-h-screen">
       <div className="mx-auto grid min-h-screen max-w-[1600px] grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)]">
-        <aside className="relative overflow-hidden border-b border-white/8 bg-[#232730]/82 px-5 py-6 backdrop-blur lg:border-b-0 lg:border-r">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_48%),radial-gradient(circle_at_top_right,rgba(217,249,157,0.14),transparent_44%)]" />
+        <aside className="relative overflow-hidden border-b border-white/8 bg-[#1b2027]/88 px-5 py-6 backdrop-blur lg:border-b-0 lg:border-r">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(circle_at_top_left,rgba(199,255,47,0.16),transparent_44%),radial-gradient(circle_at_top_right,rgba(255,255,255,0.04),transparent_38%)]" />
 
-          <div className="relative mb-8">
-            <div className="flex items-center gap-3">
-              <div className="rounded-2xl bg-[linear-gradient(135deg,#22d3ee_0%,#7dd3fc_48%,#d9f99d_100%)] p-3 text-slate-950 shadow-[0_18px_40px_-24px_rgba(125,211,252,0.9)]">
-                <Trophy className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">Padel</p>
-                <h1 className="text-lg font-semibold text-white">App Web Torneo</h1>
-              </div>
+          <div className="relative mb-8 space-y-3">
+            <PadelTournamentsLogo size="sm" />
+            <div className="inline-flex rounded-full border border-[#d6ff72]/18 bg-[#c7ff2f]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#e7ff9a]">
+              Panel
             </div>
           </div>
 
@@ -65,10 +61,10 @@ export function AdminShell({
           </nav>
 
           <div className="relative mt-8 rounded-[1.5rem] border border-white/8 bg-white/[0.03] p-4 text-sm text-slate-400 shadow-[0_24px_60px_-44px_rgba(0,0,0,0.5)]">
-            <div className="mb-3 inline-flex rounded-full bg-cyan-400/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
+            <div className="mb-3 inline-flex rounded-full border border-[#d6ff72]/18 bg-[#c7ff2f]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#e7ff9a]">
               Atajos
             </div>
-            Crea. Edita. Publica.
+            Crea. Ajusta. Publica.
           </div>
         </aside>
 
@@ -95,8 +91,8 @@ function SidebarLink({
       className={cn(
         "flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-semibold no-underline transition",
         active
-          ? "border border-white/35 bg-[#9ae8ff] text-[#11161d] shadow-[0_18px_45px_-18px_rgba(154,232,255,0.55)]"
-          : "bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white",
+          ? "border border-[#d3ff69]/38 bg-[#c7ff2f] !text-[#10161f] shadow-[0_18px_45px_-18px_rgba(199,255,47,0.42)]"
+          : "bg-white/[0.04] !text-slate-300 hover:bg-white/[0.08] hover:!text-white",
       )}
     >
       {icon}

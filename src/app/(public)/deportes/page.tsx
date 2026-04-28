@@ -53,7 +53,7 @@ export default async function SportsPage() {
 
       <section className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="app-panel rounded-[2rem] px-5 py-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">Accesos</p>
+          <p className="app-kicker">Accesos</p>
           <div className="mt-4 grid gap-3">
             {shortcuts.map((item) => (
               <Link
@@ -62,10 +62,10 @@ export default async function SportsPage() {
                 className="group rounded-[1.7rem] border border-white/10 bg-white/[0.04] px-4 py-4 no-underline transition hover:bg-white/[0.08]"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-300/12 text-cyan-100">
+                  <div className="app-icon-chip h-11 w-11">
                     <item.icon className="h-5 w-5" />
                   </div>
-                  <ArrowUpRight className="mt-1 h-4 w-4 text-cyan-200 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <ArrowUpRight className="mt-1 h-4 w-4 text-[#dfff75] transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
                 <p className="mt-4 text-xl font-semibold text-white">{item.title}</p>
                 <p className="mt-1 text-sm text-slate-300">{item.label}</p>
@@ -76,8 +76,8 @@ export default async function SportsPage() {
 
         <div className="app-panel rounded-[2rem] px-5 py-5">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">Proximos</p>
-            <Link href={"/tournaments" as Route} className="text-sm font-semibold text-cyan-100 no-underline">
+            <p className="app-kicker">Proximos</p>
+            <Link href={"/tournaments" as Route} className="text-sm font-semibold text-[#dfff75] no-underline">
               Ver todos
             </Link>
           </div>

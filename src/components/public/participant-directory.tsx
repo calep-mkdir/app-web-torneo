@@ -50,7 +50,7 @@ export function ParticipantDirectory({
               <Link
                 key={entry.id}
                 href={`/tournaments/${slug}/participants/${entry.id}` as Route}
-                className="block rounded-2xl border border-white/8 bg-[#232830] px-4 py-4 no-underline transition hover:bg-white/[0.04]"
+                className="block rounded-2xl border border-white/8 bg-[#232830] px-4 py-4 no-underline transition hover:border-[#d6ff72]/18 hover:bg-white/[0.04]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">

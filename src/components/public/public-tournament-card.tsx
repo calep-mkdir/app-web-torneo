@@ -12,15 +12,13 @@ export function PublicTournamentCard({
 }: {
   tournament: PublicTournamentListItem;
 }) {
-  const accent = getTournamentAccent(tournament.sportName);
-
   return (
-    <Card className="group app-panel h-full overflow-hidden bg-[linear-gradient(180deg,rgba(58,64,75,0.92)_0%,rgba(36,40,48,0.96)_100%)] transition hover:-translate-y-1 hover:shadow-[0_30px_90px_-42px_rgba(103,232,249,0.2)]">
-      <div className={accent.ribbonClass} />
-      <CardHeader className={`gap-4 ${accent.headerClass}`}>
+    <Card className="group app-panel h-full overflow-hidden bg-[linear-gradient(180deg,rgba(31,37,46,0.95)_0%,rgba(21,26,33,0.98)_100%)] transition hover:-translate-y-1 hover:shadow-[0_30px_90px_-42px_rgba(199,255,47,0.14)]">
+      <div className="h-1.5 bg-[#c7ff2f]" />
+      <CardHeader className="gap-4 bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_100%)]">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1">
-            <CardDescription className="font-medium text-cyan-200">{tournament.sportName}</CardDescription>
+            <CardDescription className="font-medium text-white/62">{tournament.sportName}</CardDescription>
             <CardTitle className="text-2xl text-white">{tournament.name}</CardTitle>
           </div>
           <Badge variant={getStatusBadgeVariant(tournament.status)}>
@@ -55,26 +53,4 @@ function Metric({ label, value }: { label: string; value: string }) {
       <dd className="mt-1 text-lg font-semibold text-white">{value}</dd>
     </div>
   );
-}
-
-function getTournamentAccent(sportName: string) {
-  const palette = [
-    {
-      ribbonClass: "h-2 bg-[linear-gradient(90deg,#38bdf8_0%,#7dd3fc_55%,#d9f99d_100%)]",
-      headerClass: "bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_100%)]",
-    },
-    {
-      ribbonClass: "h-2 bg-[linear-gradient(90deg,#d9f99d_0%,#bef264_50%,#38bdf8_100%)]",
-      headerClass: "bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_100%)]",
-    },
-    {
-      ribbonClass: "h-2 bg-[linear-gradient(90deg,#fb7185_0%,#38bdf8_50%,#d9f99d_100%)]",
-      headerClass: "bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_100%)]",
-    },
-  ];
-  const seed = sportName
-    .split("")
-    .reduce((total, letter) => total + letter.charCodeAt(0), 0);
-
-  return palette[seed % palette.length];
 }

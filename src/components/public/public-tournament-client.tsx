@@ -115,7 +115,7 @@ export function PublicTournamentClient({
             ) : null}
 
             {realtime.error ? (
-              <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+              <p className="rounded-2xl border border-rose-400/18 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
                 {realtime.error}
               </p>
             ) : (
@@ -156,7 +156,7 @@ export function PublicTournamentClient({
           ) : null}
 
           {realtime.error ? (
-            <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+            <p className="rounded-2xl border border-rose-400/18 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
               {realtime.error}
             </p>
           ) : null}

@@ -170,7 +170,7 @@ function EntryLink({
   return (
     <Link
       href={`/tournaments/${slug}/participants/${entryId}` as Route}
-      className="truncate text-sm font-medium text-white no-underline hover:text-cyan-200"
+      className="truncate text-sm font-medium text-white no-underline hover:text-[#dfff75]"
     >
       {label}
     </Link>

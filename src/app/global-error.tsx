@@ -19,7 +19,7 @@ export default function GlobalError({
       <body className="min-h-screen bg-background text-foreground">
         <div className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center px-6 text-center">
           <div className="app-panel app-panel-strong rounded-[2rem] px-6 py-10">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-200">
+            <p className="app-kicker">
               Error global
             </p>
             <h1 className="mt-4 text-3xl font-semibold text-white">

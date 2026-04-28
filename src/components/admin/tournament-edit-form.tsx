@@ -42,7 +42,7 @@ export function TournamentEditForm({
 
   return (
     <Card className="overflow-hidden">
-      <div className="h-1 bg-[linear-gradient(90deg,#7dd3fc_0%,#d9f99d_52%,#fb7185_100%)]" />
+      <div className="h-1 bg-[#c7ff2f]" />
       <CardHeader>
         <div className="flex flex-wrap items-center gap-3">
           <Badge variant="secondary" className="bg-white/8 text-white">

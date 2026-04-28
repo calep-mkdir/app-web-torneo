@@ -17,7 +17,7 @@ export default function Error({
   return (
     <div className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-6 text-center">
       <div className="app-panel app-panel-strong rounded-[2rem] px-6 py-10">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-200">
+        <p className="app-kicker">
           Error inesperado
         </p>
         <h1 className="mt-4 text-3xl font-semibold text-white">

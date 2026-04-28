@@ -22,19 +22,13 @@ export function TournamentList({
       {tournaments.map((tournament) => (
         <Card
           key={tournament.id}
-          className="app-panel overflow-hidden bg-[linear-gradient(180deg,rgba(58,64,75,0.92)_0%,rgba(36,40,48,0.96)_100%)]"
+          className="app-panel overflow-hidden bg-[linear-gradient(180deg,rgba(31,37,46,0.96)_0%,rgba(20,24,31,0.99)_100%)]"
         >
-          <div
-            className={
-              tournament.isPublic
-                ? "h-2 bg-[linear-gradient(90deg,#10b981_0%,#84cc16_100%)]"
-                : "h-2 bg-[linear-gradient(90deg,#f97316_0%,#ec4899_100%)]"
-            }
-          />
+          <div className="h-1.5 bg-[#c7ff2f]" />
           <CardHeader className="gap-3">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <CardDescription className="font-medium text-cyan-200">
+                <CardDescription className="font-medium text-white/62">
                   {tournament.sportName} · {tournament.slug}
                 </CardDescription>
                 <CardTitle className="mt-1 text-2xl text-white">{tournament.name}</CardTitle>
@@ -58,7 +52,7 @@ export function TournamentList({
               </span>
               <Link
                 href={`/admin/tournaments/${tournament.id}` as Route}
-                className="font-semibold text-cyan-200 no-underline"
+                className="font-semibold text-white no-underline transition hover:text-[#c7ff2f]"
               >
                 Abrir torneo
               </Link>

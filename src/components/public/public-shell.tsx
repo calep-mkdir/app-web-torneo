@@ -61,9 +61,9 @@ export function PublicShell({
 
   return (
     <div className="relative min-h-screen overflow-x-clip">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[26rem] bg-[radial-gradient(circle_at_top_left,rgba(199,255,47,0.08),transparent_28%),radial-gradient(circle_at_top_right,rgba(56,189,248,0.08),transparent_22%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_80%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[26rem] bg-[radial-gradient(circle_at_top_left,rgba(199,255,47,0.08),transparent_28%),radial-gradient(circle_at_top_right,rgba(255,255,255,0.03),transparent_22%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_80%)]" />
 
-      <header className="relative z-50 border-b border-white/6 bg-[#11161d]/92 backdrop-blur-xl">
+      <header className="relative z-50 border-b border-white/6 bg-[#10151b]/92 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1560px] items-center gap-6 px-4 py-5 sm:px-6 lg:px-8">
           <Link href="/" className="no-underline">
             <PadelTournamentsLogo size="sm" />
@@ -89,13 +89,11 @@ export function PublicShell({
 
       <main className="relative mx-auto max-w-[1560px] px-4 py-6 sm:px-6 lg:px-8">{children}</main>
 
-      <footer className="relative mt-10 border-t border-white/6 bg-[#12171f]/96">
+      <footer className="relative mt-10 border-t border-white/6 bg-[#10151b]/96">
         <div className="mx-auto grid max-w-[1560px] gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[1.2fr_0.85fr_0.85fr_1.05fr] lg:px-8">
           <div className="space-y-4">
             <PadelTournamentsLogo size="sm" />
-            <p className="max-w-sm text-sm leading-6 text-slate-400">
-              Torneos, cuadros, partidos y resultados en una sola vista.
-            </p>
+            <p className="max-w-sm text-sm leading-6 text-slate-400">Cuadros, partidos y resultados.</p>
           </div>
 
           {footerGroups.map((group) => (
@@ -159,8 +157,8 @@ function NavLink({
           ? [
               "shrink-0 rounded-full border px-4 py-2",
               isActive
-                ? "border-[#c7ff2f]/40 bg-[#c7ff2f] text-[#11161d]"
-                : "border-white/10 bg-white/[0.03] text-slate-200 hover:border-white/16 hover:text-white",
+                ? "border-[#c7ff2f]/40 bg-[#c7ff2f] !text-[#11161d]"
+                : "border-white/10 bg-white/[0.03] !text-slate-200 hover:border-white/16 hover:!text-white",
             ]
           : [
               "pb-3",

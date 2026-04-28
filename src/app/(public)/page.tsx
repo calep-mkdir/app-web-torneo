@@ -3,7 +3,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { CalendarDays, ChevronRight, Clock3, MapPin, Trophy } from "lucide-react";
 
-import { BracketView, PadelTournamentsLogo } from "@/components/public";
+import { BracketView, PadelTournamentsLogo, PadelTournamentsMark } from "@/components/public";
 import { formatDateRange, formatDateTime } from "@/components/public/date-utils";
 import { Badge } from "@/components/ui";
 import { buildEntryDirectory, buildMatchViewModels, buildPublicBracket } from "@/features/public/mappers";
@@ -91,27 +91,31 @@ export default async function PublicHomePage() {
         <section className="app-panel app-panel-strong relative overflow-hidden rounded-[1.7rem] p-5">
           <div className="absolute inset-x-0 top-0 h-36 bg-[radial-gradient(circle_at_top,rgba(199,255,47,0.14),transparent_60%)]" />
           <div className="absolute inset-y-6 right-[-2rem] w-32 rounded-full bg-[#c7ff2f]/8 blur-3xl" />
-          <div className="relative">
+          <div className="relative z-10">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">Circuito</p>
-            <PadelTournamentsLogo
-              size="md"
-              className="mt-4"
-              titleClassName="text-[2.7rem]"
-              subtitleClassName="tracking-[0.3em] text-white/62"
-            />
+            <div className="mt-4 inline-flex rounded-[1.8rem] border border-white/8 bg-[#0f141b] p-4 shadow-[0_24px_70px_-42px_rgba(0,0,0,0.7)]">
+              <PadelTournamentsMark className="h-20 w-20" />
+            </div>
+            <PadelTournamentsLogo size="md" className="mt-4" titleClassName="text-[2.7rem]" subtitleClassName="tracking-[0.3em] text-white/62" />
             <p className="mt-4 max-w-[15rem] text-sm leading-6 text-slate-300">
               Compite. Disfruta. Repite.
             </p>
           </div>
 
-          <BrandShowcase className="mt-5" compact />
-
-          <div className="mt-5 grid gap-3">
-            <Link href={"/admin" as Route} className="app-cta-primary w-full">
-              Abrir panel
+          <div className="relative z-10 mt-5 grid gap-3">
+            <Link
+              href={"/admin" as Route}
+              className="app-cta-primary w-full justify-start px-6 text-base !text-[#10161f]"
+              style={{ color: "#10161f" }}
+            >
+              <span style={{ color: "#10161f" }}>Abrir panel</span>
             </Link>
-            <Link href={"/organiza" as Route} className="app-cta-secondary w-full">
-              Organizar torneo
+            <Link
+              href={"/organiza" as Route}
+              className="app-cta-secondary w-full justify-start px-6 text-base !text-white"
+              style={{ color: "#f8fafc" }}
+            >
+              <span style={{ color: "#f8fafc" }}>Organizar torneo</span>
             </Link>
           </div>
         </section>
@@ -122,7 +126,7 @@ export default async function PublicHomePage() {
           <section className="app-panel app-panel-strong relative overflow-hidden rounded-[1.8rem]">
             <CourtBackdrop />
             <div className="absolute right-8 top-8 hidden opacity-10 lg:block">
-              <PadelTournamentsLogo size="md" titleClassName="text-white" subtitleClassName="text-white/60" />
+              <PadelTournamentsMark className="h-40 w-40" />
             </div>
             <div className="relative grid gap-6 px-6 py-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-10">
               <div className="space-y-6">
@@ -355,10 +359,10 @@ function SidebarTournamentCard({
 
 function CourtThumbnail({ tone }: { tone: number }) {
   const tones = [
-    "from-[#081224] via-[#0f2d61] to-[#0a1526]",
-    "from-[#0b1424] via-[#133a66] to-[#0b1018]",
-    "from-[#1c1308] via-[#6a3e11] to-[#18100b]",
-    "from-[#0a1520] via-[#16445f] to-[#0b1018]",
+    "from-[#10161d] via-[#1c242d] to-[#0f141a]",
+    "from-[#131920] via-[#242d37] to-[#10141b]",
+    "from-[#11161d] via-[#202830] to-[#0d1218]",
+    "from-[#141a21] via-[#2a3139] to-[#10141a]",
   ];
 
   return (
@@ -376,7 +380,7 @@ function CourtThumbnail({ tone }: { tone: number }) {
 function CourtBackdrop({ compact = false }: { compact?: boolean }) {
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.18),transparent_54%),linear-gradient(180deg,rgba(17,22,31,0.26)_0%,rgba(12,18,27,0.82)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(199,255,47,0.12),transparent_56%),radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_40%),linear-gradient(180deg,rgba(17,22,31,0.2)_0%,rgba(12,18,27,0.9)_100%)]" />
       <div className="absolute inset-x-[6%] bottom-[10%] top-[12%] rounded-[1.5rem] border border-white/8" />
       <div className="absolute inset-x-[27%] bottom-[10%] top-[12%] border-x border-white/8" />
       <div className="absolute bottom-[35%] left-[6%] right-[6%] border-t border-white/8" />
@@ -385,7 +389,7 @@ function CourtBackdrop({ compact = false }: { compact?: boolean }) {
       <div className="absolute left-[10%] top-[14%] h-16 w-16 rounded-full bg-white/60 blur-[38px]" />
       <div className="absolute right-[16%] top-[12%] h-16 w-16 rounded-full bg-white/55 blur-[38px]" />
       {!compact ? (
-        <div className="absolute inset-y-0 right-0 w-[45%] bg-[linear-gradient(90deg,transparent_0%,rgba(12,18,27,0.22)_20%,rgba(12,18,27,0.74)_100%)]" />
+        <div className="absolute inset-y-0 right-0 w-[45%] bg-[linear-gradient(90deg,transparent_0%,rgba(12,18,27,0.2)_20%,rgba(12,18,27,0.76)_100%)]" />
       ) : null}
     </div>
   );
@@ -408,14 +412,14 @@ function BrandShowcase({
     >
       <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(199,255,47,0.16),transparent_70%)]" />
       <div className="absolute right-[-2rem] top-[-2rem] h-28 w-28 rounded-full bg-[#c7ff2f]/10 blur-3xl" />
-      <div className="absolute left-[-2rem] bottom-[-2rem] h-24 w-24 rounded-full bg-cyan-300/10 blur-3xl" />
+      <div className="absolute left-[-2rem] bottom-[-2rem] h-24 w-24 rounded-full bg-white/6 blur-3xl" />
       <div className="relative flex min-h-full items-center justify-center">
-        <PadelTournamentsLogo
-          size={compact ? "md" : "lg"}
-          className="justify-center"
-          titleClassName={compact ? "text-[2.5rem]" : "text-center"}
-          subtitleClassName="text-white/58"
-        />
+        <div className="flex flex-col items-center justify-center gap-4">
+          <PadelTournamentsMark className={compact ? "h-24 w-24" : "h-32 w-32"} />
+          {!compact ? (
+            <PadelTournamentsLogo size="md" className="justify-center" subtitleClassName="text-white/58" />
+          ) : null}
+        </div>
       </div>
     </div>
   );

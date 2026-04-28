@@ -37,11 +37,11 @@ export function PublicPageHero({
 
   return (
     <section className="app-panel app-panel-strong relative overflow-hidden rounded-[2rem]">
-      <div className="absolute inset-x-0 top-0 h-full bg-[radial-gradient(circle_at_top_left,rgba(103,232,249,0.12),transparent_32%),radial-gradient(circle_at_top_right,rgba(190,242,100,0.08),transparent_34%),radial-gradient(circle_at_center,rgba(251,113,133,0.06),transparent_42%)]" />
+      <div className="absolute inset-x-0 top-0 h-full bg-[radial-gradient(circle_at_top_left,rgba(199,255,47,0.11),transparent_32%),radial-gradient(circle_at_top_right,rgba(255,255,255,0.04),transparent_34%),radial-gradient(circle_at_center,rgba(199,255,47,0.03),transparent_42%)]" />
       <div className="relative px-6 py-7 sm:px-8 sm:py-9 lg:px-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
+            <p className="app-kicker">
               {eyebrow}
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">

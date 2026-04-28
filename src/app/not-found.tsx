@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <div className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-6 text-center">
       <div className="app-panel app-panel-strong rounded-[2rem] px-6 py-10">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-200">404</p>
+        <p className="app-kicker">404</p>
         <h1 className="mt-4 text-3xl font-semibold text-white">
           La pagina que buscas no existe o ya no esta disponible.
         </h1>
