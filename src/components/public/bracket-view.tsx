@@ -1,18 +1,19 @@
+"use client";
+
 import type { Route } from "next";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import type { Bracket, BracketMatch, BracketRound, BracketSlot } from "@/lib/brackets";
 import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 
-const DESKTOP_HEADER_HEIGHT = 82;
-const DESKTOP_CARD_WIDTH = 304;
-const DESKTOP_CARD_HEIGHT = 168;
-const DESKTOP_COLUMN_GAP = 80;
-const DESKTOP_ROW_GAP = 22;
-const DESKTOP_CHAMPION_CARD_WIDTH = 244;
-const DESKTOP_CHAMPION_CARD_HEIGHT = 128;
+const DESKTOP_HEADER_HEIGHT = 78;
+const DESKTOP_CARD_WIDTH = 238;
+const DESKTOP_CARD_HEIGHT = 208;
+const DESKTOP_COLUMN_GAP = 44;
+const DESKTOP_ROW_GAP = 18;
 
 export function BracketView({
   slug,
@@ -25,6 +26,32 @@ export function BracketView({
   title?: string;
   description?: string;
 }) {
+  const boardFrameRef = useRef<HTMLDivElement>(null);
+  const [boardFrameWidth, setBoardFrameWidth] = useState(0);
+
+  useEffect(() => {
+    const element = boardFrameRef.current;
+    if (!element) {
+      return;
+    }
+
+    const updateWidth = () => {
+      setBoardFrameWidth(element.clientWidth);
+    };
+
+    updateWidth();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateWidth();
+    });
+
+    resizeObserver.observe(element);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   if (!bracket) {
     return (
       <Card className="app-panel bg-white/[0.04]">
@@ -50,7 +77,7 @@ export function BracketView({
       ? firstRoundMatchCount * DESKTOP_CARD_HEIGHT + Math.max(firstRoundMatchCount - 1, 0) * DESKTOP_ROW_GAP
       : DESKTOP_CARD_HEIGHT;
   const boardHeight = DESKTOP_HEADER_HEIGHT + boardCoreHeight;
-  const bracketBoardWidth =
+  const boardWidth =
     rounds.length * DESKTOP_CARD_WIDTH + Math.max(rounds.length - 1, 0) * DESKTOP_COLUMN_GAP;
 
   const roundIndexByMatchId = new Map<string, number>();
@@ -106,22 +133,11 @@ export function BracketView({
       ];
     }),
   );
-  const finalRound = desktopRounds.at(-1);
-  const finalMatch = finalRound?.matches.at(0);
-  const championX = bracketBoardWidth + DESKTOP_COLUMN_GAP;
-  const boardWidth = champion ? championX + DESKTOP_CHAMPION_CARD_WIDTH : bracketBoardWidth;
-  const championConnector =
-    champion && finalRound && finalMatch
-      ? {
-          d: buildConnectorPath(
-            finalRound.x + DESKTOP_CARD_WIDTH,
-            DESKTOP_HEADER_HEIGHT + finalMatch.centerY,
-            championX,
-            DESKTOP_HEADER_HEIGHT + finalMatch.centerY,
-          ),
-          y: finalMatch.centerY,
-        }
-      : null;
+  const desktopScale =
+    boardFrameWidth > 0 ? Math.min(1, boardFrameWidth / boardWidth) : 1;
+  const scaledBoardHeight = Math.round(boardHeight * desktopScale);
+  const boardLeftOffset =
+    boardFrameWidth > 0 ? Math.max((boardFrameWidth - boardWidth * desktopScale) / 2, 0) : 0;
 
   return (
     <Card className="app-panel overflow-hidden bg-white/[0.04]">
@@ -160,97 +176,87 @@ export function BracketView({
                     match={match}
                     slug={slug}
                     participants={bracket.participants}
+                    isFinal={round.roundIndex === rounds.length - 1}
                     compact
                   />
                 ))}
               </div>
             </section>
           ))}
-          {champion ? <BracketChampionBanner championName={champion.name} /> : null}
         </div>
 
         <div className="hidden lg:block">
-          <div className="-mx-2 overflow-x-auto px-2 pb-2">
-            <div className="relative min-w-max" style={{ width: boardWidth, height: boardHeight }}>
-              <svg
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-                width={boardWidth}
-                height={boardHeight}
-                viewBox={`0 0 ${boardWidth} ${boardHeight}`}
+          <div ref={boardFrameRef} className="px-1 pb-2">
+            <div
+              className="relative overflow-hidden rounded-[1.6rem] border border-white/8 bg-[radial-gradient(circle_at_top,rgba(199,255,47,0.06),transparent_40%),linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(255,255,255,0.01)_100%)]"
+              style={{ height: scaledBoardHeight || boardHeight }}
+            >
+              <div
+                className="absolute top-0 origin-top-left"
+                style={{
+                  left: boardLeftOffset,
+                  width: boardWidth,
+                  height: boardHeight,
+                  transform: `scale(${desktopScale})`,
+                }}
               >
-                {connectors.map((connector) => (
-                  <path
-                    key={connector.id}
-                    d={connector.d}
-                    fill="none"
-                    stroke={connector.active ? "rgba(199,255,47,0.45)" : "rgba(148,163,184,0.18)"}
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                ))}
-                {championConnector ? (
-                  <path
-                    d={championConnector.d}
-                    fill="none"
-                    stroke="rgba(199,255,47,0.65)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                ) : null}
-              </svg>
-
-              {desktopRounds.map((round) => (
-                <div
-                  key={round.id}
-                  className="absolute top-0"
-                  style={{ left: round.x, width: DESKTOP_CARD_WIDTH }}
+                <svg
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                  width={boardWidth}
+                  height={boardHeight}
+                  viewBox={`0 0 ${boardWidth} ${boardHeight}`}
                 >
-                  <RoundHeader round={round} />
-                </div>
-              ))}
-
-              {desktopRounds.map((round) =>
-                round.matches.map((match) => (
-                  <div
-                    key={match.id}
-                    className="absolute"
-                    style={{
-                      left: round.x,
-                      top: match.top,
-                      width: DESKTOP_CARD_WIDTH,
-                    }}
-                  >
-                    <BracketMatchCard
-                      match={match}
-                      slug={slug}
-                      participants={bracket.participants}
-                      fixedHeight
+                  {connectors.map((connector) => (
+                    <path
+                      key={connector.id}
+                      d={connector.d}
+                      fill="none"
+                      stroke={connector.active ? "rgba(199,255,47,0.45)" : "rgba(148,163,184,0.18)"}
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
-                  </div>
-                )),
-              )}
+                  ))}
+                </svg>
 
-              {champion && championConnector ? (
-                <div
-                  className="absolute"
-                  style={{
-                    left: championX,
-                    top:
-                      DESKTOP_HEADER_HEIGHT +
-                      championConnector.y -
-                      DESKTOP_CHAMPION_CARD_HEIGHT / 2,
-                    width: DESKTOP_CHAMPION_CARD_WIDTH,
-                  }}
-                >
-                  <BracketChampionBanner championName={champion.name} desktop />
-                </div>
-              ) : null}
+                {desktopRounds.map((round) => (
+                  <div
+                    key={round.id}
+                    className="absolute top-0"
+                    style={{ left: round.x, width: DESKTOP_CARD_WIDTH }}
+                  >
+                    <RoundHeader round={round} />
+                  </div>
+                ))}
+
+                {desktopRounds.map((round) =>
+                  round.matches.map((match) => (
+                    <div
+                      key={match.id}
+                      className="absolute"
+                      style={{
+                        left: round.x,
+                        top: match.top,
+                        width: DESKTOP_CARD_WIDTH,
+                      }}
+                    >
+                      <BracketMatchCard
+                        match={match}
+                        slug={slug}
+                        participants={bracket.participants}
+                        isFinal={round.roundIndex === rounds.length - 1}
+                        fixedHeight
+                      />
+                    </div>
+                  )),
+                )}
+              </div>
             </div>
           </div>
         </div>
+
+        {champion ? <BracketChampionBanner championName={champion.name} /> : null}
       </CardContent>
     </Card>
   );
@@ -289,12 +295,14 @@ function BracketMatchCard({
   match,
   slug,
   participants,
+  isFinal = false,
   compact = false,
   fixedHeight = false,
 }: {
   match: BracketMatch;
   slug: string;
   participants: Bracket["participants"];
+  isFinal?: boolean;
   compact?: boolean;
   fixedHeight?: boolean;
 }) {
@@ -302,7 +310,8 @@ function BracketMatchCard({
     <article
       className={cn(
         "rounded-[1.55rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(31,36,45,0.99)_100%)] p-4 shadow-[0_24px_60px_-40px_rgba(0,0,0,0.65)]",
-        fixedHeight ? "h-[168px]" : "",
+        isFinal ? "border-[#c7ff2f]/18 shadow-[0_26px_80px_-48px_rgba(199,255,47,0.25)]" : "",
+        fixedHeight ? "h-[208px]" : "",
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -360,7 +369,7 @@ function BracketSlotRow({
   const content = (
     <div
       className={cn(
-        "flex items-center justify-between gap-3 rounded-[1rem] border px-3 py-3 transition",
+        "flex min-h-[4.7rem] items-center justify-between gap-3 rounded-[1rem] border px-3 py-3 transition",
         isWinner
           ? "border-[#c7ff2f]/18 bg-[#263214] text-white shadow-[inset_0_0_0_1px_rgba(199,255,47,0.06)]"
           : winnerKnown
@@ -368,15 +377,25 @@ function BracketSlotRow({
             : "border-white/8 bg-[#2b313b] text-white",
       )}
     >
-      <div className="min-w-0">
-        <p className={cn("truncate text-[15px] font-semibold", !slot.participantId && "text-white/78")}>
+      <div className="min-w-0 flex-1">
+        <p
+          className={cn(
+            "pr-2 text-[14px] font-semibold leading-[1.15rem] text-pretty",
+            !slot.participantId && "text-white/78",
+          )}
+        >
           {label}
         </p>
         <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#7f90af]">
           {formatSlotMeta(slot, slotIndex)}
         </p>
       </div>
-      <div className={cn("min-w-[1.75rem] text-right text-2xl font-semibold", isWinner ? "text-[#efffaa]" : "text-white")}>
+      <div
+        className={cn(
+          "min-w-[1.75rem] self-center text-right text-[1.9rem] font-semibold leading-none",
+          isWinner ? "text-[#efffaa]" : "text-white",
+        )}
+      >
         {slot.score ?? "-"}
       </div>
     </div>
@@ -438,18 +457,11 @@ function BracketOverviewPill({
 
 function BracketChampionBanner({
   championName,
-  desktop = false,
 }: {
   championName: string;
-  desktop?: boolean;
 }) {
   return (
-    <div
-      className={cn(
-        "rounded-[1.5rem] border border-[#c7ff2f]/20 bg-[linear-gradient(180deg,rgba(48,66,18,0.86)_0%,rgba(31,40,18,0.96)_100%)] px-4 py-4 shadow-[0_28px_65px_-38px_rgba(199,255,47,0.18)]",
-        desktop ? "h-[128px] flex items-center" : "",
-      )}
-    >
+    <div className="rounded-[1.5rem] border border-[#c7ff2f]/20 bg-[linear-gradient(180deg,rgba(48,66,18,0.86)_0%,rgba(31,40,18,0.96)_100%)] px-4 py-4 shadow-[0_28px_65px_-38px_rgba(199,255,47,0.18)]">
       <div className="space-y-2">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e7ff9c]">
           Campeones
