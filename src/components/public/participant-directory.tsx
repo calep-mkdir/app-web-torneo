@@ -6,6 +6,7 @@ import { useDeferredValue, useMemo, useState } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, Input } from "@/components/ui";
 import type { PublicEntryDirectoryItem } from "@/features/public/types";
+import { formatStatusLabel } from "@/lib/padel";
 
 export function ParticipantDirectory({
   slug,
@@ -27,12 +28,10 @@ export function ParticipantDirectory({
   }, [deferredQuery, entries]);
 
   return (
-    <Card className="border-white/8 bg-white/[0.03]">
+    <Card className="app-panel bg-white/[0.04]">
       <CardHeader>
         <CardTitle>Participantes</CardTitle>
-        <CardDescription>
-          Busca una pareja o jugador y entra en su trayectoria completa.
-        </CardDescription>
+        <CardDescription>Busca una pareja o jugador.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <Input
@@ -51,13 +50,13 @@ export function ParticipantDirectory({
               <Link
                 key={entry.id}
                 href={`/tournaments/${slug}/participants/${entry.id}` as Route}
-                className="block rounded-2xl border border-white/8 bg-[#0b1220] px-4 py-4 no-underline transition hover:bg-white/[0.04]"
+                className="block rounded-2xl border border-white/8 bg-[#232830] px-4 py-4 no-underline transition hover:bg-white/[0.04]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="truncate font-medium text-white">{entry.name}</p>
                     <p className="mt-1 text-xs text-slate-400">
-                      Seed {entry.seed ?? "-"} · Estado {entry.status}
+                      Seed {entry.seed ?? "-"} · {formatStatusLabel(entry.status)}
                     </p>
                   </div>
                   <div className="rounded-full bg-white/[0.05] px-3 py-1 text-xs font-medium text-slate-300">

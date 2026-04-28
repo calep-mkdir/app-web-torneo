@@ -3,7 +3,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { CalendarDays, ClipboardList, Radar, Trophy } from "lucide-react";
 
-import { CtaBanner, PublicPageHero, SectionHeading } from "@/components/public";
+import { PublicPageHero } from "@/components/public";
 
 export const metadata: Metadata = {
   title: "Organiza tu torneo",
@@ -24,13 +24,13 @@ const workflow = [
   {
     icon: Radar,
     title: "3. Resultados",
-    text: "Marcadores, cierre y publico.",
+    text: "Marcadores y cierre.",
   },
 ];
 
 export default function OrganizePage() {
   return (
-    <div className="space-y-10 lg:space-y-14">
+    <div className="space-y-4">
       <PublicPageHero
         eyebrow="Panel"
         title="Crear torneo"
@@ -42,48 +42,35 @@ export default function OrganizePage() {
         ]}
       />
 
-      <section className="space-y-6">
-        <SectionHeading eyebrow="Pasos" title="Paso a paso" />
-
-        <div className="grid gap-5 lg:grid-cols-3">
+      <section className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-1">
           {workflow.map((item) => (
-            <article
-              key={item.title}
-              className="rounded-[2rem] border border-white/8 bg-white/[0.03] p-6 shadow-[0_24px_80px_-44px_rgba(0,0,0,0.38)]"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-400/12 text-cyan-200">
+            <article key={item.title} className="app-panel rounded-[2rem] p-5">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-300/12 text-cyan-100">
                 <item.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-5 text-2xl font-semibold text-white">{item.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-400">{item.text}</p>
+              <h3 className="mt-4 text-2xl font-semibold text-white">{item.title}</h3>
+              <p className="mt-1 text-sm text-slate-300">{item.text}</p>
             </article>
           ))}
         </div>
-      </section>
 
-      <section className="grid gap-4 md:grid-cols-2">
-        <ActionTile
-          icon={CalendarDays}
-          title="Abrir panel"
-          href={"/admin" as Route}
-          label="Crear torneo"
-        />
-        <ActionTile
-          icon={Radar}
-          title="Ver torneos"
-          href={"/tournaments" as Route}
-          label="Abrir calendario"
-        />
+        <div className="grid gap-4">
+          <ActionTile
+            icon={CalendarDays}
+            title="Abrir panel"
+            href={"/admin" as Route}
+            label="Crear torneo"
+            primary
+          />
+          <ActionTile
+            icon={Radar}
+            title="Ver torneos"
+            href={"/tournaments" as Route}
+            label="Abrir calendario"
+          />
+        </div>
       </section>
-
-      <CtaBanner
-        eyebrow="Panel"
-        title="Crear torneo"
-        primaryHref={"/admin" as Route}
-        primaryLabel="Abrir panel"
-        secondaryHref={"/tournaments" as Route}
-        secondaryLabel="Ver torneos"
-      />
     </div>
   );
 }
@@ -93,24 +80,28 @@ function ActionTile({
   title,
   href,
   label,
+  primary = false,
 }: {
   icon: typeof CalendarDays;
   title: string;
   href: Route;
   label: string;
+  primary?: boolean;
 }) {
   return (
     <Link
       href={href}
-      className="group rounded-[2rem] border border-white/8 bg-white/[0.03] p-6 no-underline shadow-[0_24px_80px_-44px_rgba(0,0,0,0.38)] transition hover:-translate-y-1 hover:bg-white/[0.05]"
+      className="app-panel group rounded-[2rem] p-6 no-underline transition hover:-translate-y-1 hover:bg-white/[0.08]"
     >
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-400/12 text-cyan-200">
-        <Icon className="h-5 w-5" />
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-300/12 text-cyan-100">
+          <Icon className="h-5 w-5" />
+        </div>
+        <span className={primary ? "app-cta-primary px-4 py-2" : "app-cta-secondary px-4 py-2"}>
+          {label}
+        </span>
       </div>
-      <h3 className="mt-5 text-2xl font-semibold text-white">{title}</h3>
-      <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200">
-        {label}
-      </div>
+      <h3 className="mt-6 text-2xl font-semibold text-white">{title}</h3>
     </Link>
   );
 }

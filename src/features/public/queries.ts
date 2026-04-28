@@ -130,12 +130,12 @@ export async function getPublicHomePageData(): Promise<{
   const featuredTournaments = tournaments
     .slice()
     .sort((left, right) => {
-      if (right.liveMatchesCount !== left.liveMatchesCount) {
-        return right.liveMatchesCount - left.liveMatchesCount;
-      }
-
       if (right.participantsCount !== left.participantsCount) {
         return right.participantsCount - left.participantsCount;
+      }
+
+      if ((left.startAt ?? "") !== (right.startAt ?? "")) {
+        return (left.startAt ?? "").localeCompare(right.startAt ?? "", "es");
       }
 
       return left.name.localeCompare(right.name, "es");
@@ -144,10 +144,6 @@ export async function getPublicHomePageData(): Promise<{
 
   const liveTournaments = tournaments.filter((tournament) => tournament.liveMatchesCount > 0).slice(0, 3);
   const sports = Array.from(sportsMap.values()).sort((left, right) => {
-    if (right.liveMatchesCount !== left.liveMatchesCount) {
-      return right.liveMatchesCount - left.liveMatchesCount;
-    }
-
     if (right.tournamentsCount !== left.tournamentsCount) {
       return right.tournamentsCount - left.tournamentsCount;
     }

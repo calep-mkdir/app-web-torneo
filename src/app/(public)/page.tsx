@@ -1,147 +1,157 @@
 import type { Metadata } from "next";
 import type { Route } from "next";
 import Link from "next/link";
-import { Activity, ArrowUpRight, Trophy, Users } from "lucide-react";
+import { ArrowUpRight, ClipboardList, Trophy, Users } from "lucide-react";
 
-import {
-  CtaBanner,
-  PadelRacketHero,
-  PublicTournamentCard,
-  SectionHeading,
-} from "@/components/public";
+import { Badge } from "@/components/ui";
+import { PadelRacketHero } from "@/components/public";
 import { getPublicHomePageData } from "@/features/public/queries";
+import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
+import { formatDateRange } from "@/components/public/date-utils";
 
 export const metadata: Metadata = {
-  title: "Padel en directo",
-  description: "Cuadros, partidos y panel de torneos de padel.",
+  title: "Padel",
+  description: "Torneos, resultados y panel de padel.",
 };
 
 const shortcuts = [
   {
     icon: Trophy,
     title: "Torneos",
-    label: "Abrir calendario",
     href: "/tournaments" as Route,
+    label: "Abrir calendario",
   },
   {
-    icon: Activity,
-    title: "En juego",
-    label: "Ver directos",
-    href: "/tournaments" as Route,
+    icon: ClipboardList,
+    title: "Organiza",
+    href: "/organiza" as Route,
+    label: "Ver pasos",
   },
   {
     icon: Users,
     title: "Panel",
-    label: "Crear torneo",
     href: "/admin" as Route,
+    label: "Crear torneo",
   },
 ];
 
 export default async function PublicHomePage() {
   const data = await getPublicHomePageData();
-  const liveNow = data.tournaments.filter((tournament) => tournament.liveMatchesCount > 0).slice(0, 3);
-  const spotlight = liveNow.length > 0 ? liveNow : data.featuredTournaments.slice(0, 3);
+  const spotlight = data.tournaments.slice(0, 3);
 
   return (
-    <div className="space-y-12 lg:space-y-16">
-      <section className="grid gap-10 rounded-[2.4rem] border border-white/8 bg-[linear-gradient(135deg,rgba(15,23,42,0.92)_0%,rgba(9,15,29,0.98)_100%)] px-6 py-8 shadow-[0_34px_110px_-42px_rgba(0,0,0,0.62)] sm:px-8 lg:grid-cols-[1fr_0.94fr] lg:px-10 lg:py-10">
-        <div className="flex flex-col justify-center">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-cyan-400/15 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100">
-            Padel
-          </div>
-
-          <h1 className="mt-6 max-w-4xl text-5xl font-semibold tracking-tight text-white sm:text-6xl">
-            Abre el cuadro. Sigue el punto. Crea el siguiente.
-          </h1>
-
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-400">
-            Torneos arriba. Panel a un clic.
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href={"/tournaments" as Route}
-              className="inline-flex items-center rounded-full bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] px-5 py-3 text-sm font-semibold text-slate-950 no-underline shadow-[0_18px_45px_-18px_rgba(103,232,249,0.5)] transition hover:-translate-y-0.5 hover:brightness-105"
-            >
-              Ver torneos
-            </Link>
-            <Link
-              href={"/admin" as Route}
-              className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/[0.08]"
-            >
-              Crear torneo
-            </Link>
-          </div>
-
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            <StatPill label="Torneos" value={String(data.stats.tournamentsCount)} />
-            <StatPill label="Categorias" value={String(data.stats.categoriesCount)} />
-            <StatPill label="Live" value={String(data.stats.liveMatchesCount)} />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-center">
-          <PadelRacketHero />
-        </div>
-      </section>
-
-      <section className="grid gap-4 md:grid-cols-3">
-        {shortcuts.map((shortcut, index) => (
-          <Link
-            key={shortcut.title}
-            href={shortcut.href}
-            className="group rounded-[1.8rem] border border-white/8 bg-white/[0.03] p-6 no-underline shadow-[0_24px_80px_-44px_rgba(0,0,0,0.38)] transition hover:-translate-y-1 hover:bg-white/[0.05]"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-400/12 text-cyan-200">
-                <shortcut.icon className="h-5 w-5" />
+    <div className="space-y-4">
+      <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+        <div className="app-panel app-panel-strong rounded-[2.4rem] px-6 py-7 sm:px-8 lg:px-10 lg:py-9">
+          <div className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
+            <div className="space-y-6">
+              <div className="inline-flex w-fit rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100">
+                Padel
               </div>
-              <span className="text-3xl font-semibold text-white">
-                {index === 0 ? data.stats.tournamentsCount : index === 1 ? data.stats.liveMatchesCount : "Nuevo"}
-              </span>
+
+              <div>
+                <h1 className="max-w-xl text-5xl font-semibold tracking-tight text-white sm:text-6xl">
+                  Torneos, cuadros y resultados.
+                </h1>
+                <p className="mt-4 max-w-lg text-base leading-7 text-slate-300 sm:text-lg">
+                  Entra, elige torneo y sigue el cuadro.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <Link href={"/tournaments" as Route} className="app-cta-primary">
+                  Ver torneos
+                </Link>
+                <Link href={"/admin" as Route} className="app-cta-secondary">
+                  Crear torneo
+                </Link>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-3">
+                <StatPill label="Torneos" value={String(data.stats.tournamentsCount)} />
+                <StatPill label="Categorias" value={String(data.stats.categoriesCount)} />
+                <StatPill label="Entradas" value={String(data.stats.participantsCount)} />
+              </div>
             </div>
-            <h2 className="mt-5 text-2xl font-semibold text-white">{shortcut.title}</h2>
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200">
-              {shortcut.label}
-              <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+
+            <div className="min-h-[320px]">
+              <PadelRacketHero />
             </div>
-          </Link>
-        ))}
-      </section>
-
-      <section className="space-y-6">
-        <SectionHeading eyebrow="Ahora" title={liveNow.length > 0 ? "En juego" : "Destacados"} />
-
-        {spotlight.length === 0 ? (
-          <div className="rounded-[2rem] border border-dashed border-white/12 bg-white/[0.03] px-6 py-12 text-center">
-            <p className="text-xl font-semibold text-white">Todavia no hay torneos publicados</p>
-            <p className="mt-3 text-sm text-slate-400">Crea el primero.</p>
           </div>
-        ) : (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {spotlight.map((tournament) => (
-              <PublicTournamentCard key={tournament.id} tournament={tournament} />
-            ))}
-          </div>
-        )}
-      </section>
+        </div>
 
-      <CtaBanner
-        eyebrow="Siguiente"
-        title="Crea el siguiente torneo"
-        primaryHref={"/admin" as Route}
-        primaryLabel="Abrir panel"
-        secondaryHref={"/tournaments" as Route}
-        secondaryLabel="Ver torneos"
-      />
+        <div className="grid gap-4">
+          <section className="app-panel rounded-[2rem] px-5 py-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">Accesos</p>
+            <div className="mt-4 grid gap-3">
+              {shortcuts.map((shortcut) => (
+                <Link
+                  key={shortcut.title}
+                  href={shortcut.href}
+                  className="group rounded-[1.7rem] border border-white/10 bg-white/[0.04] px-4 py-4 no-underline transition hover:bg-white/[0.08]"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-300/12 text-cyan-100">
+                      <shortcut.icon className="h-5 w-5" />
+                    </div>
+                    <ArrowUpRight className="mt-1 h-4 w-4 text-cyan-200 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </div>
+                  <p className="mt-4 text-xl font-semibold text-white">{shortcut.title}</p>
+                  <p className="mt-1 text-sm text-slate-300">{shortcut.label}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <section className="app-panel rounded-[2rem] px-5 py-5">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">Torneos</p>
+              <Link href={"/tournaments" as Route} className="text-sm font-semibold text-cyan-100 no-underline">
+                Ver todos
+              </Link>
+            </div>
+
+            {spotlight.length === 0 ? (
+              <div className="mt-4 rounded-[1.7rem] border border-dashed border-white/12 bg-white/[0.03] px-4 py-8 text-center">
+                <p className="font-medium text-white">Todavia no hay torneos publicados</p>
+              </div>
+            ) : (
+              <div className="mt-4 space-y-3">
+                {spotlight.map((tournament) => (
+                  <Link
+                    key={tournament.id}
+                    href={`/tournaments/${tournament.slug}` as Route}
+                    className="group flex items-center justify-between gap-3 rounded-[1.7rem] border border-white/10 bg-white/[0.04] px-4 py-4 no-underline transition hover:bg-white/[0.08]"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-white">{tournament.name}</p>
+                      <p className="mt-1 truncate text-xs text-slate-400">
+                        {formatDateRange(
+                          tournament.startAt,
+                          tournament.endAt,
+                          "es-ES",
+                          tournament.timezone,
+                        )}
+                      </p>
+                    </div>
+                    <Badge variant={getStatusBadgeVariant(tournament.status)}>
+                      {formatStatusLabel(tournament.status)}
+                    </Badge>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
+      </section>
     </div>
   );
 }
 
 function StatPill({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[1.5rem] border border-white/8 bg-white/[0.04] px-4 py-4">
-      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{label}</p>
+    <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.05] px-4 py-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">{label}</p>
       <p className="mt-2 text-3xl font-semibold text-white">{value}</p>
     </div>
   );

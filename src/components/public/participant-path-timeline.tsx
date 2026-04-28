@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui";
 import type { ParticipantPath } from "@/lib/brackets";
 import type { PublicMatchViewModel } from "@/features/public/types";
+import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 
 import { formatDateTime } from "./date-utils";
 
@@ -22,7 +23,7 @@ export function ParticipantPathTimeline({
 }) {
   return (
     <div className="space-y-6">
-      <Card className="border-white/8 bg-white/[0.03]">
+      <Card className="app-panel bg-white/[0.04]">
         <CardHeader>
           <CardTitle>Trayectoria de {entryName}</CardTitle>
           <CardDescription>
@@ -45,7 +46,7 @@ export function ParticipantPathTimeline({
       </Card>
 
       {knockoutPath ? (
-        <Card className="border-white/8 bg-white/[0.03]">
+        <Card className="app-panel bg-white/[0.04]">
           <CardHeader>
             <CardTitle>Camino en el bracket</CardTitle>
             <CardDescription>
@@ -57,7 +58,7 @@ export function ParticipantPathTimeline({
               {knockoutPath.matches.map((step) => (
                 <div
                   key={step.matchId}
-                  className="rounded-2xl border border-white/8 bg-[#0b1220] px-4 py-4"
+                  className="rounded-2xl border border-white/8 bg-[#232830] px-4 py-4"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -66,7 +67,9 @@ export function ParticipantPathTimeline({
                         Rival {step.opponentName ?? "Pendiente"}
                       </p>
                     </div>
-                    <Badge variant={badgeForOutcome(step.outcome)}>{step.outcome}</Badge>
+                    <Badge variant={getStatusBadgeVariant(step.outcome)}>
+                      {formatStatusLabel(step.outcome)}
+                    </Badge>
                   </div>
 
                   <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-400">
@@ -82,7 +85,7 @@ export function ParticipantPathTimeline({
         </Card>
       ) : null}
 
-      <Card className="border-white/8 bg-white/[0.03]">
+      <Card className="app-panel bg-white/[0.04]">
         <CardHeader>
           <CardTitle>Historial completo</CardTitle>
           <CardDescription>
@@ -99,7 +102,7 @@ export function ParticipantPathTimeline({
               {history.map((match) => (
                 <article
                   key={match.id}
-                  className="rounded-2xl border border-white/8 bg-[#0b1220] px-4 py-4"
+                  className="rounded-2xl border border-white/8 bg-[#232830] px-4 py-4"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
@@ -112,8 +115,8 @@ export function ParticipantPathTimeline({
                         {match.venue ? ` - ${match.venue}` : ""}
                       </p>
                     </div>
-                    <Badge variant={badgeForOutcome(match.outcomeForEntry ?? "pending")}>
-                      {match.outcomeForEntry ?? "pending"}
+                    <Badge variant={getStatusBadgeVariant(match.outcomeForEntry ?? "pending")}>
+                      {formatStatusLabel(match.outcomeForEntry ?? "pending")}
                     </Badge>
                   </div>
 
@@ -172,19 +175,4 @@ function EntryLink({
       {label}
     </Link>
   );
-}
-
-function badgeForOutcome(outcome: string) {
-  switch (outcome) {
-    case "win":
-    case "bye":
-      return "success" as const;
-    case "loss":
-      return "destructive" as const;
-    case "draw":
-    case "live":
-      return "warning" as const;
-    default:
-      return "secondary" as const;
-  }
 }

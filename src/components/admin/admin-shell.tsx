@@ -23,7 +23,7 @@ export function AdminShell({
   return (
     <div className="min-h-screen">
       <div className="mx-auto grid min-h-screen max-w-[1600px] grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)]">
-        <aside className="relative overflow-hidden border-b border-white/8 bg-[#090f1d]/82 px-5 py-6 backdrop-blur lg:border-b-0 lg:border-r">
+        <aside className="relative overflow-hidden border-b border-white/8 bg-[#232730]/82 px-5 py-6 backdrop-blur lg:border-b-0 lg:border-r">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.16),transparent_48%),radial-gradient(circle_at_top_right,rgba(217,249,157,0.14),transparent_44%)]" />
 
           <div className="relative mb-8">
@@ -95,7 +95,7 @@ function SidebarLink({
       className={cn(
         "flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-semibold no-underline transition",
         active
-          ? "bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] text-slate-950 shadow-[0_18px_45px_-22px_rgba(103,232,249,0.45)]"
+          ? "border border-white/35 bg-[#9ae8ff] text-[#11161d] shadow-[0_18px_45px_-18px_rgba(154,232,255,0.55)]"
           : "bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] hover:text-white",
       )}
     >

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui";
 import { PublicPageHero, PublicTournamentClient } from "@/components/public";
 import { getPublicTournamentPageData } from "@/features/public/queries";
+import { formatDateRange } from "@/components/public/date-utils";
 
 export default async function PublicTournamentPage({
   params,
@@ -17,11 +18,20 @@ export default async function PublicTournamentPage({
         title={data.tournament.name}
         description={data.tournament.description}
         sportName={data.tournament.sportName}
-        venue={data.tournament.venue}
         status={data.tournament.status}
-        startAt={data.tournament.startAt}
-        endAt={data.tournament.endAt}
-        timezone={data.tournament.timezone}
+        details={[
+          {
+            label: "Fechas",
+            value: formatDateRange(
+              data.tournament.startAt,
+              data.tournament.endAt,
+              "es-ES",
+              data.tournament.timezone,
+            ),
+          },
+          { label: "Club", value: data.tournament.venue ?? "Sede pendiente" },
+          { label: "Zona", value: data.tournament.timezone },
+        ]}
       />
 
       {data.initialCategoryId ? (
@@ -32,7 +42,7 @@ export default async function PublicTournamentPage({
           initialSnapshot={data.initialSnapshot}
         />
       ) : (
-        <Card className="border-white/8 bg-white/[0.03]">
+        <Card className="app-panel bg-white/[0.04]">
           <CardHeader>
             <CardTitle>Sin categorias publicas</CardTitle>
           </CardHeader>

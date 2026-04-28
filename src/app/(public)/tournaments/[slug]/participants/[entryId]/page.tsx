@@ -19,13 +19,13 @@ export default async function PublicParticipantPage({
           <PublicPageHero
             eyebrow={data.category.name}
             title={data.entry.name}
-            description={`Trayectoria publica dentro de ${data.tournament.name}.`}
             sportName={data.tournament.sportName}
-            venue={data.tournament.venue}
             status={data.entry.status}
-            startAt={data.tournament.startAt}
-            endAt={data.tournament.endAt}
-            timezone={data.tournament.timezone}
+            details={[
+              { label: "Torneo", value: data.tournament.name },
+              { label: "Seed", value: String(data.entry.seed ?? "-") },
+              { label: "Club", value: data.tournament.venue ?? "Sede pendiente" },
+            ]}
           />
         </div>
       </div>
@@ -33,7 +33,7 @@ export default async function PublicParticipantPage({
       <div className="flex items-center justify-between">
         <Link
           href={`/tournaments/${slug}` as Route}
-          className="text-sm font-semibold text-cyan-200 no-underline"
+          className="app-cta-secondary px-4 py-2"
         >
           Volver al torneo
         </Link>

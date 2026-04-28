@@ -22,7 +22,7 @@ export async function getAdminOverviewData(): Promise<{
     tournamentsCount: number;
     entriesCount: number;
     matchesCount: number;
-    liveCount: number;
+    finishedCount: number;
   };
 }> {
   noStore();
@@ -111,7 +111,7 @@ export async function getAdminOverviewData(): Promise<{
       tournamentsCount: tournamentItems.length,
       entriesCount: entries.length,
       matchesCount: matches.length,
-      liveCount: matches.filter((match) => match.status === "live").length,
+      finishedCount: matches.filter((match) => match.status === "finished").length,
     },
   };
 }

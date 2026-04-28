@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import type { Bracket } from "@/lib/brackets";
+import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 
 export function BracketView({
   slug,
@@ -14,12 +15,10 @@ export function BracketView({
 }) {
   if (!bracket) {
     return (
-      <Card className="border-white/8 bg-white/[0.03]">
+      <Card className="app-panel bg-white/[0.04]">
         <CardHeader>
-          <CardTitle>Bracket</CardTitle>
-          <CardDescription>
-            Esta categoria todavia no tiene un cuadro knockout disponible.
-          </CardDescription>
+          <CardTitle>Cuadro</CardTitle>
+          <CardDescription>Esta categoria todavia no tiene un cuadro disponible.</CardDescription>
         </CardHeader>
       </Card>
     );
@@ -34,12 +33,10 @@ export function BracketView({
   }));
 
   return (
-    <Card className="border-white/8 bg-white/[0.03]">
+    <Card className="app-panel bg-white/[0.04]">
       <CardHeader>
-        <CardTitle>Bracket en tiempo real</CardTitle>
-        <CardDescription>
-          Cuadro actualizado automaticamente con resultados y avances de ronda.
-        </CardDescription>
+        <CardTitle>Cuadro</CardTitle>
+        <CardDescription>Cruces y estados de cada partido.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="-mx-2 overflow-x-auto px-2 pb-2">
@@ -68,7 +65,7 @@ export function BracketView({
                   {round.matches.map((match) => (
                     <article
                       key={match.id}
-                      className="rounded-2xl border border-white/8 bg-[#0b1220] p-4 shadow-[0_18px_40px_-28px_rgba(0,0,0,0.6)]"
+                      className="rounded-2xl border border-white/8 bg-[#232830] p-4 shadow-[0_18px_40px_-28px_rgba(0,0,0,0.6)]"
                     >
                       <div className="flex items-center justify-between gap-3">
                         <div>
@@ -77,7 +74,9 @@ export function BracketView({
                           </p>
                           <p className="mt-1 text-sm font-medium text-white">{match.roundName}</p>
                         </div>
-                        <Badge variant={statusVariant(match.status)}>{match.status}</Badge>
+                        <Badge variant={getStatusBadgeVariant(match.status)}>
+                          {formatStatusLabel(match.status)}
+                        </Badge>
                       </div>
 
                       <div className="mt-4 space-y-2">
@@ -98,8 +97,8 @@ export function BracketView({
                               className={cn(
                                 "flex items-center justify-between rounded-xl px-3 py-3",
                                 isWinner
-                                  ? "bg-lime-300/18 text-lime-100"
-                                  : "bg-white/[0.04] text-slate-200",
+                                  ? "bg-[#9ae8ff] text-[#11161d]"
+                                  : "bg-white/[0.05] text-white",
                               )}
                             >
                               <div className="min-w-0">
@@ -133,17 +132,4 @@ export function BracketView({
       </CardContent>
     </Card>
   );
-}
-
-function statusVariant(status: string) {
-  switch (status) {
-    case "finished":
-      return "success" as const;
-    case "live":
-      return "warning" as const;
-    case "cancelled":
-      return "destructive" as const;
-    default:
-      return "secondary" as const;
-  }
 }

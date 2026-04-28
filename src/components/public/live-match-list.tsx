@@ -3,16 +3,17 @@ import Link from "next/link";
 
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui";
 import type { PublicMatchViewModel } from "@/features/public/types";
+import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 
 import { formatDateTime } from "./date-utils";
 
 export function LiveMatchList({
   slug,
   matches,
-  title = "Partidos en directo",
-  description = "Marcadores y cruces actualizados sin recargar la pagina.",
-  emptyTitle = "Sin partidos en directo",
-  emptyDescription = "Cuando un partido pase a estado live aparecera aqui automaticamente.",
+  title = "Partidos",
+  description = "Estado, horario y marcador.",
+  emptyTitle = "Sin partidos",
+  emptyDescription = "Aqui apareceran los partidos de esta categoria.",
   timezone,
 }: {
   slug: string;
@@ -24,7 +25,7 @@ export function LiveMatchList({
   timezone?: string;
 }) {
   return (
-    <Card className="border-white/8 bg-white/[0.03]">
+    <Card className="app-panel bg-white/[0.04]">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
@@ -50,8 +51,8 @@ export function LiveMatchList({
                       {match.venue ? ` - ${match.venue}` : ""}
                     </p>
                   </div>
-                  <Badge variant={match.status === "live" ? "warning" : "secondary"}>
-                    {match.status}
+                  <Badge variant={getStatusBadgeVariant(match.status)}>
+                    {formatStatusLabel(match.status)}
                   </Badge>
                 </div>
 
@@ -101,7 +102,7 @@ function ScoreRow({
     <div
       className={[
         "flex items-center justify-between rounded-xl px-3 py-2 transition",
-        winner ? "bg-lime-300/18 text-lime-100" : "bg-[#0b1220] text-slate-200",
+        winner ? "bg-[#9ae8ff] text-[#11161d]" : "bg-[#232830] text-white",
       ].join(" ")}
     >
       <span className="truncate font-medium">{label}</span>

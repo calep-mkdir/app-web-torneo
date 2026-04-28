@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui";
 import type { PublicTournamentListItem } from "@/features/public/types";
+import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 
 import { formatDateRange } from "./date-utils";
 
@@ -14,7 +15,7 @@ export function PublicTournamentCard({
   const accent = getTournamentAccent(tournament.sportName);
 
   return (
-    <Card className="group h-full overflow-hidden border-white/8 bg-[linear-gradient(180deg,rgba(17,24,39,0.92)_0%,rgba(15,23,42,0.96)_100%)] transition hover:-translate-y-1 hover:shadow-[0_30px_90px_-42px_rgba(56,189,248,0.2)]">
+    <Card className="group app-panel h-full overflow-hidden bg-[linear-gradient(180deg,rgba(58,64,75,0.92)_0%,rgba(36,40,48,0.96)_100%)] transition hover:-translate-y-1 hover:shadow-[0_30px_90px_-42px_rgba(103,232,249,0.2)]">
       <div className={accent.ribbonClass} />
       <CardHeader className={`gap-4 ${accent.headerClass}`}>
         <div className="flex items-start justify-between gap-3">
@@ -22,31 +23,25 @@ export function PublicTournamentCard({
             <CardDescription className="font-medium text-cyan-200">{tournament.sportName}</CardDescription>
             <CardTitle className="text-2xl text-white">{tournament.name}</CardTitle>
           </div>
-          <Badge variant={tournament.liveMatchesCount > 0 ? "warning" : "secondary"}>
-            {tournament.liveMatchesCount > 0
-              ? `${tournament.liveMatchesCount} en directo`
-              : tournament.status.replaceAll("_", " ")}
+          <Badge variant={getStatusBadgeVariant(tournament.status)}>
+            {formatStatusLabel(tournament.status)}
           </Badge>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-5">
-        <dl className="grid grid-cols-3 gap-3 text-sm">
+      <CardContent className="space-y-4">
+        <dl className="grid grid-cols-2 gap-3 text-sm">
           <Metric label="Categorias" value={String(tournament.categoriesCount)} />
           <Metric label="Entradas" value={String(tournament.participantsCount)} />
-          <Metric label="Live" value={String(tournament.liveMatchesCount)} />
         </dl>
 
         <div className="space-y-2 text-sm text-slate-400">
-          <p>{formatDateRange(tournament.startAt, tournament.endAt, "es-ES", tournament.timezone)}</p>
           <p>{tournament.venue ?? "Sede pendiente"}</p>
+          <p>{formatDateRange(tournament.startAt, tournament.endAt, "es-ES", tournament.timezone)}</p>
         </div>
 
-        <Link
-          href={`/tournaments/${tournament.slug}` as Route}
-          className="inline-flex items-center rounded-full bg-[linear-gradient(135deg,#67e8f9_0%,#bef264_100%)] px-4 py-2 text-sm font-semibold text-slate-950 no-underline shadow-[0_18px_40px_-22px_rgba(103,232,249,0.45)] transition hover:brightness-105"
-        >
-          Ver torneo
+        <Link href={`/tournaments/${tournament.slug}` as Route} className="app-cta-primary px-4 py-2">
+          Abrir torneo
         </Link>
       </CardContent>
     </Card>
@@ -66,15 +61,15 @@ function getTournamentAccent(sportName: string) {
   const palette = [
     {
       ribbonClass: "h-2 bg-[linear-gradient(90deg,#38bdf8_0%,#7dd3fc_55%,#d9f99d_100%)]",
-      headerClass: "bg-[linear-gradient(180deg,rgba(8,15,28,0.18)_0%,rgba(8,15,28,0)_100%)]",
+      headerClass: "bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_100%)]",
     },
     {
       ribbonClass: "h-2 bg-[linear-gradient(90deg,#d9f99d_0%,#bef264_50%,#38bdf8_100%)]",
-      headerClass: "bg-[linear-gradient(180deg,rgba(8,15,28,0.18)_0%,rgba(8,15,28,0)_100%)]",
+      headerClass: "bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_100%)]",
     },
     {
       ribbonClass: "h-2 bg-[linear-gradient(90deg,#fb7185_0%,#38bdf8_50%,#d9f99d_100%)]",
-      headerClass: "bg-[linear-gradient(180deg,rgba(8,15,28,0.18)_0%,rgba(8,15,28,0)_100%)]",
+      headerClass: "bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_100%)]",
     },
   ];
   const seed = sportName

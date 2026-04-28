@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui";
 import type { TournamentListItem } from "@/features/admin/types";
+import { formatStatusLabel } from "@/lib/padel";
 
 export function TournamentList({
   tournaments,
@@ -21,7 +22,7 @@ export function TournamentList({
       {tournaments.map((tournament) => (
         <Card
           key={tournament.id}
-          className="overflow-hidden bg-[linear-gradient(180deg,rgba(17,24,39,0.92)_0%,rgba(15,23,42,0.96)_100%)]"
+          className="app-panel overflow-hidden bg-[linear-gradient(180deg,rgba(58,64,75,0.92)_0%,rgba(36,40,48,0.96)_100%)]"
         >
           <div
             className={
@@ -53,7 +54,7 @@ export function TournamentList({
 
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span className="rounded-full bg-white/[0.05] px-3 py-1 text-slate-300">
-                Estado: {tournament.status.replaceAll("_", " ")}
+                Estado: {formatStatusLabel(tournament.status)}
               </span>
               <Link
                 href={`/admin/tournaments/${tournament.id}` as Route}

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui";
+import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 import { cn } from "@/lib/utils";
 
 import { formatDateRange } from "./date-utils";
@@ -35,8 +36,8 @@ export function PublicPageHero({
     ];
 
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[linear-gradient(180deg,rgba(17,24,39,0.92)_0%,rgba(15,23,42,0.92)_100%)] shadow-[0_28px_90px_-42px_rgba(0,0,0,0.55)] backdrop-blur">
-      <div className="absolute inset-x-0 top-0 h-full bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.12),transparent_32%),radial-gradient(circle_at_top_right,rgba(217,249,157,0.1),transparent_34%),radial-gradient(circle_at_center,rgba(251,113,133,0.08),transparent_42%)]" />
+    <section className="app-panel app-panel-strong relative overflow-hidden rounded-[2rem]">
+      <div className="absolute inset-x-0 top-0 h-full bg-[radial-gradient(circle_at_top_left,rgba(103,232,249,0.12),transparent_32%),radial-gradient(circle_at_top_right,rgba(190,242,100,0.08),transparent_34%),radial-gradient(circle_at_center,rgba(251,113,133,0.06),transparent_42%)]" />
       <div className="relative px-6 py-7 sm:px-8 sm:py-9 lg:px-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
@@ -56,8 +57,8 @@ export function PublicPageHero({
           <div className="flex flex-wrap items-center gap-2">
             {sportName ? <Badge variant="secondary">{sportName}</Badge> : null}
             {status ? (
-              <Badge variant={status === "in_progress" ? "warning" : "secondary"}>
-                {status.replaceAll("_", " ")}
+              <Badge variant={getStatusBadgeVariant(status)}>
+                {formatStatusLabel(status)}
               </Badge>
             ) : null}
             {venue ? <Badge variant="outline">{venue}</Badge> : null}

@@ -22,3 +22,73 @@ export function slugifyTournamentName(value: string): string {
     .replace(/^-+|-+$/g, "")
     .replace(/-{2,}/g, "-");
 }
+
+export function formatStatusLabel(status: string): string {
+  switch (status.trim().toLowerCase()) {
+    case "draft":
+      return "Borrador";
+    case "published":
+      return "Publicado";
+    case "in_progress":
+    case "live":
+      return "En curso";
+    case "completed":
+    case "finished":
+      return "Finalizado";
+    case "archived":
+      return "Archivado";
+    case "ready":
+      return "Listo";
+    case "scheduled":
+      return "Programado";
+    case "pending":
+      return "Pendiente";
+    case "cancelled":
+      return "Cancelado";
+    case "active":
+      return "Activo";
+    case "win":
+      return "Victoria";
+    case "loss":
+      return "Derrota";
+    case "draw":
+      return "Empate";
+    case "bye":
+      return "Pasa";
+    default:
+      return status.replaceAll("_", " ");
+  }
+}
+
+export function getStatusBadgeVariant(status: string) {
+  switch (status.trim().toLowerCase()) {
+    case "published":
+    case "completed":
+    case "finished":
+    case "win":
+    case "bye":
+      return "success" as const;
+    case "in_progress":
+    case "live":
+    case "draw":
+      return "warning" as const;
+    case "cancelled":
+    case "loss":
+      return "destructive" as const;
+    default:
+      return "secondary" as const;
+  }
+}
+
+export function formatCategoryFormatLabel(format: string): string {
+  switch (format.trim().toLowerCase()) {
+    case "group_only":
+      return "Grupos";
+    case "knockout":
+      return "Cuadro";
+    case "group_knockout":
+      return "Grupos + cuadro";
+    default:
+      return format.replaceAll("_", " ");
+  }
+}

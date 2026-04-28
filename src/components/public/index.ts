@@ -11,5 +11,4 @@ export * from "./public-shell";
 export * from "./public-stat-strip";
 export * from "./public-tournament-card";
 export * from "./public-tournament-client";
-export * from "./realtime-pill";
 export * from "./section-heading";

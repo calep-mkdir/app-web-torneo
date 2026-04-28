@@ -6,10 +6,10 @@ export function StatCards({
   items: Array<{ label: string; value: string; hint?: string }>;
 }) {
   const tones = [
-    "bg-[linear-gradient(160deg,rgba(17,24,39,0.94)_0%,rgba(14,28,55,0.94)_100%)]",
-    "bg-[linear-gradient(160deg,rgba(17,24,39,0.94)_0%,rgba(10,48,62,0.92)_100%)]",
-    "bg-[linear-gradient(160deg,rgba(17,24,39,0.94)_0%,rgba(57,15,39,0.92)_100%)]",
-    "bg-[linear-gradient(160deg,rgba(17,24,39,0.94)_0%,rgba(42,62,10,0.92)_100%)]",
+    "bg-[linear-gradient(160deg,rgba(58,64,75,0.94)_0%,rgba(34,38,46,0.94)_100%)]",
+    "bg-[linear-gradient(160deg,rgba(58,64,75,0.94)_0%,rgba(17,63,76,0.92)_100%)]",
+    "bg-[linear-gradient(160deg,rgba(58,64,75,0.94)_0%,rgba(74,31,45,0.92)_100%)]",
+    "bg-[linear-gradient(160deg,rgba(58,64,75,0.94)_0%,rgba(69,86,28,0.92)_100%)]",
   ];
 
   return (

@@ -2,25 +2,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: 224 27% 8%;
+  --background: 220 10% 20%;
   --foreground: 210 40% 96%;
-  --card: 222 24% 12%;
+  --card: 222 11% 24%;
   --card-foreground: 210 40% 96%;
-  --popover: 222 24% 10%;
+  --popover: 222 11% 22%;
   --popover-foreground: 210 40% 96%;
-  --primary: 78 96% 64%;
-  --primary-foreground: 224 27% 8%;
-  --secondary: 221 18% 18%;
+  --primary: 193 100% 80%;
+  --primary-foreground: 220 18% 10%;
+  --secondary: 222 10% 24%;
   --secondary-foreground: 210 40% 96%;
-  --muted: 222 18% 15%;
+  --muted: 222 9% 27%;
   --muted-foreground: 215 20% 69%;
-  --accent: 193 95% 56%;
-  --accent-foreground: 224 27% 8%;
+  --accent: 193 96% 64%;
+  --accent-foreground: 220 18% 10%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
-  --border: 220 16% 21%;
-  --input: 220 16% 21%;
-  --ring: 193 95% 56%;
+  --border: 220 9% 32%;
+  --input: 220 9% 32%;
+  --ring: 193 96% 64%;
   --radius: 1rem;
 }
 
@@ -36,15 +36,56 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 24%),
-    radial-gradient(circle at top right, rgba(217, 249, 157, 0.08), transparent 20%),
-    radial-gradient(circle at bottom center, rgba(244, 114, 182, 0.08), transparent 24%),
-    linear-gradient(180deg, #0d1324 0%, #0a1020 34%, #070b15 100%);
+    radial-gradient(circle at top left, rgba(103, 232, 249, 0.14), transparent 24%),
+    radial-gradient(circle at top right, rgba(190, 242, 100, 0.08), transparent 18%),
+    radial-gradient(circle at bottom center, rgba(251, 113, 133, 0.08), transparent 24%),
+    linear-gradient(180deg, #353b44 0%, #292e36 36%, #1d2128 100%);
   color: hsl(var(--foreground));
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+}
+
+@layer utilities {
+  .app-panel {
+    @apply border border-white/10 bg-white/[0.05] shadow-[0_24px_70px_-42px_rgba(0,0,0,0.55)] backdrop-blur;
+  }
+
+  .app-panel-strong {
+    background: linear-gradient(180deg, rgba(58, 64, 75, 0.97) 0%, rgba(34, 38, 46, 0.98) 100%);
+  }
+
+  .app-cta-primary {
+    @apply inline-flex items-center justify-center rounded-full border border-white/35 bg-[#9ae8ff] px-5 py-3 text-sm font-semibold text-[#11161d] no-underline shadow-[0_18px_45px_-18px_rgba(154,232,255,0.55)] transition;
+  }
+
+  .app-cta-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-white/14 bg-[#232830] px-5 py-3 text-sm font-semibold text-white no-underline transition;
+  }
+
+  .app-nav-active {
+    @apply border border-white/35 bg-[#9ae8ff] text-[#11161d] shadow-[0_18px_45px_-18px_rgba(154,232,255,0.55)];
+  }
+
+  .app-nav-idle {
+    @apply border border-white/10 bg-white/[0.04] text-slate-200;
+  }
+}
+
+.app-cta-primary:hover,
+.app-cta-secondary:hover {
+  text-decoration: none;
+}
+
+.app-cta-primary:hover {
+  transform: translateY(-2px);
+  background: #b9f0ff;
+}
+
+.app-cta-secondary:hover {
+  transform: translateY(-2px);
+  background: #2c333d;
 }
 
 h1,
@@ -64,6 +105,10 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+a.no-underline:hover {
+  text-decoration: none;
 }
 
 input::-webkit-outer-spin-button,

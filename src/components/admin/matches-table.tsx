@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui";
 import type { TournamentMatchRecord } from "@/features/admin/types";
+import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 
 export function MatchesTable({ matches }: { matches: TournamentMatchRecord[] }) {
   return (
@@ -52,7 +53,9 @@ export function MatchesTable({ matches }: { matches: TournamentMatchRecord[] }) 
                     {match.slot1Score ?? "-"} - {match.slot2Score ?? "-"}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={badgeForStatus(match.status)}>{match.status}</Badge>
+                    <Badge variant={getStatusBadgeVariant(match.status)}>
+                      {formatStatusLabel(match.status)}
+                    </Badge>
                   </TableCell>
                 </TableRow>
               ))
@@ -62,17 +65,4 @@ export function MatchesTable({ matches }: { matches: TournamentMatchRecord[] }) 
       </CardContent>
     </Card>
   );
-}
-
-function badgeForStatus(status: string) {
-  switch (status) {
-    case "finished":
-      return "success" as const;
-    case "live":
-      return "warning" as const;
-    case "cancelled":
-      return "destructive" as const;
-    default:
-      return "secondary" as const;
-  }
 }

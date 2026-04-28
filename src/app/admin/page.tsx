@@ -19,7 +19,7 @@ export default async function AdminDashboardPage() {
           { label: "Torneos", value: String(data.stats.tournamentsCount) },
           { label: "Inscripciones", value: String(data.stats.entriesCount) },
           { label: "Partidos", value: String(data.stats.matchesCount) },
-          { label: "En vivo", value: String(data.stats.liveCount) },
+          { label: "Finalizados", value: String(data.stats.finishedCount) },
         ]}
       />
 
