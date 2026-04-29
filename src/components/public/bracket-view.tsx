@@ -18,11 +18,11 @@ import type { Bracket, BracketMatch, BracketRound, BracketSlot } from "@/lib/bra
 import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 import { cn } from "@/lib/utils";
 
-const BOARD_HEADER_HEIGHT = 64;
-const BOARD_CARD_WIDTH = 264;
-const BOARD_CARD_HEIGHT = 138;
-const BOARD_COLUMN_GAP = 38;
-const BOARD_ROW_GAP = 22;
+const BOARD_HEADER_HEIGHT = 68;
+const BOARD_CARD_WIDTH = 284;
+const BOARD_CARD_HEIGHT = 154;
+const BOARD_COLUMN_GAP = 52;
+const BOARD_ROW_GAP = 34;
 
 type BracketRoundView = BracketRound & {
   roundIndex: number;
@@ -402,7 +402,7 @@ function SummaryChip({
 
 function RoundHeader({ round }: { round: BracketRoundView }) {
   return (
-    <div className="rounded-[1.2rem] border border-white/8 bg-[#1d232c]/92 px-3 py-2.5 shadow-[0_18px_44px_-36px_rgba(0,0,0,0.9)]">
+    <div className="rounded-[1.2rem] border border-white/8 bg-[#1d232c]/92 px-3.5 py-3 shadow-[0_18px_44px_-36px_rgba(0,0,0,0.9)]">
       <p className="text-[9px] font-semibold uppercase tracking-[0.24em] text-[#8ea1c6]">
         Ronda {round.roundNumber}
       </p>
@@ -425,7 +425,7 @@ function BracketMatchCard({
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-[1.45rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(29,34,42,0.99)_100%)] p-3.5 shadow-[0_20px_55px_-44px_rgba(0,0,0,0.8)]",
+        "overflow-hidden rounded-[1.45rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(29,34,42,0.99)_100%)] p-4 shadow-[0_20px_55px_-44px_rgba(0,0,0,0.8)]",
         isFinal ? "border-[#c7ff2f]/18 bg-[linear-gradient(180deg,rgba(48,61,25,0.92)_0%,rgba(29,34,42,0.99)_100%)]" : "",
       )}
     >
@@ -439,7 +439,7 @@ function BracketMatchCard({
         <StatusPip status={match.status} />
       </div>
 
-      <div className="mt-3 space-y-2">
+      <div className="mt-3.5 space-y-2.5">
         {match.slots.map((slot, slotIndex) => (
           <BracketSlotRow
             key={`${match.id}-${slotIndex}`}
@@ -499,7 +499,7 @@ function BracketSlotRow({
   const content = (
     <div
       className={cn(
-        "flex min-h-[3.4rem] items-center justify-between gap-2.5 overflow-hidden rounded-[1rem] border px-2.5 py-2",
+        "flex min-h-[4rem] items-center justify-between gap-3 overflow-hidden rounded-[1rem] border px-3 py-2.5",
         isWinner
           ? "border-[#c7ff2f]/18 bg-[#283617] text-white"
           : winnerKnown
@@ -509,7 +509,7 @@ function BracketSlotRow({
     >
       <div className="min-w-0 flex-1">
         <p
-          className={cn("pr-2 text-[11.5px] font-semibold leading-[1rem]", !slot.participantId && "text-white/78")}
+          className={cn("pr-2 text-[12px] font-semibold leading-[1.05rem]", !slot.participantId && "text-white/78")}
           style={{
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
@@ -521,13 +521,13 @@ function BracketSlotRow({
         >
           {label}
         </p>
-        <p className="mt-1 text-[9px] font-medium uppercase tracking-[0.14em] text-[#7f90af]">
+        <p className="mt-1 text-[9.5px] font-medium uppercase tracking-[0.14em] text-[#7f90af]">
           {formatSlotMeta(slot, slotIndex)}
         </p>
       </div>
       <div
         className={cn(
-          "min-w-[1.2rem] text-right text-[1.45rem] font-semibold leading-none",
+          "min-w-[1.35rem] text-right text-[1.55rem] font-semibold leading-none",
           isWinner ? "text-[#efffaa]" : "text-white",
         )}
       >
