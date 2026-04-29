@@ -20,9 +20,9 @@ import { cn } from "@/lib/utils";
 
 const BOARD_HEADER_HEIGHT = 68;
 const BOARD_CARD_WIDTH = 284;
-const BOARD_CARD_HEIGHT = 154;
+const BOARD_CARD_HEIGHT = 214;
 const BOARD_COLUMN_GAP = 52;
-const BOARD_ROW_GAP = 34;
+const BOARD_ROW_GAP = 58;
 
 type BracketRoundView = BracketRound & {
   roundIndex: number;
@@ -424,6 +424,7 @@ function BracketMatchCard({
 }) {
   return (
     <article
+      style={{ height: BOARD_CARD_HEIGHT }}
       className={cn(
         "overflow-hidden rounded-[1.45rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(29,34,42,0.99)_100%)] p-4 shadow-[0_20px_55px_-44px_rgba(0,0,0,0.8)]",
         isFinal ? "border-[#c7ff2f]/18 bg-[linear-gradient(180deg,rgba(48,61,25,0.92)_0%,rgba(29,34,42,0.99)_100%)]" : "",
