@@ -5,21 +5,26 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui";
-import { cn } from "@/lib/utils";
 import type { Bracket, BracketMatch, BracketRound, BracketSlot } from "@/lib/brackets";
 import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
+import { cn } from "@/lib/utils";
 
-const DESKTOP_HEADER_HEIGHT = 66;
-const DESKTOP_CARD_WIDTH = 216;
-const DESKTOP_CARD_HEIGHT = 176;
-const DESKTOP_COLUMN_GAP = 32;
-const DESKTOP_ROW_GAP = 18;
+const DESKTOP_HEADER_HEIGHT = 56;
+const DESKTOP_CARD_WIDTH = 192;
+const DESKTOP_CARD_HEIGHT = 108;
+const DESKTOP_COLUMN_GAP = 24;
+const DESKTOP_ROW_GAP = 16;
+
+type BracketRoundView = BracketRound & {
+  roundIndex: number;
+  matches: BracketMatch[];
+};
 
 export function BracketView({
   slug,
   bracket,
   title = "Cuadro",
-  description = "Cruces y estados de cada partido.",
+  description = "Cruces y avance de la eliminatoria.",
 }: {
   slug: string;
   bracket: Bracket | null;
@@ -63,7 +68,7 @@ export function BracketView({
     );
   }
 
-  const rounds = bracket.rounds.map((round, roundIndex) => ({
+  const rounds: BracketRoundView[] = bracket.rounds.map((round, roundIndex) => ({
     ...round,
     roundIndex,
     matches: round.matchIds.map((matchId) => bracket.matches[matchId]).filter(Boolean),
@@ -133,9 +138,9 @@ export function BracketView({
       ];
     }),
   );
-  const desktopScale =
-    boardFrameWidth > 0 ? Math.min(1, boardFrameWidth / boardWidth) : 1;
-  const scaledBoardHeight = Math.round(boardHeight * desktopScale);
+
+  const desktopScale = boardFrameWidth > 0 ? Math.min(1, boardFrameWidth / boardWidth) : 1;
+  const visibleBoardHeight = Math.round(boardHeight * desktopScale);
   const boardLeftOffset =
     boardFrameWidth > 0 ? Math.max((boardFrameWidth - boardWidth * desktopScale) / 2, 0) : 0;
 
@@ -149,35 +154,26 @@ export function BracketView({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center rounded-full border border-[#d6ff72]/18 bg-[#c7ff2f]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#eaff9d]">
-              Eliminatoria
-            </span>
-            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">
-              {rounds.length} rondas
-            </span>
+            <SummaryChip label="Formato" value="Eliminatoria" accent />
+            <SummaryChip label="Rondas" value={`${rounds.length}`} />
+            {champion ? <SummaryChip label="Campeones" value={champion.name} /> : null}
           </div>
         </div>
       </CardHeader>
 
       <CardContent className="space-y-6">
-        <BracketOverviewRail
-          roundsCount={rounds.length}
-          championName={champion?.name}
-        />
-
         <div className="space-y-4 lg:hidden">
           {rounds.map((round) => (
             <section key={round.id} className="space-y-3">
-              <RoundHeader round={round} mobile />
+              <RoundHeaderMobile round={round} />
               <div className="space-y-3">
                 {round.matches.map((match) => (
-                  <BracketMatchCard
+                  <MobileMatchCard
                     key={match.id}
                     match={match}
                     slug={slug}
                     participants={bracket.participants}
                     isFinal={round.roundIndex === rounds.length - 1}
-                    compact
                   />
                 ))}
               </div>
@@ -188,13 +184,13 @@ export function BracketView({
         <div className="hidden lg:block">
           <div ref={boardFrameRef} className="px-1 pb-2">
             <div
-              className="relative overflow-hidden rounded-[1.6rem] border border-white/8 bg-[radial-gradient(circle_at_top,rgba(199,255,47,0.06),transparent_40%),linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(255,255,255,0.01)_100%)]"
-              style={{ height: scaledBoardHeight || boardHeight }}
+              className="relative overflow-hidden rounded-[1.75rem] border border-white/8 bg-[radial-gradient(circle_at_top,rgba(199,255,47,0.08),transparent_44%),linear-gradient(180deg,rgba(255,255,255,0.03)_0%,rgba(255,255,255,0.01)_100%)] px-4 py-4"
+              style={{ height: (visibleBoardHeight || boardHeight) + 32 }}
             >
               <div
-                className="absolute top-0 origin-top-left"
+                className="absolute top-4 origin-top-left"
                 style={{
-                  left: boardLeftOffset,
+                  left: boardLeftOffset + 16,
                   width: boardWidth,
                   height: boardHeight,
                   transform: `scale(${desktopScale})`,
@@ -212,8 +208,8 @@ export function BracketView({
                       key={connector.id}
                       d={connector.d}
                       fill="none"
-                      stroke={connector.active ? "rgba(199,255,47,0.45)" : "rgba(148,163,184,0.18)"}
-                      strokeWidth="2.5"
+                      stroke={connector.active ? "rgba(199,255,47,0.58)" : "rgba(148,163,184,0.14)"}
+                      strokeWidth="2.25"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
@@ -226,7 +222,7 @@ export function BracketView({
                     className="absolute top-0"
                     style={{ left: round.x, width: DESKTOP_CARD_WIDTH }}
                   >
-                    <RoundHeader round={round} />
+                    <RoundHeaderDesktop round={round} />
                   </div>
                 ))}
 
@@ -241,12 +237,11 @@ export function BracketView({
                         width: DESKTOP_CARD_WIDTH,
                       }}
                     >
-                      <BracketMatchCard
+                      <DesktopMatchCard
                         match={match}
                         slug={slug}
                         participants={bracket.participants}
                         isFinal={round.roundIndex === rounds.length - 1}
-                        fixedHeight
                       />
                     </div>
                   )),
@@ -256,203 +251,13 @@ export function BracketView({
           </div>
         </div>
 
-        {champion ? <BracketChampionBanner championName={champion.name} /> : null}
+        {champion ? <ChampionBanner championName={champion.name} /> : null}
       </CardContent>
     </Card>
   );
 }
 
-function RoundHeader({
-  round,
-  mobile = false,
-}: {
-  round: BracketRound & { roundIndex?: number };
-  mobile?: boolean;
-}) {
-  return (
-    <div
-      className={cn(
-        "rounded-[1.35rem] border border-white/8 bg-[linear-gradient(180deg,rgba(34,40,49,0.96)_0%,rgba(24,29,37,0.98)_100%)] shadow-[0_22px_55px_-40px_rgba(0,0,0,0.6)]",
-        mobile ? "px-4 py-3" : "px-3 py-2.5",
-        mobile ? "flex items-center justify-between" : "",
-      )}
-    >
-      <div>
-        <p className={cn("font-semibold uppercase tracking-[0.22em] text-[#8fa2c5]", mobile ? "text-[11px]" : "text-[10px]")}>
-          {mobile ? `Ronda ${round.roundNumber}` : `Fase ${round.roundNumber}`}
-        </p>
-        <p className={cn("mt-1 font-semibold text-white", mobile ? "text-lg" : "text-[15px]")}>
-          {round.name}
-        </p>
-      </div>
-      {mobile ? (
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">
-          {round.matchIds.length} cruces
-        </span>
-      ) : null}
-    </div>
-  );
-}
-
-function BracketMatchCard({
-  match,
-  slug,
-  participants,
-  isFinal = false,
-  compact = false,
-  fixedHeight = false,
-}: {
-  match: BracketMatch;
-  slug: string;
-  participants: Bracket["participants"];
-  isFinal?: boolean;
-  compact?: boolean;
-  fixedHeight?: boolean;
-}) {
-  const dense = fixedHeight;
-
-  return (
-    <article
-      className={cn(
-        "overflow-hidden rounded-[1.55rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(31,36,45,0.99)_100%)] shadow-[0_24px_60px_-40px_rgba(0,0,0,0.65)]",
-        dense ? "p-3" : "p-4",
-        isFinal ? "border-[#c7ff2f]/18 shadow-[0_26px_80px_-48px_rgba(199,255,47,0.25)]" : "",
-        fixedHeight ? "h-[176px]" : "",
-      )}
-    >
-      <div className={cn("flex items-start justify-between gap-3", dense ? "gap-2.5" : "")}>
-        <div>
-          <p className={cn("font-semibold uppercase tracking-[0.2em] text-[#8191ad]", dense ? "text-[9px]" : "text-[11px]")}>
-            {compact ? match.roundName : `Partido ${match.position}`}
-          </p>
-          <p className={cn("mt-1 font-semibold text-white/92", dense ? "text-[12px]" : "text-sm")}>
-            {compact ? `Cruce ${match.position}` : match.roundName}
-          </p>
-        </div>
-        <div className={cn(dense ? "scale-[0.92] origin-top-right" : "")}>
-          <Badge variant={getStatusBadgeVariant(match.status)}>{formatStatusLabel(match.status)}</Badge>
-        </div>
-      </div>
-
-      <div className={cn(dense ? "mt-3 space-y-2" : "mt-4 space-y-2.5")}>
-        {match.slots.map((slot, slotIndex) => (
-          <BracketSlotRow
-            key={`${match.id}-${slotIndex}`}
-            slug={slug}
-            slot={slot}
-            slotIndex={slotIndex}
-            isWinner={match.winnerParticipantId === slot.participantId}
-            winnerKnown={Boolean(match.winnerParticipantId)}
-            participants={participants}
-            dense={dense}
-            match={match}
-          />
-        ))}
-      </div>
-    </article>
-  );
-}
-
-function BracketSlotRow({
-  slug,
-  slot,
-  slotIndex,
-  isWinner,
-  winnerKnown,
-  participants,
-  dense = false,
-  match,
-}: {
-  slug: string;
-  slot: BracketSlot;
-  slotIndex: number;
-  isWinner: boolean;
-  winnerKnown: boolean;
-  participants: Bracket["participants"];
-  dense?: boolean;
-  match: BracketMatch;
-}) {
-  const label = resolveSlotLabel(slot, slotIndex, participants);
-  const href = slot.participantId
-    ? (`/tournaments/${slug}/participants/${slot.participantId}` as Route)
-    : null;
-
-  const content = (
-    <div
-      className={cn(
-        "flex items-center justify-between overflow-hidden rounded-[1rem] border transition",
-        dense ? "min-h-[3.55rem] gap-2 px-2.5 py-2" : "min-h-[5.4rem] gap-3 px-3 py-3",
-        isWinner
-          ? "border-[#c7ff2f]/18 bg-[#263214] text-white shadow-[inset_0_0_0_1px_rgba(199,255,47,0.06)]"
-          : winnerKnown
-            ? "border-white/6 bg-[#313742] text-white/92"
-            : "border-white/8 bg-[#2b313b] text-white",
-      )}
-    >
-      <div className="min-w-0 flex-1">
-        <p
-          className={cn(
-            dense ? "pr-1.5 text-[11px] font-semibold leading-[0.95rem]" : "pr-2 text-[13px] font-semibold leading-[1.05rem]",
-            !slot.participantId && "text-white/78",
-          )}
-          style={{
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 2,
-            overflow: "hidden",
-            overflowWrap: "anywhere",
-          }}
-        >
-          {label}
-        </p>
-        {dense ? null : (
-          <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#7f90af]">
-            {formatSlotMeta(slot, slotIndex)}
-          </p>
-        )}
-      </div>
-      <div
-        className={cn(
-          dense
-            ? "min-w-[1.3rem] self-center text-right text-[1.55rem] font-semibold leading-none"
-            : "min-w-[1.75rem] self-center text-right text-[1.9rem] font-semibold leading-none",
-          isWinner ? "text-[#efffaa]" : "text-white",
-        )}
-      >
-        {slot.score ?? "-"}
-      </div>
-    </div>
-  );
-
-  if (!href) {
-    return content;
-  }
-
-  return (
-    <Link href={href} className="block no-underline">
-      {content}
-    </Link>
-  );
-}
-
-function BracketOverviewRail({
-  roundsCount,
-  championName,
-}: {
-  roundsCount: number;
-  championName?: string;
-}) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      <BracketOverviewPill label="Recorrido" value="Izquierda a derecha" />
-      <BracketOverviewPill label="Cruces" value={`${roundsCount} rondas`} />
-      <BracketOverviewPill label="Marcador" value="Resultado a la derecha" />
-      {championName ? <BracketOverviewPill label="Campeon" value={championName} accent /> : null}
-    </div>
-  );
-}
-
-function BracketOverviewPill({
+function SummaryChip({
   label,
   value,
   accent = false,
@@ -470,7 +275,7 @@ function BracketOverviewPill({
           : "border-white/8 bg-white/[0.03] text-white",
       )}
     >
-      <p className={cn("text-[10px] font-semibold uppercase tracking-[0.18em]", accent ? "text-[#dfff94]" : "text-[#8092b1]")}>
+      <p className={cn("text-[10px] font-semibold uppercase tracking-[0.18em]", accent ? "text-[#e8ffa0]" : "text-[#8393b0]")}>
         {label}
       </p>
       <p className="mt-1 text-sm font-semibold">{value}</p>
@@ -478,11 +283,254 @@ function BracketOverviewPill({
   );
 }
 
-function BracketChampionBanner({
-  championName,
+function RoundHeaderMobile({ round }: { round: BracketRoundView }) {
+  return (
+    <div className="flex items-center justify-between rounded-[1.4rem] border border-white/8 bg-[linear-gradient(180deg,rgba(34,40,49,0.96)_0%,rgba(24,29,37,0.98)_100%)] px-4 py-3 shadow-[0_22px_55px_-40px_rgba(0,0,0,0.6)]">
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8fa2c5]">
+          Ronda {round.roundNumber}
+        </p>
+        <p className="mt-1 text-lg font-semibold text-white">{round.name}</p>
+      </div>
+      <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">
+        {round.matchIds.length} cruces
+      </span>
+    </div>
+  );
+}
+
+function RoundHeaderDesktop({ round }: { round: BracketRoundView }) {
+  return (
+    <div className="rounded-[1.2rem] border border-white/8 bg-[#1d232c]/92 px-3 py-2 shadow-[0_16px_40px_-34px_rgba(0,0,0,0.9)]">
+      <p className="text-[9px] font-semibold uppercase tracking-[0.24em] text-[#8ea1c6]">
+        Ronda {round.roundNumber}
+      </p>
+      <p className="mt-1 text-[14px] font-semibold text-white">{round.name}</p>
+    </div>
+  );
+}
+
+function MobileMatchCard({
+  match,
+  slug,
+  participants,
+  isFinal = false,
 }: {
-  championName: string;
+  match: BracketMatch;
+  slug: string;
+  participants: Bracket["participants"];
+  isFinal?: boolean;
 }) {
+  return (
+    <article
+      className={cn(
+        "overflow-hidden rounded-[1.6rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(31,36,45,0.99)_100%)] p-4 shadow-[0_22px_55px_-40px_rgba(0,0,0,0.7)]",
+        isFinal ? "border-[#c7ff2f]/18 shadow-[0_26px_80px_-48px_rgba(199,255,47,0.24)]" : "",
+      )}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8191ad]">
+            {match.roundName}
+          </p>
+          <p className="mt-1 text-base font-semibold text-white">Cruce {match.position}</p>
+        </div>
+        <Badge variant={getStatusBadgeVariant(match.status)}>{formatStatusLabel(match.status)}</Badge>
+      </div>
+
+      <div className="mt-4 space-y-2.5">
+        {match.slots.map((slot, slotIndex) => (
+          <MobileSlotRow
+            key={`${match.id}-${slotIndex}`}
+            slug={slug}
+            slot={slot}
+            slotIndex={slotIndex}
+            participants={participants}
+            isWinner={match.winnerParticipantId === slot.participantId}
+            winnerKnown={Boolean(match.winnerParticipantId)}
+          />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function DesktopMatchCard({
+  match,
+  slug,
+  participants,
+  isFinal = false,
+}: {
+  match: BracketMatch;
+  slug: string;
+  participants: Bracket["participants"];
+  isFinal?: boolean;
+}) {
+  return (
+    <article
+      className={cn(
+        "overflow-hidden rounded-[1.35rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(29,34,42,0.99)_100%)] p-3 shadow-[0_20px_55px_-44px_rgba(0,0,0,0.8)]",
+        isFinal ? "border-[#c7ff2f]/18 bg-[linear-gradient(180deg,rgba(48,61,25,0.92)_0%,rgba(29,34,42,0.99)_100%)]" : "",
+      )}
+    >
+      <div className="flex items-center justify-between gap-2">
+        <div>
+          <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#8091ae]">
+            {match.roundName}
+          </p>
+          <p className="mt-1 text-[12px] font-semibold text-white/90">Cruce {match.position}</p>
+        </div>
+        <StatusPip status={match.status} />
+      </div>
+
+      <div className="mt-3 space-y-2">
+        {match.slots.map((slot, slotIndex) => (
+          <DesktopSlotRow
+            key={`${match.id}-${slotIndex}`}
+            slug={slug}
+            slot={slot}
+            slotIndex={slotIndex}
+            participants={participants}
+            isWinner={match.winnerParticipantId === slot.participantId}
+            winnerKnown={Boolean(match.winnerParticipantId)}
+          />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function StatusPip({ status }: { status: BracketMatch["status"] }) {
+  const tone =
+    status === "finished"
+      ? "bg-[#d6ff72]"
+      : status === "live"
+        ? "bg-amber-300"
+        : status === "cancelled"
+          ? "bg-rose-400"
+          : "bg-slate-500";
+
+  return (
+    <div className="inline-flex items-center gap-1.5 rounded-full border border-white/8 bg-white/[0.03] px-2 py-1">
+      <span className={cn("h-2 w-2 rounded-full", tone)} />
+      <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-300">
+        {formatStatusLabel(status)}
+      </span>
+    </div>
+  );
+}
+
+function MobileSlotRow({
+  slug,
+  slot,
+  slotIndex,
+  participants,
+  isWinner,
+  winnerKnown,
+}: {
+  slug: string;
+  slot: BracketSlot;
+  slotIndex: number;
+  participants: Bracket["participants"];
+  isWinner: boolean;
+  winnerKnown: boolean;
+}) {
+  const label = resolveSlotLabel(slot, slotIndex, participants);
+  const href = slot.participantId
+    ? (`/tournaments/${slug}/participants/${slot.participantId}` as Route)
+    : null;
+
+  const content = (
+    <div
+      className={cn(
+        "flex min-h-[5rem] items-center justify-between gap-3 rounded-[1rem] border px-3 py-3",
+        isWinner
+          ? "border-[#c7ff2f]/18 bg-[#263214] text-white"
+          : winnerKnown
+            ? "border-white/6 bg-[#313742] text-white/92"
+            : "border-white/8 bg-[#2b313b] text-white",
+      )}
+    >
+      <div className="min-w-0 flex-1">
+        <p className={cn("pr-2 text-[14px] font-semibold leading-[1.08rem]", !slot.participantId && "text-white/78")}>
+          {label}
+        </p>
+        <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#7f90af]">
+          {formatSlotMeta(slot, slotIndex)}
+        </p>
+      </div>
+      <div className={cn("min-w-[1.6rem] text-right text-[1.9rem] font-semibold leading-none", isWinner ? "text-[#efffaa]" : "text-white")}>
+        {slot.score ?? "-"}
+      </div>
+    </div>
+  );
+
+  if (!href) {
+    return content;
+  }
+
+  return (
+    <Link href={href} className="block no-underline">
+      {content}
+    </Link>
+  );
+}
+
+function DesktopSlotRow({
+  slug,
+  slot,
+  slotIndex,
+  participants,
+  isWinner,
+  winnerKnown,
+}: {
+  slug: string;
+  slot: BracketSlot;
+  slotIndex: number;
+  participants: Bracket["participants"];
+  isWinner: boolean;
+  winnerKnown: boolean;
+}) {
+  const label = resolveSlotLabel(slot, slotIndex, participants);
+  const href = slot.participantId
+    ? (`/tournaments/${slug}/participants/${slot.participantId}` as Route)
+    : null;
+
+  const content = (
+    <div
+      className={cn(
+        "flex min-h-[2.75rem] items-center justify-between gap-2 rounded-[0.95rem] border px-2.5 py-2",
+        isWinner
+          ? "border-[#c7ff2f]/18 bg-[#283617] text-white"
+          : winnerKnown
+            ? "border-white/6 bg-[#313742] text-white/92"
+            : "border-white/8 bg-[#2b313b] text-white",
+      )}
+    >
+      <p
+        className={cn("min-w-0 flex-1 truncate pr-2 text-[11px] font-semibold", !slot.participantId && "text-white/78")}
+        title={label}
+      >
+        {label}
+      </p>
+      <div className={cn("min-w-[1.2rem] text-right text-[1.3rem] font-semibold leading-none", isWinner ? "text-[#efffaa]" : "text-white")}>
+        {slot.score ?? "-"}
+      </div>
+    </div>
+  );
+
+  if (!href) {
+    return content;
+  }
+
+  return (
+    <Link href={href} className="block no-underline">
+      {content}
+    </Link>
+  );
+}
+
+function ChampionBanner({ championName }: { championName: string }) {
   return (
     <div className="rounded-[1.5rem] border border-[#c7ff2f]/20 bg-[linear-gradient(180deg,rgba(48,66,18,0.86)_0%,rgba(31,40,18,0.96)_100%)] px-4 py-4 shadow-[0_28px_65px_-38px_rgba(199,255,47,0.18)]">
       <div className="space-y-2">
