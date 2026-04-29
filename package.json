@@ -19,7 +19,7 @@
     "seed:demo": "node --env-file=.env.local scripts/reset-and-seed-demo.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.104.0",
+    "@supabase/supabase-js": "2.105.1",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "lucide-react": "1.8.0",
