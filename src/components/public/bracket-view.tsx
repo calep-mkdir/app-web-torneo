@@ -9,11 +9,11 @@ import { cn } from "@/lib/utils";
 import type { Bracket, BracketMatch, BracketRound, BracketSlot } from "@/lib/brackets";
 import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 
-const DESKTOP_HEADER_HEIGHT = 78;
-const DESKTOP_CARD_WIDTH = 238;
-const DESKTOP_CARD_HEIGHT = 228;
-const DESKTOP_COLUMN_GAP = 44;
-const DESKTOP_ROW_GAP = 24;
+const DESKTOP_HEADER_HEIGHT = 66;
+const DESKTOP_CARD_WIDTH = 216;
+const DESKTOP_CARD_HEIGHT = 176;
+const DESKTOP_COLUMN_GAP = 32;
+const DESKTOP_ROW_GAP = 18;
 
 export function BracketView({
   slug,
@@ -272,15 +272,18 @@ function RoundHeader({
   return (
     <div
       className={cn(
-        "rounded-[1.35rem] border border-white/8 bg-[linear-gradient(180deg,rgba(34,40,49,0.96)_0%,rgba(24,29,37,0.98)_100%)] px-4 py-3 shadow-[0_22px_55px_-40px_rgba(0,0,0,0.6)]",
+        "rounded-[1.35rem] border border-white/8 bg-[linear-gradient(180deg,rgba(34,40,49,0.96)_0%,rgba(24,29,37,0.98)_100%)] shadow-[0_22px_55px_-40px_rgba(0,0,0,0.6)]",
+        mobile ? "px-4 py-3" : "px-3 py-2.5",
         mobile ? "flex items-center justify-between" : "",
       )}
     >
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8fa2c5]">
+        <p className={cn("font-semibold uppercase tracking-[0.22em] text-[#8fa2c5]", mobile ? "text-[11px]" : "text-[10px]")}>
           {mobile ? `Ronda ${round.roundNumber}` : `Fase ${round.roundNumber}`}
         </p>
-        <p className="mt-1 text-lg font-semibold text-white">{round.name}</p>
+        <p className={cn("mt-1 font-semibold text-white", mobile ? "text-lg" : "text-[15px]")}>
+          {round.name}
+        </p>
       </div>
       {mobile ? (
         <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">
@@ -306,27 +309,32 @@ function BracketMatchCard({
   compact?: boolean;
   fixedHeight?: boolean;
 }) {
+  const dense = fixedHeight;
+
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-[1.55rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(31,36,45,0.99)_100%)] p-4 shadow-[0_24px_60px_-40px_rgba(0,0,0,0.65)]",
+        "overflow-hidden rounded-[1.55rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(31,36,45,0.99)_100%)] shadow-[0_24px_60px_-40px_rgba(0,0,0,0.65)]",
+        dense ? "p-3" : "p-4",
         isFinal ? "border-[#c7ff2f]/18 shadow-[0_26px_80px_-48px_rgba(199,255,47,0.25)]" : "",
-        fixedHeight ? "h-[228px]" : "",
+        fixedHeight ? "h-[176px]" : "",
       )}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className={cn("flex items-start justify-between gap-3", dense ? "gap-2.5" : "")}>
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8191ad]">
+          <p className={cn("font-semibold uppercase tracking-[0.2em] text-[#8191ad]", dense ? "text-[9px]" : "text-[11px]")}>
             {compact ? match.roundName : `Partido ${match.position}`}
           </p>
-          <p className="mt-1 text-sm font-semibold text-white/92">
+          <p className={cn("mt-1 font-semibold text-white/92", dense ? "text-[12px]" : "text-sm")}>
             {compact ? `Cruce ${match.position}` : match.roundName}
           </p>
         </div>
-        <Badge variant={getStatusBadgeVariant(match.status)}>{formatStatusLabel(match.status)}</Badge>
+        <div className={cn(dense ? "scale-[0.92] origin-top-right" : "")}>
+          <Badge variant={getStatusBadgeVariant(match.status)}>{formatStatusLabel(match.status)}</Badge>
+        </div>
       </div>
 
-      <div className="mt-4 space-y-2.5">
+      <div className={cn(dense ? "mt-3 space-y-2" : "mt-4 space-y-2.5")}>
         {match.slots.map((slot, slotIndex) => (
           <BracketSlotRow
             key={`${match.id}-${slotIndex}`}
@@ -336,6 +344,7 @@ function BracketMatchCard({
             isWinner={match.winnerParticipantId === slot.participantId}
             winnerKnown={Boolean(match.winnerParticipantId)}
             participants={participants}
+            dense={dense}
             match={match}
           />
         ))}
@@ -351,6 +360,7 @@ function BracketSlotRow({
   isWinner,
   winnerKnown,
   participants,
+  dense = false,
   match,
 }: {
   slug: string;
@@ -359,6 +369,7 @@ function BracketSlotRow({
   isWinner: boolean;
   winnerKnown: boolean;
   participants: Bracket["participants"];
+  dense?: boolean;
   match: BracketMatch;
 }) {
   const label = resolveSlotLabel(slot, slotIndex, participants);
@@ -369,7 +380,8 @@ function BracketSlotRow({
   const content = (
     <div
       className={cn(
-        "flex min-h-[5.4rem] items-center justify-between gap-3 overflow-hidden rounded-[1rem] border px-3 py-3 transition",
+        "flex items-center justify-between overflow-hidden rounded-[1rem] border transition",
+        dense ? "min-h-[3.55rem] gap-2 px-2.5 py-2" : "min-h-[5.4rem] gap-3 px-3 py-3",
         isWinner
           ? "border-[#c7ff2f]/18 bg-[#263214] text-white shadow-[inset_0_0_0_1px_rgba(199,255,47,0.06)]"
           : winnerKnown
@@ -380,7 +392,7 @@ function BracketSlotRow({
       <div className="min-w-0 flex-1">
         <p
           className={cn(
-            "pr-2 text-[13px] font-semibold leading-[1.05rem]",
+            dense ? "pr-1.5 text-[11px] font-semibold leading-[0.95rem]" : "pr-2 text-[13px] font-semibold leading-[1.05rem]",
             !slot.participantId && "text-white/78",
           )}
           style={{
@@ -393,13 +405,17 @@ function BracketSlotRow({
         >
           {label}
         </p>
-        <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#7f90af]">
-          {formatSlotMeta(slot, slotIndex)}
-        </p>
+        {dense ? null : (
+          <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#7f90af]">
+            {formatSlotMeta(slot, slotIndex)}
+          </p>
+        )}
       </div>
       <div
         className={cn(
-          "min-w-[1.75rem] self-center text-right text-[1.9rem] font-semibold leading-none",
+          dense
+            ? "min-w-[1.3rem] self-center text-right text-[1.55rem] font-semibold leading-none"
+            : "min-w-[1.75rem] self-center text-right text-[1.9rem] font-semibold leading-none",
           isWinner ? "text-[#efffaa]" : "text-white",
         )}
       >
