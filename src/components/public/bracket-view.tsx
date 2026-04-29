@@ -11,9 +11,9 @@ import { formatStatusLabel, getStatusBadgeVariant } from "@/lib/padel";
 
 const DESKTOP_HEADER_HEIGHT = 78;
 const DESKTOP_CARD_WIDTH = 238;
-const DESKTOP_CARD_HEIGHT = 208;
+const DESKTOP_CARD_HEIGHT = 228;
 const DESKTOP_COLUMN_GAP = 44;
-const DESKTOP_ROW_GAP = 18;
+const DESKTOP_ROW_GAP = 24;
 
 export function BracketView({
   slug,
@@ -309,9 +309,9 @@ function BracketMatchCard({
   return (
     <article
       className={cn(
-        "rounded-[1.55rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(31,36,45,0.99)_100%)] p-4 shadow-[0_24px_60px_-40px_rgba(0,0,0,0.65)]",
+        "overflow-hidden rounded-[1.55rem] border border-white/8 bg-[linear-gradient(180deg,rgba(39,45,55,0.98)_0%,rgba(31,36,45,0.99)_100%)] p-4 shadow-[0_24px_60px_-40px_rgba(0,0,0,0.65)]",
         isFinal ? "border-[#c7ff2f]/18 shadow-[0_26px_80px_-48px_rgba(199,255,47,0.25)]" : "",
-        fixedHeight ? "h-[208px]" : "",
+        fixedHeight ? "h-[228px]" : "",
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -369,7 +369,7 @@ function BracketSlotRow({
   const content = (
     <div
       className={cn(
-        "flex min-h-[4.7rem] items-center justify-between gap-3 rounded-[1rem] border px-3 py-3 transition",
+        "flex min-h-[5.4rem] items-center justify-between gap-3 overflow-hidden rounded-[1rem] border px-3 py-3 transition",
         isWinner
           ? "border-[#c7ff2f]/18 bg-[#263214] text-white shadow-[inset_0_0_0_1px_rgba(199,255,47,0.06)]"
           : winnerKnown
@@ -380,9 +380,16 @@ function BracketSlotRow({
       <div className="min-w-0 flex-1">
         <p
           className={cn(
-            "pr-2 text-[14px] font-semibold leading-[1.15rem] text-pretty",
+            "pr-2 text-[13px] font-semibold leading-[1.05rem]",
             !slot.participantId && "text-white/78",
           )}
+          style={{
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2,
+            overflow: "hidden",
+            overflowWrap: "anywhere",
+          }}
         >
           {label}
         </p>
